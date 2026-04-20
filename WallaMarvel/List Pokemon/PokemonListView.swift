@@ -19,10 +19,12 @@ struct PokemonListView: View {
                 } else {
                     List {
                         ForEach(viewModel.pokemon, id: \.id) { pokemon in
-                            PokemonRowView(pokemon: pokemon)
-                                .task {
-                                    await viewModel.loadMoreIfNeeded(currentPokemon: pokemon)
-                                }
+                            NavigationLink(destination: PokemonDetailView(pokemonID: pokemon.id)) {
+                                PokemonRowView(pokemon: pokemon)
+                            }
+                            .task {
+                                await viewModel.loadMoreIfNeeded(currentPokemon: pokemon)
+                            }
                         }
                         if viewModel.isLoading {
                             HStack {
