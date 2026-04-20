@@ -1,5 +1,5 @@
 //
-//  ListPokemonPresenterTests.swift
+//  ListPokemonViewModelTests.swift
 //  WallaMarvelTests
 //
 //  Created by Laura Sales Martínez on 21/4/26.

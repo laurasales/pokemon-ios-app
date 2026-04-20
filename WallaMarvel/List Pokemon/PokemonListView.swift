@@ -17,8 +17,21 @@ struct PokemonListView: View {
                     ProgressView()
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
-                    List(viewModel.pokemon, id: \.id) { pokemon in
-                        PokemonRowView(pokemon: pokemon)
+                    List {
+                        ForEach(viewModel.pokemon, id: \.id) { pokemon in
+                            PokemonRowView(pokemon: pokemon)
+                                .task {
+                                    await viewModel.loadMoreIfNeeded(currentPokemon: pokemon)
+                                }
+                        }
+                        if viewModel.isLoading {
+                            HStack {
+                                Spacer()
+                                ProgressView()
+                                Spacer()
+                            }
+                            .listRowSeparator(.hidden)
+                        }
                     }
                     .listStyle(.plain)
                     .refreshable {
