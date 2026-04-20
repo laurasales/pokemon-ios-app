@@ -1,34 +1,37 @@
-import Foundation
+//
+//  ListPokemonAdapter.swift
+//  WallaMarvel
+//
+//  Created by Laura Sales Martínez on 20/4/26.
+//
+
 import UIKit
 
-final class ListHeroesAdapter: NSObject, UITableViewDataSource {
-    var heroes: [CharacterDataModel] {
+final class ListPokemonAdapter: NSObject, UITableViewDataSource {
+    var pokemon: [Pokemon] {
         didSet {
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
         }
     }
-    
+
     private let tableView: UITableView
-    
-    init(tableView: UITableView, heroes: [CharacterDataModel] = []) {
+
+    init(tableView: UITableView, pokemon: [Pokemon] = []) {
         self.tableView = tableView
-        self.heroes = heroes
+        self.pokemon = pokemon
         super.init()
         self.tableView.dataSource = self
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        heroes.count
+        pokemon.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ListHeroesTableViewCell", for: indexPath) as! ListHeroesTableViewCell
-        
-        let model = heroes[indexPath.row]
-        cell.configure(model: model)
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ListPokemonTableViewCell", for: indexPath) as! ListPokemonTableViewCell
+        cell.configure(model: pokemon[indexPath.row])
         return cell
     }
 }
