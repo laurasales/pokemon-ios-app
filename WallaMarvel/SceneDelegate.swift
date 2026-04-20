@@ -17,10 +17,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         
         let presenter = ListPokemonPresenter()
-        let listHeroesViewController = ListPokemonViewController()
-        listHeroesViewController.presenter = presenter
-        
-        let navigationController = UINavigationController(rootViewController: listHeroesViewController)
+        let listPokemonViewController = ListPokemonViewController()
+        listPokemonViewController.presenter = presenter
+
+        let navigationController = UINavigationController(rootViewController: listPokemonViewController)
         window.rootViewController = navigationController
         self.window = window
         self.window?.makeKeyAndVisible()
