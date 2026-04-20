@@ -9,11 +9,22 @@ import SwiftUI
 
 struct PokemonListView: View {
     @StateObject private var viewModel = ListPokemonViewModel()
-    
+
     var body: some View {
         NavigationStack {
-            List(viewModel.pokemon, id: \.id) { pokemon in
-                PokemonRowView(pokemon: pokemon)
+            Group {
+                if viewModel.isLoading && viewModel.pokemon.isEmpty {
+                    ProgressView()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    List(viewModel.pokemon, id: \.id) { pokemon in
+                        PokemonRowView(pokemon: pokemon)
+                    }
+                    .listStyle(.plain)
+                    .refreshable {
+                        await viewModel.getPokemon()
+                    }
+                }
             }
             .navigationTitle(viewModel.title)
             .task {

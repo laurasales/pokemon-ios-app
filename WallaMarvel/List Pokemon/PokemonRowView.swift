@@ -10,17 +10,34 @@ import Kingfisher
 
 struct PokemonRowView: View {
     let pokemon: Pokemon
-    
+
     var body: some View {
-        HStack(spacing: 12) {
-            KFImage(pokemon.imageURL)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 80, height: 80)
-            Text(pokemon.name)
-                .font(.body)
+        HStack(spacing: 16) {
+            ZStack {
+                Circle()
+                    .fill(Color(.systemGray6))
+                    .frame(width: 72, height: 72)
+                KFImage(pokemon.imageURL)
+                    .placeholder {
+                        ProgressView()
+                            .frame(width: 72, height: 72)
+                    }
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 60, height: 60)
+            }
+            VStack(alignment: .leading, spacing: 2) {
+                Text(String(format: "#%03d", pokemon.id))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Text(pokemon.name)
+                    .font(.headline)
+            }
             Spacer()
+            Image(systemName: "chevron.right")
+                .font(.caption)
+                .foregroundStyle(.tertiary)
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, 6)
     }
 }

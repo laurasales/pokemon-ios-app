@@ -10,7 +10,8 @@ import Foundation
 @MainActor
 final class ListPokemonViewModel: ObservableObject {
     @Published private(set) var pokemon: [Pokemon] = []
-    
+    @Published private(set) var isLoading: Bool = false
+
     private let getPokemonListUseCase: GetPokemonListUseCaseProtocol
     
     init(getPokemonListUseCase: GetPokemonListUseCaseProtocol = GetPokemonList()) {
@@ -20,6 +21,8 @@ final class ListPokemonViewModel: ObservableObject {
     var title: String { "Pokédex" }
     
     func getPokemon() async {
+        isLoading = true
+        defer { isLoading = false }
         do {
             pokemon = try await getPokemonListUseCase.execute(limit: 20, offset: 0)
         } catch {
