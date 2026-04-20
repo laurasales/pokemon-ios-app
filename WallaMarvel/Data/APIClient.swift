@@ -1,38 +1,34 @@
+//
+//  APIClient.swift
+//  WallaMarvel
+//
+//  Created by Laura Sales Martínez on 20/4/26.
+//
+
 import Foundation
 
 protocol APIClientProtocol {
-    func getHeroes(completionBlock: @escaping (CharacterDataContainer) -> Void)
+    func getPokemonList(limit: Int, offset: Int) async throws -> PokemonListResponseDTO
 }
 
 final class APIClient: APIClientProtocol {
-    enum Constant {
-        static let privateKey = "188f9a5aa76846d907c41cbea6506e4cc455293f"
-        static let publicKey = "d575c26d5c746f623518e753921ac847"
+    private enum Constant {
+        static let baseURL = "https://pokeapi.co/api/v2"
     }
-    
-    init() { }
-    
-    func getHeroes(completionBlock: @escaping (CharacterDataContainer) -> Void) {
-        let ts = String(Int(Date().timeIntervalSince1970))
-        let privateKey = Constant.privateKey
-        let publicKey = Constant.publicKey
-        let hash = "\(ts)\(privateKey)\(publicKey)".md5
-        let parameters: [String: String] = ["apikey": publicKey,
-                                            "ts": ts,
-                                            "hash": hash]
-        
-        let endpoint = "https://gateway.marvel.com:443/v1/public/characters"
-        var urlComponent = URLComponents(string: endpoint)
-        urlComponent?.queryItems = parameters.map { (key, value) in
-            URLQueryItem(name: key, value: value)
-        }
-        
-        let urlRequest = URLRequest(url: urlComponent!.url!)
-        
-        URLSession.shared.dataTask(with: urlRequest) { data, response, error in
-            let dataModel = try! JSONDecoder().decode(CharacterDataContainer.self, from: data!)
-            completionBlock(dataModel)
-            print(dataModel)
-        }.resume()
+
+    private let session: URLSession
+
+    init(session: URLSession = .shared) {
+        self.session = session
+    }
+
+    func getPokemonList(limit: Int, offset: Int) async throws -> PokemonListResponseDTO {
+        var components = URLComponents(string: "\(Constant.baseURL)/pokemon")!
+        components.queryItems = [
+            URLQueryItem(name: "limit", value: String(limit)),
+            URLQueryItem(name: "offset", value: String(offset))
+        ]
+        let (data, _) = try await session.data(from: components.url!)
+        return try JSONDecoder().decode(PokemonListResponseDTO.self, from: data)
     }
 }
