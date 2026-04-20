@@ -13,11 +13,11 @@ protocol GetPokemonListUseCaseProtocol {
 
 struct GetPokemonList: GetPokemonListUseCaseProtocol {
     private let repository: PokemonRepositoryProtocol
-
+    
     init(repository: PokemonRepositoryProtocol = PokemonRepository()) {
         self.repository = repository
     }
-
+    
     func execute(limit: Int, offset: Int) async throws -> [Pokemon] {
         try await repository.getPokemonList(limit: limit, offset: offset)
     }
