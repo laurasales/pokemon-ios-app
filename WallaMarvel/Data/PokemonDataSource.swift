@@ -10,6 +10,7 @@ import Foundation
 protocol PokemonDataSourceProtocol {
     func getPokemonList(limit: Int, offset: Int) async throws -> [Pokemon]
     func getPokemonDetail(id: Int) async throws -> PokemonDetail
+    func searchPokemon(query: String) async throws -> Pokemon
 }
 
 final class PokemonDataSource: PokemonDataSourceProtocol {
@@ -50,6 +51,14 @@ final class PokemonDataSource: PokemonDataSourceProtocol {
             stats: dto.stats.map { PokemonDetail.Stat(name: $0.stat.name, value: $0.baseStat) },
             abilities: dto.abilities.map { $0.ability.name.capitalized }
         )
+    }
+
+    func searchPokemon(query: String) async throws -> Pokemon {
+        let dto = try await apiClient.searchPokemon(query: query)
+        guard let imageURL = URL(string: "\(Constant.spriteBaseURL)/\(dto.id).png") else {
+            throw URLError(.badURL)
+        }
+        return Pokemon(id: dto.id, name: dto.name.capitalized, imageURL: imageURL)
     }
 
     private func extractID(from url: String) -> Int? {

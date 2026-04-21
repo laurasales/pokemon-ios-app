@@ -21,4 +21,8 @@ final class PokemonRepository: PokemonRepositoryProtocol {
     func getPokemonDetail(id: Int) async throws -> PokemonDetail {
         try await dataSource.getPokemonDetail(id: id)
     }
+
+    func searchPokemon(query: String) async throws -> Pokemon {
+        try await dataSource.searchPokemon(query: query)
+    }
 }

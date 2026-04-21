@@ -117,6 +117,29 @@ final class PokemonDataSourceTests: XCTestCase {
             XCTAssertTrue(error is URLError)
         }
     }
+
+    // MARK: - searchPokemon
+
+    func test_searchPokemon_mapsResponseToPokemon() async throws {
+        let dataSource = PokemonDataSource(apiClient: MockAPIClient(searchResponse: .mock))
+
+        let pokemon = try await dataSource.searchPokemon(query: "bulbasaur")
+
+        XCTAssertEqual(pokemon.id, 1)
+        XCTAssertEqual(pokemon.name, "Bulbasaur")
+        XCTAssertEqual(pokemon.imageURL, URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"))
+    }
+
+    func test_searchPokemon_propagatesAPIClientError() async {
+        let dataSource = PokemonDataSource(apiClient: MockAPIClient(error: URLError(.notConnectedToInternet)))
+
+        do {
+            _ = try await dataSource.searchPokemon(query: "bulbasaur")
+            XCTFail("Expected error to be thrown")
+        } catch {
+            XCTAssertTrue(error is URLError)
+        }
+    }
 }
 
 // MARK: - Mocks
@@ -124,20 +147,30 @@ final class PokemonDataSourceTests: XCTestCase {
 private final class MockAPIClient: APIClientProtocol {
     private let listResult: Result<PokemonListResponseDTO, Error>
     private let detailResult: Result<PokemonDetailDTO, Error>
+    private let searchResult: Result<PokemonDetailDTO, Error>
 
     init(listResponse: PokemonListResponseDTO) {
         self.listResult = .success(listResponse)
         self.detailResult = .failure(URLError(.unknown))
+        self.searchResult = .failure(URLError(.unknown))
     }
 
     init(detailResponse: PokemonDetailDTO) {
         self.listResult = .failure(URLError(.unknown))
         self.detailResult = .success(detailResponse)
+        self.searchResult = .failure(URLError(.unknown))
+    }
+
+    init(searchResponse: PokemonDetailDTO) {
+        self.listResult = .failure(URLError(.unknown))
+        self.detailResult = .failure(URLError(.unknown))
+        self.searchResult = .success(searchResponse)
     }
 
     init(error: Error) {
         self.listResult = .failure(error)
         self.detailResult = .failure(error)
+        self.searchResult = .failure(error)
     }
 
     func getPokemonList(limit: Int, offset: Int) async throws -> PokemonListResponseDTO {
@@ -146,6 +179,10 @@ private final class MockAPIClient: APIClientProtocol {
 
     func getPokemonDetail(id: Int) async throws -> PokemonDetailDTO {
         try detailResult.get()
+    }
+
+    func searchPokemon(query: String) async throws -> PokemonDetailDTO {
+        try searchResult.get()
     }
 }
 

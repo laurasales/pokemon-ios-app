@@ -40,6 +40,7 @@
 		D34DFA662F96E70800386709 /* Color+PokemonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DFA672F96E70900386709 /* Color+PokemonType.swift */; };
 		D34DFA682F96E71000386709 /* PokemonSoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DFA692F96E71100386709 /* PokemonSoundPlayer.swift */; };
 		D34DFA6A2F96E72000386709 /* PokemonDetailViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DFA6B2F96E72100386709 /* PokemonDetailViewModelTests.swift */; };
+		D34DFA6C2F96E72200386709 /* SearchPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DFA6D2F96E72300386709 /* SearchPokemon.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,6 +97,7 @@
 		D34DFA672F96E70900386709 /* Color+PokemonType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+PokemonType.swift"; sourceTree = "<group>"; };
 		D34DFA692F96E71100386709 /* PokemonSoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonSoundPlayer.swift; sourceTree = "<group>"; };
 		D34DFA6B2F96E72100386709 /* PokemonDetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailViewModelTests.swift; sourceTree = "<group>"; };
+		D34DFA6D2F96E72300386709 /* SearchPokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPokemon.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -242,6 +244,7 @@
 			children = (
 				D34DFA4A2F96E28300386709 /* GetPokemonList.swift */,
 				D34DFA592F96E60500386709 /* GetPokemonDetail.swift */,
+				D34DFA6D2F96E72300386709 /* SearchPokemon.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -403,6 +406,7 @@
 				D34DFA642F96E70600386709 /* PokemonAbilitiesSectionView.swift in Sources */,
 				D34DFA662F96E70800386709 /* Color+PokemonType.swift in Sources */,
 				D34DFA682F96E71000386709 /* PokemonSoundPlayer.swift in Sources */,
+				D34DFA6C2F96E72200386709 /* SearchPokemon.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
