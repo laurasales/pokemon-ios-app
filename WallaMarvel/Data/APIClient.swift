@@ -10,6 +10,7 @@ import Foundation
 protocol APIClientProtocol {
     func getPokemonList(limit: Int, offset: Int) async throws -> PokemonListResponseDTO
     func getPokemonDetail(id: Int) async throws -> PokemonDetailDTO
+    func searchPokemon(query: String) async throws -> PokemonDetailDTO
 }
 
 final class APIClient: APIClientProtocol {
@@ -35,6 +36,12 @@ final class APIClient: APIClientProtocol {
 
     func getPokemonDetail(id: Int) async throws -> PokemonDetailDTO {
         let url = URL(string: "\(Constant.baseURL)/pokemon/\(id)")!
+        let (data, _) = try await session.data(from: url)
+        return try JSONDecoder().decode(PokemonDetailDTO.self, from: data)
+    }
+
+    func searchPokemon(query: String) async throws -> PokemonDetailDTO {
+        let url = URL(string: "\(Constant.baseURL)/pokemon/\(query.lowercased())")!
         let (data, _) = try await session.data(from: url)
         return try JSONDecoder().decode(PokemonDetailDTO.self, from: data)
     }
