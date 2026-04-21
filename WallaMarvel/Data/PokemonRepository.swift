@@ -8,21 +8,21 @@
 import Foundation
 
 final class PokemonRepository: PokemonRepositoryProtocol {
-    private let dataSource: PokemonDataSourceProtocol
-    
-    init(dataSource: PokemonDataSourceProtocol = PokemonDataSource()) {
-        self.dataSource = dataSource
+    private let networkService: PokemonNetworkServiceProtocol
+
+    init(networkService: PokemonNetworkServiceProtocol = PokemonAPINetworkService()) {
+        self.networkService = networkService
     }
-    
+
     func getPokemonList(limit: Int, offset: Int) async throws -> [Pokemon] {
-        try await dataSource.getPokemonList(limit: limit, offset: offset)
+        try await networkService.getPokemonList(limit: limit, offset: offset)
     }
 
     func getPokemonDetail(id: Int) async throws -> PokemonDetail {
-        try await dataSource.getPokemonDetail(id: id)
+        try await networkService.getPokemonDetail(id: id)
     }
 
     func searchPokemon(query: String) async throws -> Pokemon {
-        try await dataSource.searchPokemon(query: query)
+        try await networkService.searchPokemon(query: query)
     }
 }
