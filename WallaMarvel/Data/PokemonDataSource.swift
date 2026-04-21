@@ -42,6 +42,7 @@ final class PokemonDataSource: PokemonDataSourceProtocol {
         return PokemonDetail(
             id: dto.id,
             name: dto.name.capitalized,
+            slug: dto.name,
             imageURL: imageURL,
             height: dto.height,
             weight: dto.weight,

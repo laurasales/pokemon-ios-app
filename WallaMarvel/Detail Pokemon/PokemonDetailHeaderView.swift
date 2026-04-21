@@ -11,6 +11,7 @@ import Kingfisher
 struct PokemonDetailHeaderView: View {
     let detail: PokemonDetail
     @State private var isFloating = false
+    @StateObject private var soundPlayer = PokemonSoundPlayer()
 
     private var primaryColor: Color {
         detail.types.first.map { Color.pokemonType($0) } ?? .gray
@@ -54,6 +55,19 @@ struct PokemonDetailHeaderView: View {
                 ForEach(detail.types, id: \.self) { type in
                     PokemonTypeBadgeView(type: type)
                 }
+            }
+
+            Button {
+                if soundPlayer.isPlaying {
+                    soundPlayer.stop()
+                } else {
+                    soundPlayer.play(slug: detail.slug)
+                }
+            } label: {
+                Image(systemName: soundPlayer.isPlaying ? "stop.circle.fill" : "speaker.wave.2.circle.fill")
+                    .font(.title)
+                    .foregroundStyle(primaryColor)
+                    .symbolEffect(.bounce, value: soundPlayer.isPlaying)
             }
             .padding(.bottom, 12)
         }
