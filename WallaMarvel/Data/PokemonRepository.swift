@@ -17,4 +17,8 @@ final class PokemonRepository: PokemonRepositoryProtocol {
     func getPokemonList(limit: Int, offset: Int) async throws -> [Pokemon] {
         try await dataSource.getPokemonList(limit: limit, offset: offset)
     }
+
+    func getPokemonDetail(id: Int) async throws -> PokemonDetail {
+        try await dataSource.getPokemonDetail(id: id)
+    }
 }
