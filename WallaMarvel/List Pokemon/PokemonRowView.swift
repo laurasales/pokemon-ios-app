@@ -27,7 +27,7 @@ struct PokemonRowView: View {
                     .frame(width: 60, height: 60)
             }
             VStack(alignment: .leading, spacing: 2) {
-                Text(String(format: "#%03d", pokemon.id))
+                Text("#\(pokemon.id)")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Text(pokemon.name)
