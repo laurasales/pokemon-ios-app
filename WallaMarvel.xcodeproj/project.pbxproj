@@ -33,6 +33,11 @@
 		D34DFA582F96E60400386709 /* GetPokemonDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DFA592F96E60500386709 /* GetPokemonDetail.swift */; };
 		D34DFA5A2F96E60600386709 /* PokemonDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DFA5B2F96E60700386709 /* PokemonDetailViewModel.swift */; };
 		D34DFA5C2F96E60800386709 /* PokemonDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DFA5D2F96E60900386709 /* PokemonDetailView.swift */; };
+		D34DFA5E2F96E70000386709 /* PokemonDetailHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DFA5F2F96E70100386709 /* PokemonDetailHeaderView.swift */; };
+		D34DFA602F96E70200386709 /* PokemonStatsSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DFA612F96E70300386709 /* PokemonStatsSectionView.swift */; };
+		D34DFA622F96E70400386709 /* PokemonInfoSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DFA632F96E70500386709 /* PokemonInfoSectionView.swift */; };
+		D34DFA642F96E70600386709 /* PokemonAbilitiesSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DFA652F96E70700386709 /* PokemonAbilitiesSectionView.swift */; };
+		D34DFA662F96E70800386709 /* Color+PokemonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DFA672F96E70900386709 /* Color+PokemonType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,6 +87,11 @@
 		D34DFA592F96E60500386709 /* GetPokemonDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPokemonDetail.swift; sourceTree = "<group>"; };
 		D34DFA5B2F96E60700386709 /* PokemonDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailViewModel.swift; sourceTree = "<group>"; };
 		D34DFA5D2F96E60900386709 /* PokemonDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailView.swift; sourceTree = "<group>"; };
+		D34DFA5F2F96E70100386709 /* PokemonDetailHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailHeaderView.swift; sourceTree = "<group>"; };
+		D34DFA612F96E70300386709 /* PokemonStatsSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonStatsSectionView.swift; sourceTree = "<group>"; };
+		D34DFA632F96E70500386709 /* PokemonInfoSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonInfoSectionView.swift; sourceTree = "<group>"; };
+		D34DFA652F96E70700386709 /* PokemonAbilitiesSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonAbilitiesSectionView.swift; sourceTree = "<group>"; };
+		D34DFA672F96E70900386709 /* Color+PokemonType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+PokemonType.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +189,11 @@
 			isa = PBXGroup;
 			children = (
 				D34DFA5D2F96E60900386709 /* PokemonDetailView.swift */,
+				D34DFA5F2F96E70100386709 /* PokemonDetailHeaderView.swift */,
+				D34DFA612F96E70300386709 /* PokemonStatsSectionView.swift */,
+				D34DFA632F96E70500386709 /* PokemonInfoSectionView.swift */,
+				D34DFA652F96E70700386709 /* PokemonAbilitiesSectionView.swift */,
+				D34DFA672F96E70900386709 /* Color+PokemonType.swift */,
 				D34DFA5B2F96E60700386709 /* PokemonDetailViewModel.swift */,
 			);
 			path = "Detail Pokemon";
@@ -376,6 +391,11 @@
 				D34DFA582F96E60400386709 /* GetPokemonDetail.swift in Sources */,
 				D34DFA5A2F96E60600386709 /* PokemonDetailViewModel.swift in Sources */,
 				D34DFA5C2F96E60800386709 /* PokemonDetailView.swift in Sources */,
+				D34DFA5E2F96E70000386709 /* PokemonDetailHeaderView.swift in Sources */,
+				D34DFA602F96E70200386709 /* PokemonStatsSectionView.swift in Sources */,
+				D34DFA622F96E70400386709 /* PokemonInfoSectionView.swift in Sources */,
+				D34DFA642F96E70600386709 /* PokemonAbilitiesSectionView.swift in Sources */,
+				D34DFA662F96E70800386709 /* Color+PokemonType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
