@@ -19,6 +19,6 @@ struct SearchPokemon: SearchPokemonUseCaseProtocol {
     }
 
     func execute(query: String) async throws -> Pokemon {
-        try await repository.searchPokemon(query: query)
+        try await repository.searchPokemon(query: query.lowercased())
     }
 }
