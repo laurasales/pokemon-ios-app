@@ -33,7 +33,7 @@ struct PokemonDataMapper {
         return Pokemon(id: id, name: name.capitalized, imageURL: imageURL)
     }
 
-    func toDomainDetail(from pokemon: PKMPokemon) throws -> PokemonDetail {
+    func toPokemonDetail(from pokemon: PKMPokemon) throws -> PokemonDetail {
         guard let id = pokemon.id,
               let name = pokemon.name,
               let spriteString = pokemon.sprites?.frontDefault,

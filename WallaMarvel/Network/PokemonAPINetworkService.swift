@@ -26,7 +26,7 @@ final class PokemonAPINetworkService: PokemonNetworkServiceProtocol {
 
     func getPokemonDetail(id: Int) async throws -> PokemonDetail {
         let pokemon = try await api.pokemonService.fetchPokemon(id)
-        return try mapper.toDomainDetail(from: pokemon)
+        return try mapper.toPokemonDetail(from: pokemon)
     }
 
     func searchPokemon(query: String) async throws -> Pokemon {
