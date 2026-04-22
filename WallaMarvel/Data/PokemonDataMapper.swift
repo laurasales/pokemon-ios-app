@@ -26,7 +26,8 @@ struct PokemonDataMapper {
     func toPokemon(from pokemon: PKMPokemon) throws -> Pokemon {
         guard let id = pokemon.id,
               let name = pokemon.name,
-              let imageURL = URL(string: "\(Constant.spriteBaseURL)/\(id).png") else {
+              let spriteString = pokemon.sprites?.frontDefault,
+              let imageURL = URL(string: spriteString) else {
             throw URLError(.badServerResponse)
         }
         return Pokemon(id: id, name: name.capitalized, imageURL: imageURL)
@@ -35,7 +36,8 @@ struct PokemonDataMapper {
     func toDomainDetail(from pokemon: PKMPokemon) throws -> PokemonDetail {
         guard let id = pokemon.id,
               let name = pokemon.name,
-              let imageURL = URL(string: "\(Constant.spriteBaseURL)/\(id).png") else {
+              let spriteString = pokemon.sprites?.frontDefault,
+              let imageURL = URL(string: spriteString) else {
             throw URLError(.badServerResponse)
         }
         return PokemonDetail(
