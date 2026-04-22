@@ -38,7 +38,13 @@
 		D34DFA702F96E72600386709 /* PokemonNetworkServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DFA712F96E72700386709 /* PokemonNetworkServiceProtocol.swift */; };
 		D34DFA722F96E72800386709 /* PokemonAPINetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DFA732F96E72900386709 /* PokemonAPINetworkService.swift */; };
 		D34DFA742F96E72A00386709 /* PokemonDataMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DFA752F96E72B00386709 /* PokemonDataMapper.swift */; };
+		D34DFA762F96E72C00386709 /* OpenAPIPokemonNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DFA772F96E72D00386709 /* OpenAPIPokemonNetworkService.swift */; };
+		D34DFA782F96E72E00386709 /* OpenAPIPokemonDataMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DFA792F96E72F00386709 /* OpenAPIPokemonDataMapper.swift */; };
 		D3DC46F42F983A6700C72D3B /* PokemonAPI in Frameworks */ = {isa = PBXBuildFile; productRef = D3DC46F32F983A6700C72D3B /* PokemonAPI */; };
+		D3DC47012F997D6400C72D3B /* OpenAPIRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = D3DC47002F997D6400C72D3B /* OpenAPIRuntime */; };
+		D3DC47042F997D7D00C72D3B /* OpenAPIURLSession in Frameworks */ = {isa = PBXBuildFile; productRef = D3DC47032F997D7D00C72D3B /* OpenAPIURLSession */; };
+		D3DC47102F9980A500C72D3B /* openapi-generator-config.yaml in Resources */ = {isa = PBXBuildFile; fileRef = D3DC470F2F9980A500C72D3B /* openapi-generator-config.yaml */; };
+		D3DC47272F99896300C72D3B /* openapi.yaml in Resources */ = {isa = PBXBuildFile; fileRef = D3DC47262F99896300C72D3B /* openapi.yaml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,6 +99,10 @@
 		D34DFA712F96E72700386709 /* PokemonNetworkServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonNetworkServiceProtocol.swift; sourceTree = "<group>"; };
 		D34DFA732F96E72900386709 /* PokemonAPINetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonAPINetworkService.swift; sourceTree = "<group>"; };
 		D34DFA752F96E72B00386709 /* PokemonDataMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDataMapper.swift; sourceTree = "<group>"; };
+		D3DC470F2F9980A500C72D3B /* openapi-generator-config.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = "openapi-generator-config.yaml"; sourceTree = "<group>"; };
+		D3DC47262F99896300C72D3B /* openapi.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = openapi.yaml; sourceTree = "<group>"; };
+		D34DFA772F96E72D00386709 /* OpenAPIPokemonNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAPIPokemonNetworkService.swift; sourceTree = "<group>"; };
+		D34DFA792F96E72F00386709 /* OpenAPIPokemonDataMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAPIPokemonDataMapper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,7 +111,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				A66389F32DCE202500466318 /* Kingfisher in Frameworks */,
+				D3DC47012F997D6400C72D3B /* OpenAPIRuntime in Frameworks */,
 				D3DC46F42F983A6700C72D3B /* PokemonAPI in Frameworks */,
+				D3DC47042F997D7D00C72D3B /* OpenAPIURLSession in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -155,6 +167,8 @@
 				1A0E3AA12862F7E300132FCB /* Assets.xcassets */,
 				1A0E3AA32862F7E300132FCB /* LaunchScreen.storyboard */,
 				1A0E3AA62862F7E300132FCB /* Info.plist */,
+				D3DC47262F99896300C72D3B /* openapi.yaml */,
+				D3DC470F2F9980A500C72D3B /* openapi-generator-config.yaml */,
 			);
 			path = WallaMarvel;
 			sourceTree = "<group>";
@@ -237,6 +251,7 @@
 			children = (
 				D34DFA712F96E72700386709 /* PokemonNetworkServiceProtocol.swift */,
 				D34DFA732F96E72900386709 /* PokemonAPINetworkService.swift */,
+				D34DFA772F96E72D00386709 /* OpenAPIPokemonNetworkService.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -245,6 +260,7 @@
 			isa = PBXGroup;
 			children = (
 				D34DFA752F96E72B00386709 /* PokemonDataMapper.swift */,
+				D34DFA792F96E72F00386709 /* OpenAPIPokemonDataMapper.swift */,
 			);
 			path = Mapper;
 			sourceTree = "<group>";
@@ -272,6 +288,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				D3DC470C2F997E7000C72D3B /* PBXTargetDependency */,
 			);
 			name = WallaMarvel;
 			productName = WallaMarvel;
@@ -349,6 +366,9 @@
 			packageReferences = (
 				A66389F12DCE202500466318 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				D3DC46F22F983A6700C72D3B /* XCRemoteSwiftPackageReference "PokemonAPI" */,
+				D3DC46FA2F98504A00C72D3B /* XCRemoteSwiftPackageReference "swift-openapi-generator" */,
+				D3DC46FF2F997D6400C72D3B /* XCRemoteSwiftPackageReference "swift-openapi-runtime" */,
+				D3DC47022F997D7D00C72D3B /* XCRemoteSwiftPackageReference "swift-openapi-urlsession" */,
 			);
 			productRefGroup = 1A0E3A962862F7E200132FCB /* Products */;
 			projectDirPath = "";
@@ -367,6 +387,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A0E3AA52862F7E300132FCB /* LaunchScreen.storyboard in Resources */,
+				D3DC47272F99896300C72D3B /* openapi.yaml in Resources */,
+				D3DC47102F9980A500C72D3B /* openapi-generator-config.yaml in Resources */,
 				1A0E3AA22862F7E300132FCB /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -415,6 +437,8 @@
 				D34DFA662F96E70800386709 /* Color+PokemonType.swift in Sources */,
 				D34DFA682F96E71000386709 /* PokemonSoundPlayer.swift in Sources */,
 				D34DFA6C2F96E72200386709 /* SearchPokemon.swift in Sources */,
+				D34DFA762F96E72C00386709 /* OpenAPIPokemonNetworkService.swift in Sources */,
+				D34DFA782F96E72E00386709 /* OpenAPIPokemonDataMapper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -449,6 +473,10 @@
 			isa = PBXTargetDependency;
 			target = 1A0E3A942862F7E200132FCB /* WallaMarvel */;
 			targetProxy = 1A0E3AB62862F7E300132FCB /* PBXContainerItemProxy */;
+		};
+		D3DC470C2F997E7000C72D3B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = D3DC470B2F997E7000C72D3B /* OpenAPIGenerator */;
 		};
 /* End PBXTargetDependency section */
 
@@ -776,6 +804,30 @@
 				version = 7.0.3;
 			};
 		};
+		D3DC46FA2F98504A00C72D3B /* XCRemoteSwiftPackageReference "swift-openapi-generator" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-openapi-generator.git";
+			requirement = {
+				kind = exactVersion;
+				version = 1.11.1;
+			};
+		};
+		D3DC46FF2F997D6400C72D3B /* XCRemoteSwiftPackageReference "swift-openapi-runtime" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-openapi-runtime";
+			requirement = {
+				kind = exactVersion;
+				version = 1.11.0;
+			};
+		};
+		D3DC47022F997D7D00C72D3B /* XCRemoteSwiftPackageReference "swift-openapi-urlsession" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-openapi-urlsession";
+			requirement = {
+				kind = exactVersion;
+				version = 1.3.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -788,6 +840,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D3DC46F22F983A6700C72D3B /* XCRemoteSwiftPackageReference "PokemonAPI" */;
 			productName = PokemonAPI;
+		};
+		D3DC47002F997D6400C72D3B /* OpenAPIRuntime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D3DC46FF2F997D6400C72D3B /* XCRemoteSwiftPackageReference "swift-openapi-runtime" */;
+			productName = OpenAPIRuntime;
+		};
+		D3DC47032F997D7D00C72D3B /* OpenAPIURLSession */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D3DC47022F997D7D00C72D3B /* XCRemoteSwiftPackageReference "swift-openapi-urlsession" */;
+			productName = OpenAPIURLSession;
+		};
+		D3DC470B2F997E7000C72D3B /* OpenAPIGenerator */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D3DC46FA2F98504A00C72D3B /* XCRemoteSwiftPackageReference "swift-openapi-generator" */;
+			productName = "plugin:OpenAPIGenerator";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
