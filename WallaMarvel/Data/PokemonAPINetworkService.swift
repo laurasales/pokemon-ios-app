@@ -30,7 +30,7 @@ final class PokemonAPINetworkService: PokemonNetworkServiceProtocol {
     }
 
     func searchPokemon(query: String) async throws -> Pokemon {
-        let pokemon = try await api.pokemonService.fetchPokemon(query.lowercased())
+        let pokemon = try await api.pokemonService.fetchPokemon(query)
         return try mapper.toPokemon(from: pokemon)
     }
 }
