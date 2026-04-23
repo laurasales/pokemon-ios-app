@@ -53,6 +53,7 @@
 		D3A5E0EA2F9AAF95007F83A5 /* PokemonDetail+Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E0E82F9AAF95007F83A5 /* PokemonDetail+Mock.swift */; };
 		D3A5E0F32F9AB42E007F83A5 /* AppLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E0F22F9AB42E007F83A5 /* AppLogger.swift */; };
 		D3A5E0F72F9AB435007F83A5 /* ErrorAlertModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E0F62F9AB435007F83A5 /* ErrorAlertModifier.swift */; };
+		D3A5E10A2F9AB9DA007F83A5 /* PokemonSpriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E1092F9AB9DA007F83A5 /* PokemonSpriteView.swift */; };
 		D3DC46F42F983A6700C72D3B /* PokemonAPI in Frameworks */ = {isa = PBXBuildFile; productRef = D3DC46F32F983A6700C72D3B /* PokemonAPI */; };
 		D3DC47012F997D6400C72D3B /* OpenAPIRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = D3DC47002F997D6400C72D3B /* OpenAPIRuntime */; };
 		D3DC47042F997D7D00C72D3B /* OpenAPIURLSession in Frameworks */ = {isa = PBXBuildFile; productRef = D3DC47032F997D7D00C72D3B /* OpenAPIURLSession */; };
@@ -127,6 +128,7 @@
 		D3A5E0E82F9AAF95007F83A5 /* PokemonDetail+Mock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PokemonDetail+Mock.swift"; sourceTree = "<group>"; };
 		D3A5E0F22F9AB42E007F83A5 /* AppLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLogger.swift; sourceTree = "<group>"; };
 		D3A5E0F62F9AB435007F83A5 /* ErrorAlertModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorAlertModifier.swift; sourceTree = "<group>"; };
+		D3A5E1092F9AB9DA007F83A5 /* PokemonSpriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonSpriteView.swift; sourceTree = "<group>"; };
 		D3DC470F2F9980A500C72D3B /* openapi-generator-config.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = "openapi-generator-config.yaml"; sourceTree = "<group>"; };
 		D3DC47262F99896300C72D3B /* openapi.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = openapi.yaml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -279,6 +281,7 @@
 		D3A5E0A22F9AA1F4007F83A5 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				D3A5E1092F9AB9DA007F83A5 /* PokemonSpriteView.swift */,
 				D3A5E0F62F9AB435007F83A5 /* ErrorAlertModifier.swift */,
 				D3A5E0F22F9AB42E007F83A5 /* AppLogger.swift */,
 				D3A5E0C72F9AA56B007F83A5 /* PokemonTypeBadgeView.swift */,
@@ -487,6 +490,7 @@
 				D34DFA492F96E25F00386709 /* PokemonRepositoryProtocol.swift in Sources */,
 				1A0E3A9B2862F7E200132FCB /* SceneDelegate.swift in Sources */,
 				D34DFA472F96E24B00386709 /* PokemonRepository.swift in Sources */,
+				D3A5E10A2F9AB9DA007F83A5 /* PokemonSpriteView.swift in Sources */,
 				D3A5E0BB2F9AA2E1007F83A5 /* String+PokemonType.swift in Sources */,
 				D34DFA702F96E72600386709 /* PokemonNetworkServiceProtocol.swift in Sources */,
 				D3A5E0A32F9AA1F4007F83A5 /* Color+PokemonType.swift in Sources */,
