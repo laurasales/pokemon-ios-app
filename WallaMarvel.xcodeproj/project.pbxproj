@@ -43,6 +43,8 @@
 		D3A5E0872F9A980B007F83A5 /* GetPokemonByType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E0862F9A980B007F83A5 /* GetPokemonByType.swift */; };
 		D3A5E0A32F9AA1F4007F83A5 /* Color+PokemonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E0A12F9AA1F4007F83A5 /* Color+PokemonType.swift */; };
 		D3A5E0B32F9AA21D007F83A5 /* GetPokemonTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E0B22F9AA21D007F83A5 /* GetPokemonTypes.swift */; };
+		D3A5E0BB2F9AA2E1007F83A5 /* String+PokemonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E0BA2F9AA2E1007F83A5 /* String+PokemonType.swift */; };
+		D3A5E0C82F9AA56B007F83A5 /* PokemonTypeBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E0C72F9AA56B007F83A5 /* PokemonTypeBadgeView.swift */; };
 		D3DC46F42F983A6700C72D3B /* PokemonAPI in Frameworks */ = {isa = PBXBuildFile; productRef = D3DC46F32F983A6700C72D3B /* PokemonAPI */; };
 		D3DC47012F997D6400C72D3B /* OpenAPIRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = D3DC47002F997D6400C72D3B /* OpenAPIRuntime */; };
 		D3DC47042F997D7D00C72D3B /* OpenAPIURLSession in Frameworks */ = {isa = PBXBuildFile; productRef = D3DC47032F997D7D00C72D3B /* OpenAPIURLSession */; };
@@ -107,6 +109,8 @@
 		D3A5E0862F9A980B007F83A5 /* GetPokemonByType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPokemonByType.swift; sourceTree = "<group>"; };
 		D3A5E0A12F9AA1F4007F83A5 /* Color+PokemonType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+PokemonType.swift"; sourceTree = "<group>"; };
 		D3A5E0B22F9AA21D007F83A5 /* GetPokemonTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPokemonTypes.swift; sourceTree = "<group>"; };
+		D3A5E0BA2F9AA2E1007F83A5 /* String+PokemonType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+PokemonType.swift"; sourceTree = "<group>"; };
+		D3A5E0C72F9AA56B007F83A5 /* PokemonTypeBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonTypeBadgeView.swift; sourceTree = "<group>"; };
 		D3DC470F2F9980A500C72D3B /* openapi-generator-config.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = "openapi-generator-config.yaml"; sourceTree = "<group>"; };
 		D3DC47262F99896300C72D3B /* openapi.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = openapi.yaml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -257,6 +261,8 @@
 		D3A5E0A22F9AA1F4007F83A5 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				D3A5E0C72F9AA56B007F83A5 /* PokemonTypeBadgeView.swift */,
+				D3A5E0BA2F9AA2E1007F83A5 /* String+PokemonType.swift */,
 				D3A5E0A12F9AA1F4007F83A5 /* Color+PokemonType.swift */,
 			);
 			path = Shared;
@@ -440,8 +446,10 @@
 				D34DFA492F96E25F00386709 /* PokemonRepositoryProtocol.swift in Sources */,
 				1A0E3A9B2862F7E200132FCB /* SceneDelegate.swift in Sources */,
 				D34DFA472F96E24B00386709 /* PokemonRepository.swift in Sources */,
+				D3A5E0BB2F9AA2E1007F83A5 /* String+PokemonType.swift in Sources */,
 				D34DFA702F96E72600386709 /* PokemonNetworkServiceProtocol.swift in Sources */,
 				D3A5E0A32F9AA1F4007F83A5 /* Color+PokemonType.swift in Sources */,
+				D3A5E0C82F9AA56B007F83A5 /* PokemonTypeBadgeView.swift in Sources */,
 				D34DFA722F96E72800386709 /* PokemonAPINetworkService.swift in Sources */,
 				D34DFA742F96E72A00386709 /* PokemonDataMapper.swift in Sources */,
 				D34DFA512F96E5DD00386709 /* PokemonListView.swift in Sources */,

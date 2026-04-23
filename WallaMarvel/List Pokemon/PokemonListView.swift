@@ -45,12 +45,11 @@ struct PokemonListView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {
                 ForEach(viewModel.pokemonTypes, id: \.self) { type in
-                    TypeChipView(
+                    PokemonTypeBadgeView(
                         type: type,
-                        isSelected: viewModel.selectedType == type
-                    ) {
-                        Task { await viewModel.selectType(type) }
-                    }
+                        isSelected: viewModel.selectedType == type,
+                        onTap: { Task { await viewModel.selectType(type) } }
+                    )
                 }
             }
             .padding(.horizontal, 16)
@@ -104,26 +103,3 @@ struct PokemonListView: View {
     }
 }
 
-private struct TypeChipView: View {
-    let type: String
-    let isSelected: Bool
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            Text(type.capitalized)
-                .font(.caption)
-                .fontWeight(.semibold)
-                .foregroundStyle(.white)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 6)
-                .background(Color.pokemonType(type).opacity(isSelected ? 1.0 : 0.5))
-                .clipShape(Capsule())
-                .overlay(
-                    Capsule()
-                        .stroke(Color.pokemonType(type), lineWidth: isSelected ? 2 : 0)
-                )
-        }
-        .buttonStyle(.plain)
-    }
-}
