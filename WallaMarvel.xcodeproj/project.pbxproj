@@ -54,6 +54,7 @@
 		D3A5E0F32F9AB42E007F83A5 /* AppLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E0F22F9AB42E007F83A5 /* AppLogger.swift */; };
 		D3A5E0F72F9AB435007F83A5 /* ErrorAlertModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E0F62F9AB435007F83A5 /* ErrorAlertModifier.swift */; };
 		D3A5E10A2F9AB9DA007F83A5 /* PokemonSpriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E1092F9AB9DA007F83A5 /* PokemonSpriteView.swift */; };
+		D3A5E1162F9AD6DB007F83A5 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D3A5E1152F9AD6DB007F83A5 /* RealmSwift */; };
 		D3DC46F42F983A6700C72D3B /* PokemonAPI in Frameworks */ = {isa = PBXBuildFile; productRef = D3DC46F32F983A6700C72D3B /* PokemonAPI */; };
 		D3DC47012F997D6400C72D3B /* OpenAPIRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = D3DC47002F997D6400C72D3B /* OpenAPIRuntime */; };
 		D3DC47042F997D7D00C72D3B /* OpenAPIURLSession in Frameworks */ = {isa = PBXBuildFile; productRef = D3DC47032F997D7D00C72D3B /* OpenAPIURLSession */; };
@@ -141,6 +142,7 @@
 				A66389F32DCE202500466318 /* Kingfisher in Frameworks */,
 				D3DC47012F997D6400C72D3B /* OpenAPIRuntime in Frameworks */,
 				D3DC46F42F983A6700C72D3B /* PokemonAPI in Frameworks */,
+				D3A5E1162F9AD6DB007F83A5 /* RealmSwift in Frameworks */,
 				D3DC47042F997D7D00C72D3B /* OpenAPIURLSession in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -435,6 +437,7 @@
 				D3DC46FA2F98504A00C72D3B /* XCRemoteSwiftPackageReference "swift-openapi-generator" */,
 				D3DC46FF2F997D6400C72D3B /* XCRemoteSwiftPackageReference "swift-openapi-runtime" */,
 				D3DC47022F997D7D00C72D3B /* XCRemoteSwiftPackageReference "swift-openapi-urlsession" */,
+				D3A5E1142F9AD6DB007F83A5 /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			productRefGroup = 1A0E3A962862F7E200132FCB /* Products */;
 			projectDirPath = "";
@@ -876,6 +879,14 @@
 				minimumVersion = 7.2.4;
 			};
 		};
+		D3A5E1142F9AD6DB007F83A5 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				kind = exactVersion;
+				version = 20.0.4;
+			};
+		};
 		D3DC46F22F983A6700C72D3B /* XCRemoteSwiftPackageReference "PokemonAPI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kinkofer/PokemonAPI.git";
@@ -915,6 +926,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A66389F12DCE202500466318 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		D3A5E1152F9AD6DB007F83A5 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D3A5E1142F9AD6DB007F83A5 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
 		};
 		D3DC46F32F983A6700C72D3B /* PokemonAPI */ = {
 			isa = XCSwiftPackageProductDependency;
