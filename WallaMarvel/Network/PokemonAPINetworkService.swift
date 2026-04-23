@@ -48,6 +48,6 @@ final class PokemonAPINetworkService: PokemonNetworkServiceProtocol {
         )
         return (paged.results ?? [])
             .compactMap { $0.name }
-            .filter { $0 != "unknown" && $0 != "shadow" }
+            .filter { !["unknown", "shadow", "stellar"].contains($0) }
     }
 }

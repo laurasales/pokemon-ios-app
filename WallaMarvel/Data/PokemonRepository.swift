@@ -11,7 +11,7 @@ final class PokemonRepository: PokemonRepositoryProtocol {
     private let networkService: PokemonNetworkServiceProtocol
 
     init(
-        networkService: PokemonNetworkServiceProtocol = OpenAPIPokemonNetworkService()
+        networkService: PokemonNetworkServiceProtocol = PokemonAPINetworkService()
     ) {
         self.networkService = networkService
     }

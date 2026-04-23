@@ -53,6 +53,6 @@ final class OpenAPIPokemonNetworkService: PokemonNetworkServiceProtocol {
         let body = try response.ok.body.json
         return body.results
             .map { $0.name }
-            .filter { $0 != "unknown" && $0 != "shadow" }
+            .filter { !["unknown", "shadow", "stellar"].contains($0) }
     }
 }
