@@ -90,6 +90,51 @@ final class ListPokemonViewModelTests: XCTestCase {
         XCTAssertFalse(viewModel.searchNotFound)
     }
 
+    // MARK: - errorMessage
+
+    func test_getPokemon_setsErrorMessage_onError() async {
+        let viewModel = makeViewModel(listError: URLError(.notConnectedToInternet))
+
+        await viewModel.getPokemon()
+
+        XCTAssertNotNil(viewModel.errorMessage)
+    }
+
+    func test_getPokemon_doesNotSetErrorMessage_onSuccess() async {
+        let viewModel = makeViewModel(listPokemon: [
+            Pokemon(id: 1, name: "Bulbasaur", imageURL: URL(string: "https://example.com/1.png")!)
+        ])
+
+        await viewModel.getPokemon()
+
+        XCTAssertNil(viewModel.errorMessage)
+    }
+
+    func test_selectType_setsErrorMessage_onError() async {
+        let viewModel = makeViewModel(typesByTypeError: URLError(.notConnectedToInternet))
+
+        await viewModel.selectType("fire")
+
+        XCTAssertNotNil(viewModel.errorMessage)
+    }
+
+    func test_selectType_resetsSelectedType_onError() async {
+        let viewModel = makeViewModel(typesByTypeError: URLError(.notConnectedToInternet))
+
+        await viewModel.selectType("fire")
+
+        XCTAssertNil(viewModel.selectedType)
+    }
+
+    func test_dismissError_clearsErrorMessage() async {
+        let viewModel = makeViewModel(listError: URLError(.notConnectedToInternet))
+        await viewModel.getPokemon()
+
+        viewModel.dismissError()
+
+        XCTAssertNil(viewModel.errorMessage)
+    }
+
     // MARK: - loadTypes
 
     func test_loadTypes_updatesPokemonTypes_onSuccess() async {

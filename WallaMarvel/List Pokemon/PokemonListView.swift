@@ -48,6 +48,7 @@ struct PokemonListView: View {
                 async let pokemon: () = viewModel.getPokemon()
                 _ = await (types, pokemon)
             }
+            .errorAlert(message: viewModel.errorMessage, onDismiss: viewModel.dismissError)
         }
     }
 

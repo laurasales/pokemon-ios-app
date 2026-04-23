@@ -39,5 +39,6 @@ struct PokemonDetailView: View {
         .task {
             await viewModel.getDetail()
         }
+        .errorAlert(message: viewModel.errorMessage, onDismiss: viewModel.dismissError)
     }
 }

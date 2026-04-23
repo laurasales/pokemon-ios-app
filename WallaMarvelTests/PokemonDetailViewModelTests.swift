@@ -58,6 +58,33 @@ final class PokemonDetailViewModelTests: XCTestCase {
         XCTAssertFalse(viewModel.isLoading)
     }
 
+    // MARK: - errorMessage
+
+    func test_getDetail_setsErrorMessage_onError() async {
+        let viewModel = makeViewModel(error: URLError(.notConnectedToInternet))
+
+        await viewModel.getDetail()
+
+        XCTAssertNotNil(viewModel.errorMessage)
+    }
+
+    func test_getDetail_doesNotSetErrorMessage_onSuccess() async {
+        let viewModel = makeViewModel(detail: .mock)
+
+        await viewModel.getDetail()
+
+        XCTAssertNil(viewModel.errorMessage)
+    }
+
+    func test_dismissError_clearsErrorMessage() async {
+        let viewModel = makeViewModel(error: URLError(.notConnectedToInternet))
+        await viewModel.getDetail()
+
+        viewModel.dismissError()
+
+        XCTAssertNil(viewModel.errorMessage)
+    }
+
     // MARK: - Helpers
 
     private func makeViewModel(
