@@ -13,7 +13,8 @@ struct PokemonListView: View {
     var body: some View {
         NavigationStack {
             Group {
-                if viewModel.isLoading && viewModel.pokemon.isEmpty && !viewModel.isSearching {
+                let isTypeFilterLoading = viewModel.isLoading && viewModel.selectedType != nil && viewModel.filteredPokemon.isEmpty
+                if (viewModel.isLoading && viewModel.pokemon.isEmpty || isTypeFilterLoading) && !viewModel.isSearching {
                     ProgressView()
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if viewModel.isSearching {
