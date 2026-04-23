@@ -19,7 +19,10 @@ struct PokemonListView: View {
                 } else if viewModel.isSearching {
                     searchContent
                 } else {
-                    pokemonList
+                    VStack(spacing: 0) {
+                        typeFilterBar
+                        pokemonList
+                    }
                 }
             }
             .navigationTitle(viewModel.title)
@@ -31,9 +34,28 @@ struct PokemonListView: View {
                 if newValue.isEmpty { viewModel.clearSearch() }
             }
             .task {
-                await viewModel.getPokemon()
+                async let types: () = viewModel.loadTypes()
+                async let pokemon: () = viewModel.getPokemon()
+                _ = await (types, pokemon)
             }
         }
+    }
+
+    private var typeFilterBar: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(viewModel.pokemonTypes, id: \.self) { type in
+                    TypeChipView(
+                        type: type,
+                        isSelected: viewModel.selectedType == type
+                    ) {
+                        Task { await viewModel.selectType(type) }
+                    }
+                }
+            }
+            .padding(.horizontal, 16)
+        }
+        .padding(.vertical, 8)
     }
 
     @ViewBuilder
@@ -56,8 +78,9 @@ struct PokemonListView: View {
     }
 
     private var pokemonList: some View {
-        List {
-            ForEach(viewModel.pokemon, id: \.id) { pokemon in
+        let displayed = viewModel.selectedType != nil ? viewModel.filteredPokemon : viewModel.pokemon
+        return List {
+            ForEach(displayed, id: \.id) { pokemon in
                 NavigationLink(destination: PokemonDetailView(pokemonID: pokemon.id)) {
                     PokemonRowView(pokemon: pokemon)
                 }
@@ -78,5 +101,29 @@ struct PokemonListView: View {
         .refreshable {
             await viewModel.getPokemon()
         }
+    }
+}
+
+private struct TypeChipView: View {
+    let type: String
+    let isSelected: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Text(type.capitalized)
+                .font(.caption)
+                .fontWeight(.semibold)
+                .foregroundStyle(.white)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
+                .background(Color.pokemonType(type).opacity(isSelected ? 1.0 : 0.5))
+                .clipShape(Capsule())
+                .overlay(
+                    Capsule()
+                        .stroke(Color.pokemonType(type), lineWidth: isSelected ? 2 : 0)
+                )
+        }
+        .buttonStyle(.plain)
     }
 }

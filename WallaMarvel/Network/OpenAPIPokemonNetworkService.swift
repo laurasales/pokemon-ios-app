@@ -38,4 +38,21 @@ final class OpenAPIPokemonNetworkService: PokemonNetworkServiceProtocol {
         let body = try response.ok.body.json
         return try mapper.toPokemon(from: body)
     }
+
+    func getPokemonByType(typeName: String) async throws -> [Pokemon] {
+        let response = try await client.getPokemonType(path: .init(id: typeName))
+        let body = try response.ok.body.json
+        return try body.pokemon.compactMap { slot -> Pokemon? in
+            guard let resource = slot.pokemon else { return nil }
+            return try mapper.toPokemon(from: resource)
+        }
+    }
+
+    func getPokemonTypes() async throws -> [String] {
+        let response = try await client.listPokemonTypes()
+        let body = try response.ok.body.json
+        return body.results
+            .map { $0.name }
+            .filter { $0 != "unknown" && $0 != "shadow" }
+    }
 }
