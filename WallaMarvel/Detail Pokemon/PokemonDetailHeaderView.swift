@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Kingfisher
 
 struct PokemonDetailHeaderView: View {
     let detail: PokemonDetail
