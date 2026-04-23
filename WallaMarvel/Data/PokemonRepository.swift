@@ -10,7 +10,7 @@ import Foundation
 final class PokemonRepository: PokemonRepositoryProtocol {
     private let networkService: PokemonNetworkServiceProtocol
 
-    init(networkService: PokemonNetworkServiceProtocol = OpenAPIPokemonNetworkService()) {
+    init(networkService: PokemonNetworkServiceProtocol = PokemonAPINetworkService()) {
         self.networkService = networkService
     }
 
