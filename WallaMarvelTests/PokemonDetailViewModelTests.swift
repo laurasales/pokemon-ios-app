@@ -69,38 +69,3 @@ final class PokemonDetailViewModelTests: XCTestCase {
         return PokemonDetailViewModel(pokemonID: detail.id, getPokemonDetailUseCase: useCase)
     }
 }
-
-// MARK: - Mocks
-
-private final class MockGetPokemonDetailUseCase: GetPokemonDetailUseCaseProtocol {
-    private let result: Result<PokemonDetail, Error>
-
-    init(detail: PokemonDetail) {
-        self.result = .success(detail)
-    }
-
-    init(error: Error) {
-        self.result = .failure(error)
-    }
-
-    func execute(id: Int) async throws -> PokemonDetail {
-        try result.get()
-    }
-}
-
-private extension PokemonDetail {
-    static let mock = PokemonDetail(
-        id: 1,
-        name: "Bulbasaur",
-        slug: "bulbasaur",
-        imageURL: URL(string: "https://example.com/1.png")!,
-        height: 7,
-        weight: 69,
-        types: ["Grass", "Poison"],
-        stats: [
-            Stat(name: "hp", value: 45),
-            Stat(name: "attack", value: 49)
-        ],
-        abilities: ["Overgrow", "Chlorophyll"]
-    )
-}
