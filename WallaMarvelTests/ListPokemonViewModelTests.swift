@@ -206,6 +206,99 @@ final class ListPokemonViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.filteredPokemon.first?.name, "Squirtle")
     }
 
+    // MARK: - favourites
+
+    func test_loadFavorites_updatesFavorites() {
+        let expected = [Pokemon(id: 1, name: "Bulbasaur", imageURL: URL(string: "https://example.com/1.png")!)]
+        let viewModel = makeViewModel(favorites: expected)
+
+        viewModel.loadFavorites()
+
+        XCTAssertEqual(viewModel.favorites.count, 1)
+        XCTAssertEqual(viewModel.favorites.first?.name, "Bulbasaur")
+    }
+
+    func test_toggleShowFavoritesOnly_setsShowingFavoritesOnly() {
+        let viewModel = makeViewModel()
+
+        viewModel.toggleShowFavoritesOnly()
+
+        XCTAssertTrue(viewModel.showingFavoritesOnly)
+    }
+
+    func test_toggleShowFavoritesOnly_clearsSelectedType() async {
+        let viewModel = makeViewModel(typesByType: [
+            Pokemon(id: 4, name: "Charmander", imageURL: URL(string: "https://example.com/4.png")!)
+        ])
+        await viewModel.selectType("fire")
+
+        viewModel.toggleShowFavoritesOnly()
+
+        XCTAssertNil(viewModel.selectedType)
+        XCTAssertTrue(viewModel.filteredPokemon.isEmpty)
+    }
+
+    func test_toggleShowFavoritesOnly_turnsOff_whenAlreadyOn() {
+        let viewModel = makeViewModel()
+        viewModel.toggleShowFavoritesOnly()
+
+        viewModel.toggleShowFavoritesOnly()
+
+        XCTAssertFalse(viewModel.showingFavoritesOnly)
+    }
+
+    func test_selectType_clearsShowingFavoritesOnly() async {
+        let viewModel = makeViewModel()
+        viewModel.toggleShowFavoritesOnly()
+
+        await viewModel.selectType("fire")
+
+        XCTAssertFalse(viewModel.showingFavoritesOnly)
+    }
+
+    func test_isFavorite_returnsTrue_whenPokemonIsFavorite() {
+        let pokemon = Pokemon(id: 1, name: "Bulbasaur", imageURL: URL(string: "https://example.com/1.png")!)
+        let viewModel = makeViewModel(favoriteIDs: [1])
+
+        XCTAssertTrue(viewModel.isFavorite(pokemon))
+    }
+
+    func test_isFavorite_returnsFalse_whenPokemonIsNotFavorite() {
+        let pokemon = Pokemon(id: 1, name: "Bulbasaur", imageURL: URL(string: "https://example.com/1.png")!)
+        let viewModel = makeViewModel()
+
+        XCTAssertFalse(viewModel.isFavorite(pokemon))
+    }
+
+    func test_displayedPokemon_returnsFavorites_whenShowingFavoritesOnly() {
+        let favorites = [Pokemon(id: 1, name: "Bulbasaur", imageURL: URL(string: "https://example.com/1.png")!)]
+        let viewModel = makeViewModel(favorites: favorites)
+        viewModel.toggleShowFavoritesOnly()
+
+        XCTAssertEqual(viewModel.displayedPokemon.count, 1)
+        XCTAssertEqual(viewModel.displayedPokemon.first?.name, "Bulbasaur")
+    }
+
+    func test_displayedPokemon_returnsFilteredPokemon_whenTypeSelected() async {
+        let firePokemon = [Pokemon(id: 4, name: "Charmander", imageURL: URL(string: "https://example.com/4.png")!)]
+        let viewModel = makeViewModel(typesByType: firePokemon)
+        await viewModel.selectType("fire")
+
+        XCTAssertEqual(viewModel.displayedPokemon.count, 1)
+        XCTAssertEqual(viewModel.displayedPokemon.first?.name, "Charmander")
+    }
+
+    func test_displayedPokemon_returnsAllPokemon_whenNoFilterActive() async {
+        let allPokemon = [
+            Pokemon(id: 1, name: "Bulbasaur", imageURL: URL(string: "https://example.com/1.png")!),
+            Pokemon(id: 2, name: "Ivysaur", imageURL: URL(string: "https://example.com/2.png")!)
+        ]
+        let viewModel = makeViewModel(listPokemon: allPokemon)
+        await viewModel.getPokemon()
+
+        XCTAssertEqual(viewModel.displayedPokemon.count, 2)
+    }
+
     // MARK: - Helpers
 
     private func makeViewModel(
@@ -216,7 +309,9 @@ final class ListPokemonViewModelTests: XCTestCase {
         typesByType: [Pokemon] = [],
         typesByTypeError: Error? = nil,
         pokemonTypes: [String] = [],
-        pokemonTypesError: Error? = nil
+        pokemonTypesError: Error? = nil,
+        favorites: [Pokemon] = [],
+        favoriteIDs: Set<Int> = []
     ) -> ListPokemonViewModel {
         let listUseCase = listError.map { MockGetPokemonListUseCase(error: $0) }
             ?? MockGetPokemonListUseCase(pokemon: listPokemon)
@@ -226,11 +321,15 @@ final class ListPokemonViewModelTests: XCTestCase {
             ?? MockGetPokemonByTypeUseCase(pokemon: typesByType)
         let typesUseCase = pokemonTypesError.map { MockGetPokemonTypesUseCase(error: $0) }
             ?? MockGetPokemonTypesUseCase(types: pokemonTypes)
+        let toggleUseCase = MockToggleFavoriteUseCase(favoriteIDs: favoriteIDs)
+        let getFavoritesUseCase = MockGetFavoritesUseCase(favorites: favorites)
         return ListPokemonViewModel(
             getPokemonListUseCase: listUseCase,
             searchPokemonUseCase: searchUseCase,
             getPokemonByTypeUseCase: byTypeUseCase,
-            getPokemonTypesUseCase: typesUseCase
+            getPokemonTypesUseCase: typesUseCase,
+            toggleFavoriteUseCase: toggleUseCase,
+            getFavoritesUseCase: getFavoritesUseCase
         )
     }
 }

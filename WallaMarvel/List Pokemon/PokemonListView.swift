@@ -19,23 +19,7 @@ struct PokemonListView: View {
                 } else if viewModel.isSearching {
                     searchContent
                 } else {
-                    VStack(spacing: 0) {
-                        typeFilterBar
-                        let isTypeFilterLoading = viewModel.isLoading && viewModel.selectedType != nil && viewModel.filteredPokemon.isEmpty
-                        if isTypeFilterLoading {
-                            ProgressView()
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        } else if !viewModel.isLoading && viewModel.selectedType != nil && viewModel.filteredPokemon.isEmpty {
-                            ContentUnavailableView(
-                                "No Pokémon found",
-                                systemImage: "questionmark.circle",
-                                description: Text("No Pokémon of this type are available.")
-                            )
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        } else {
-                            pokemonList
-                        }
-                    }
+                    mainContent
                 }
             }
             .navigationTitle(viewModel.title)
@@ -50,14 +34,51 @@ struct PokemonListView: View {
                 async let types: () = viewModel.loadTypes()
                 async let pokemon: () = viewModel.getPokemon()
                 _ = await (types, pokemon)
+                viewModel.loadFavorites()
             }
             .errorAlert(message: viewModel.errorMessage, onDismiss: viewModel.dismissError)
         }
     }
 
+    @ViewBuilder
+    private var mainContent: some View {
+        VStack(spacing: 0) {
+            typeFilterBar
+            if viewModel.showingFavoritesOnly && viewModel.favorites.isEmpty {
+                emptyFavoritesView
+            } else if viewModel.isTypeFilterLoading {
+                ProgressView()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if !viewModel.isLoading && viewModel.selectedType != nil && viewModel.filteredPokemon.isEmpty {
+                ContentUnavailableView(
+                    "No Pokémon found",
+                    systemImage: "questionmark.circle",
+                    description: Text("No Pokémon of this type are available.")
+                )
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else {
+                pokemonList
+            }
+        }
+    }
+
+    private var emptyFavoritesView: some View {
+        ContentUnavailableView(
+            "No favourites yet",
+            systemImage: "heart.slash",
+            description: Text("Tap the heart on any Pokémon to save it here.")
+        )
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
     private var typeFilterBar: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {
+                PokemonTypeBadgeView(
+                    type: "favorites",
+                    isSelected: viewModel.showingFavoritesOnly,
+                    onTap: { viewModel.toggleShowFavoritesOnly() }
+                )
                 ForEach(viewModel.pokemonTypes, id: \.self) { type in
                     PokemonTypeBadgeView(
                         type: type,
@@ -91,14 +112,19 @@ struct PokemonListView: View {
     }
 
     private var pokemonList: some View {
-        let displayed = viewModel.selectedType != nil ? viewModel.filteredPokemon : viewModel.pokemon
-        return List {
-            ForEach(displayed, id: \.id) { pokemon in
+        List {
+            ForEach(viewModel.displayedPokemon, id: \.id) { pokemon in
                 NavigationLink(destination: PokemonDetailView(pokemonID: pokemon.id)) {
-                    PokemonRowView(pokemon: pokemon)
+                    PokemonRowView(
+                        pokemon: pokemon,
+                        isFavorite: viewModel.isFavorite(pokemon),
+                        onToggleFavorite: { viewModel.toggleFavorite(pokemon) }
+                    )
                 }
                 .task {
-                    await viewModel.loadMoreIfNeeded(currentPokemon: pokemon)
+                    if !viewModel.showingFavoritesOnly {
+                        await viewModel.loadMoreIfNeeded(currentPokemon: pokemon)
+                    }
                 }
             }
             if viewModel.isLoading {
@@ -112,7 +138,9 @@ struct PokemonListView: View {
         }
         .listStyle(.plain)
         .refreshable {
-            if let type = viewModel.selectedType {
+            if viewModel.showingFavoritesOnly {
+                viewModel.loadFavorites()
+            } else if let type = viewModel.selectedType {
                 await viewModel.refreshFilteredPokemon(typeName: type)
             } else {
                 await viewModel.getPokemon()
@@ -120,4 +148,3 @@ struct PokemonListView: View {
         }
     }
 }
-

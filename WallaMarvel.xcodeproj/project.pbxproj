@@ -54,6 +54,14 @@
 		D3A5E0F32F9AB42E007F83A5 /* AppLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E0F22F9AB42E007F83A5 /* AppLogger.swift */; };
 		D3A5E0F72F9AB435007F83A5 /* ErrorAlertModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E0F62F9AB435007F83A5 /* ErrorAlertModifier.swift */; };
 		D3A5E10A2F9AB9DA007F83A5 /* PokemonSpriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E1092F9AB9DA007F83A5 /* PokemonSpriteView.swift */; };
+		D3A5E1162F9AD6DB007F83A5 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D3A5E1152F9AD6DB007F83A5 /* RealmSwift */; };
+		D3A5E11B2F9AD91F007F83A5 /* FavoritesRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E11A2F9AD91F007F83A5 /* FavoritesRepositoryProtocol.swift */; };
+		D3A5E11F2F9AD92A007F83A5 /* GetFavorites.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E11E2F9AD92A007F83A5 /* GetFavorites.swift */; };
+		D3A5E1232F9AD932007F83A5 /* ToggleFavorite.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E1222F9AD932007F83A5 /* ToggleFavorite.swift */; };
+		D3A5E1272F9AD944007F83A5 /* FavoritesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E1262F9AD944007F83A5 /* FavoritesRepository.swift */; };
+		D3A5E12C2F9AD94F007F83A5 /* FavoritePokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E12A2F9AD94F007F83A5 /* FavoritePokemon.swift */; };
+		D3A5E1392F9ADF74007F83A5 /* MockToggleFavoriteUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E1382F9ADF74007F83A5 /* MockToggleFavoriteUseCase.swift */; };
+		D3A5E13F2F9ADF7E007F83A5 /* MockGetFavoritesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E13E2F9ADF7E007F83A5 /* MockGetFavoritesUseCase.swift */; };
 		D3DC46F42F983A6700C72D3B /* PokemonAPI in Frameworks */ = {isa = PBXBuildFile; productRef = D3DC46F32F983A6700C72D3B /* PokemonAPI */; };
 		D3DC47012F997D6400C72D3B /* OpenAPIRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = D3DC47002F997D6400C72D3B /* OpenAPIRuntime */; };
 		D3DC47042F997D7D00C72D3B /* OpenAPIURLSession in Frameworks */ = {isa = PBXBuildFile; productRef = D3DC47032F997D7D00C72D3B /* OpenAPIURLSession */; };
@@ -129,6 +137,13 @@
 		D3A5E0F22F9AB42E007F83A5 /* AppLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLogger.swift; sourceTree = "<group>"; };
 		D3A5E0F62F9AB435007F83A5 /* ErrorAlertModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorAlertModifier.swift; sourceTree = "<group>"; };
 		D3A5E1092F9AB9DA007F83A5 /* PokemonSpriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonSpriteView.swift; sourceTree = "<group>"; };
+		D3A5E11A2F9AD91F007F83A5 /* FavoritesRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesRepositoryProtocol.swift; sourceTree = "<group>"; };
+		D3A5E11E2F9AD92A007F83A5 /* GetFavorites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetFavorites.swift; sourceTree = "<group>"; };
+		D3A5E1222F9AD932007F83A5 /* ToggleFavorite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleFavorite.swift; sourceTree = "<group>"; };
+		D3A5E1262F9AD944007F83A5 /* FavoritesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesRepository.swift; sourceTree = "<group>"; };
+		D3A5E12A2F9AD94F007F83A5 /* FavoritePokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritePokemon.swift; sourceTree = "<group>"; };
+		D3A5E1382F9ADF74007F83A5 /* MockToggleFavoriteUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockToggleFavoriteUseCase.swift; sourceTree = "<group>"; };
+		D3A5E13E2F9ADF7E007F83A5 /* MockGetFavoritesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockGetFavoritesUseCase.swift; sourceTree = "<group>"; };
 		D3DC470F2F9980A500C72D3B /* openapi-generator-config.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = "openapi-generator-config.yaml"; sourceTree = "<group>"; };
 		D3DC47262F99896300C72D3B /* openapi.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = openapi.yaml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -141,6 +156,7 @@
 				A66389F32DCE202500466318 /* Kingfisher in Frameworks */,
 				D3DC47012F997D6400C72D3B /* OpenAPIRuntime in Frameworks */,
 				D3DC46F42F983A6700C72D3B /* PokemonAPI in Frameworks */,
+				D3A5E1162F9AD6DB007F83A5 /* RealmSwift in Frameworks */,
 				D3DC47042F997D7D00C72D3B /* OpenAPIURLSession in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -250,6 +266,7 @@
 		1A821EC62862FD650024D397 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
+				D3A5E11A2F9AD91F007F83A5 /* FavoritesRepositoryProtocol.swift */,
 				D3DC46F92F984BBC00C72D3B /* Models */,
 				D34DFA482F96E25E00386709 /* PokemonRepositoryProtocol.swift */,
 				1AC0347D286320F000E93178 /* UseCases */,
@@ -260,6 +277,8 @@
 		1A821EC72862FD6E0024D397 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				D3A5E12B2F9AD94F007F83A5 /* Persistence */,
+				D3A5E1262F9AD944007F83A5 /* FavoritesRepository.swift */,
 				D3DC46F72F984B0300C72D3B /* Mapper */,
 				D34DFA462F96E24A00386709 /* PokemonRepository.swift */,
 			);
@@ -269,6 +288,8 @@
 		1AC0347D286320F000E93178 /* UseCases */ = {
 			isa = PBXGroup;
 			children = (
+				D3A5E1222F9AD932007F83A5 /* ToggleFavorite.swift */,
+				D3A5E11E2F9AD92A007F83A5 /* GetFavorites.swift */,
 				D3A5E0B22F9AA21D007F83A5 /* GetPokemonTypes.swift */,
 				D3A5E0862F9A980B007F83A5 /* GetPokemonByType.swift */,
 				D34DFA4A2F96E28300386709 /* GetPokemonList.swift */,
@@ -294,6 +315,8 @@
 		D3A5E0E12F9AAF8C007F83A5 /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
+				D3A5E13E2F9ADF7E007F83A5 /* MockGetFavoritesUseCase.swift */,
+				D3A5E1382F9ADF74007F83A5 /* MockToggleFavoriteUseCase.swift */,
 				D3A5E0DC2F9AAF8C007F83A5 /* MockGetPokemonByTypeUseCase.swift */,
 				D3A5E0DD2F9AAF8C007F83A5 /* MockGetPokemonDetailUseCase.swift */,
 				D3A5E0DE2F9AAF8C007F83A5 /* MockGetPokemonListUseCase.swift */,
@@ -309,6 +332,14 @@
 				D3A5E0E82F9AAF95007F83A5 /* PokemonDetail+Mock.swift */,
 			);
 			path = TestData;
+			sourceTree = "<group>";
+		};
+		D3A5E12B2F9AD94F007F83A5 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				D3A5E12A2F9AD94F007F83A5 /* FavoritePokemon.swift */,
+			);
+			path = Persistence;
 			sourceTree = "<group>";
 		};
 		D3DC46F62F984AC400C72D3B /* Network */ = {
@@ -435,6 +466,7 @@
 				D3DC46FA2F98504A00C72D3B /* XCRemoteSwiftPackageReference "swift-openapi-generator" */,
 				D3DC46FF2F997D6400C72D3B /* XCRemoteSwiftPackageReference "swift-openapi-runtime" */,
 				D3DC47022F997D7D00C72D3B /* XCRemoteSwiftPackageReference "swift-openapi-urlsession" */,
+				D3A5E1142F9AD6DB007F83A5 /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			productRefGroup = 1A0E3A962862F7E200132FCB /* Products */;
 			projectDirPath = "";
@@ -485,10 +517,14 @@
 				D34DFA532F96E5EA00386709 /* PokemonRowView.swift in Sources */,
 				D34DFA3F2F96E1D000386709 /* Pokemon.swift in Sources */,
 				D3A5E0F72F9AB435007F83A5 /* ErrorAlertModifier.swift in Sources */,
+				D3A5E1232F9AD932007F83A5 /* ToggleFavorite.swift in Sources */,
+				D3A5E11B2F9AD91F007F83A5 /* FavoritesRepositoryProtocol.swift in Sources */,
+				D3A5E12C2F9AD94F007F83A5 /* FavoritePokemon.swift in Sources */,
 				1A0E3A992862F7E200132FCB /* AppDelegate.swift in Sources */,
 				D34DFA4B2F96E28400386709 /* GetPokemonList.swift in Sources */,
 				D34DFA492F96E25F00386709 /* PokemonRepositoryProtocol.swift in Sources */,
 				1A0E3A9B2862F7E200132FCB /* SceneDelegate.swift in Sources */,
+				D3A5E1272F9AD944007F83A5 /* FavoritesRepository.swift in Sources */,
 				D34DFA472F96E24B00386709 /* PokemonRepository.swift in Sources */,
 				D3A5E10A2F9AB9DA007F83A5 /* PokemonSpriteView.swift in Sources */,
 				D3A5E0BB2F9AA2E1007F83A5 /* String+PokemonType.swift in Sources */,
@@ -503,6 +539,7 @@
 				D34DFA5A2F96E60600386709 /* PokemonDetailViewModel.swift in Sources */,
 				D34DFA5C2F96E60800386709 /* PokemonDetailView.swift in Sources */,
 				D3A5E0872F9A980B007F83A5 /* GetPokemonByType.swift in Sources */,
+				D3A5E11F2F9AD92A007F83A5 /* GetFavorites.swift in Sources */,
 				D34DFA5E2F96E70000386709 /* PokemonDetailHeaderView.swift in Sources */,
 				D3A5E0F32F9AB42E007F83A5 /* AppLogger.swift in Sources */,
 				D34DFA602F96E70200386709 /* PokemonStatsSectionView.swift in Sources */,
@@ -521,9 +558,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A0E3AB02862F7E300132FCB /* WallaMarvelTests.swift in Sources */,
+				D3A5E13F2F9ADF7E007F83A5 /* MockGetFavoritesUseCase.swift in Sources */,
 				D3A5E0E22F9AAF8C007F83A5 /* MockGetPokemonTypesUseCase.swift in Sources */,
 				D3A5E0EA2F9AAF95007F83A5 /* PokemonDetail+Mock.swift in Sources */,
 				D3A5E0E32F9AAF8C007F83A5 /* MockGetPokemonDetailUseCase.swift in Sources */,
+				D3A5E1392F9ADF74007F83A5 /* MockToggleFavoriteUseCase.swift in Sources */,
 				D3A5E0E42F9AAF8C007F83A5 /* MockGetPokemonListUseCase.swift in Sources */,
 				D3A5E0E52F9AAF8C007F83A5 /* MockSearchPokemonUseCase.swift in Sources */,
 				D3A5E0E62F9AAF8C007F83A5 /* MockGetPokemonByTypeUseCase.swift in Sources */,
@@ -876,6 +915,14 @@
 				minimumVersion = 7.2.4;
 			};
 		};
+		D3A5E1142F9AD6DB007F83A5 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				kind = exactVersion;
+				version = 20.0.4;
+			};
+		};
 		D3DC46F22F983A6700C72D3B /* XCRemoteSwiftPackageReference "PokemonAPI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kinkofer/PokemonAPI.git";
@@ -915,6 +962,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A66389F12DCE202500466318 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		D3A5E1152F9AD6DB007F83A5 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D3A5E1142F9AD6DB007F83A5 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
 		};
 		D3DC46F32F983A6700C72D3B /* PokemonAPI */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -25,8 +25,9 @@ extension String {
         case "dragon":   return "lizard.fill"
         case "dark":     return "moon.fill"
         case "steel":    return "shield.fill"
-        case "fairy":    return "sparkles"
-        default:         return "questionmark.circle.fill"
+        case "fairy":      return "sparkles"
+        case "favorites":  return "heart.fill"
+        default:           return "questionmark.circle.fill"
         }
     }
 }

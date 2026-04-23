@@ -85,14 +85,61 @@ final class PokemonDetailViewModelTests: XCTestCase {
         XCTAssertNil(viewModel.errorMessage)
     }
 
+    // MARK: - favourites
+
+    func test_isFavorite_isFalse_initially() {
+        let viewModel = makeViewModel()
+
+        XCTAssertFalse(viewModel.isFavorite)
+    }
+
+    func test_isFavorite_isTrue_whenPokemonIsAlreadyFavorite() {
+        let viewModel = makeViewModel(favoriteIDs: [PokemonDetail.mock.id])
+
+        XCTAssertTrue(viewModel.isFavorite)
+    }
+
+    func test_toggleFavorite_setsIsFavoriteTrue_afterLoading() async {
+        let viewModel = makeViewModel()
+        await viewModel.getDetail()
+
+        viewModel.toggleFavorite()
+
+        XCTAssertTrue(viewModel.isFavorite)
+    }
+
+    func test_toggleFavorite_setsIsFavoriteFalse_whenAlreadyFavorite() async {
+        let viewModel = makeViewModel(favoriteIDs: [PokemonDetail.mock.id])
+        await viewModel.getDetail()
+
+        viewModel.toggleFavorite()
+
+        XCTAssertFalse(viewModel.isFavorite)
+    }
+
+    func test_toggleFavorite_doesNothing_whenDetailIsNil() async {
+        let viewModel = makeViewModel(error: URLError(.notConnectedToInternet))
+        await viewModel.getDetail()
+
+        viewModel.toggleFavorite()
+
+        XCTAssertFalse(viewModel.isFavorite)
+    }
+
     // MARK: - Helpers
 
     private func makeViewModel(
         detail: PokemonDetail = .mock,
-        error: Error? = nil
+        error: Error? = nil,
+        favoriteIDs: Set<Int> = []
     ) -> PokemonDetailViewModel {
-        let useCase = error.map { MockGetPokemonDetailUseCase(error: $0) }
+        let detailUseCase = error.map { MockGetPokemonDetailUseCase(error: $0) }
             ?? MockGetPokemonDetailUseCase(detail: detail)
-        return PokemonDetailViewModel(pokemonID: detail.id, getPokemonDetailUseCase: useCase)
+        let toggleUseCase = MockToggleFavoriteUseCase(favoriteIDs: favoriteIDs)
+        return PokemonDetailViewModel(
+            pokemonID: detail.id,
+            getPokemonDetailUseCase: detailUseCase,
+            toggleFavoriteUseCase: toggleUseCase
+        )
     }
 }
