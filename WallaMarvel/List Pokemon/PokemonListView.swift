@@ -13,8 +13,7 @@ struct PokemonListView: View {
     var body: some View {
         NavigationStack {
             Group {
-                let isTypeFilterLoading = viewModel.isLoading && viewModel.selectedType != nil && viewModel.filteredPokemon.isEmpty
-                if (viewModel.isLoading && viewModel.pokemon.isEmpty || isTypeFilterLoading) && !viewModel.isSearching {
+                if viewModel.isLoading && viewModel.pokemon.isEmpty && !viewModel.isSearching {
                     ProgressView()
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if viewModel.isSearching {
@@ -22,7 +21,11 @@ struct PokemonListView: View {
                 } else {
                     VStack(spacing: 0) {
                         typeFilterBar
-                        if !viewModel.isLoading && viewModel.selectedType != nil && viewModel.filteredPokemon.isEmpty {
+                        let isTypeFilterLoading = viewModel.isLoading && viewModel.selectedType != nil && viewModel.filteredPokemon.isEmpty
+                        if isTypeFilterLoading {
+                            ProgressView()
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        } else if !viewModel.isLoading && viewModel.selectedType != nil && viewModel.filteredPokemon.isEmpty {
                             ContentUnavailableView(
                                 "No Pokémon found",
                                 systemImage: "questionmark.circle",
