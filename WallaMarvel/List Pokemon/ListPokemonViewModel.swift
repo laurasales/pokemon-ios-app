@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os
 
 @MainActor
 final class ListPokemonViewModel: ObservableObject {
@@ -17,6 +18,7 @@ final class ListPokemonViewModel: ObservableObject {
     @Published private(set) var selectedType: String? = nil
     @Published private(set) var filteredPokemon: [Pokemon] = []
     @Published private(set) var pokemonTypes: [String] = []
+    @Published private(set) var errorMessage: String? = nil
 
     private let getPokemonListUseCase: GetPokemonListUseCaseProtocol
     private let searchPokemonUseCase: SearchPokemonUseCaseProtocol
@@ -42,11 +44,16 @@ final class ListPokemonViewModel: ObservableObject {
 
     var title: String { "Pokédex" }
 
+    func dismissError() {
+        errorMessage = nil
+    }
+
     func loadTypes() async {
         do {
             pokemonTypes = try await getPokemonTypesUseCase.execute()
+            Logger.network.debug("Loaded \(self.pokemonTypes.count) Pokémon types")
         } catch {
-            // TODO: surface error in UI
+            Logger.network.error("Failed to load Pokémon types: \(error)")
         }
     }
 
@@ -59,8 +66,10 @@ final class ListPokemonViewModel: ObservableObject {
             pokemon = result
             currentOffset = result.count
             hasMore = result.count == pageSize
+            Logger.network.debug("Loaded \(result.count) Pokémon")
         } catch {
-            // TODO: surface error in UI
+            Logger.network.error("Failed to load Pokémon list: \(error)")
+            errorMessage = "Failed to load Pokémons. Please try again."
         }
     }
 
@@ -75,8 +84,10 @@ final class ListPokemonViewModel: ObservableObject {
             pokemon.append(contentsOf: result)
             currentOffset += result.count
             hasMore = result.count == pageSize
+            Logger.network.debug("Loaded \(result.count) more Pokémon, total: \(self.pokemon.count)")
         } catch {
-            // TODO: surface error in UI
+            Logger.network.error("Failed to load more Pokémon at offset \(self.currentOffset): \(error)")
+            errorMessage = "Failed to load more Pokémon. Please try again."
         }
     }
 
@@ -87,9 +98,12 @@ final class ListPokemonViewModel: ObservableObject {
         searchNotFound = false
         isLoading = true
         defer { isLoading = false }
+        Logger.ui.debug("Searching for Pokémon with query: \(query, privacy: .private)")
         do {
             searchResult = try await searchPokemonUseCase.execute(query: query)
+            Logger.network.debug("Search succeeded for query: \(query, privacy: .private)")
         } catch {
+            Logger.network.error("Search failed for query \(query, privacy: .private): \(error)")
             searchNotFound = true
         }
     }
@@ -100,20 +114,39 @@ final class ListPokemonViewModel: ObservableObject {
         searchNotFound = false
     }
 
+    func refreshFilteredPokemon(typeName: String) async {
+        filteredPokemon = []
+        isLoading = true
+        defer { isLoading = false }
+        do {
+            filteredPokemon = try await getPokemonByTypeUseCase.execute(typeName: typeName)
+            Logger.network.debug("Refreshed \(self.filteredPokemon.count) Pokémons for type: \(typeName)")
+        } catch {
+            Logger.network.error("Failed to refresh Pokémons for type \(typeName): \(error)")
+            selectedType = nil
+            errorMessage = "Failed to load \(typeName.capitalized) type Pokémons. Please try again."
+        }
+    }
+
     func selectType(_ type: String) async {
         if selectedType == type {
+            Logger.ui.debug("Deselected Pokémon type: \(type)")
             selectedType = nil
             filteredPokemon = []
             return
         }
+        Logger.ui.debug("Selected Pokémon type: \(type)")
         selectedType = type
         filteredPokemon = []
         isLoading = true
         defer { isLoading = false }
         do {
             filteredPokemon = try await getPokemonByTypeUseCase.execute(typeName: type)
+            Logger.network.debug("Loaded \(self.filteredPokemon.count) Pokémons for type: \(type)")
         } catch {
-            // TODO: surface error in UI
+            Logger.network.error("Failed to load Pokémons for type \(type): \(error)")
+            selectedType = nil
+            errorMessage = "Failed to load \(type.capitalized) type Pokémons. Please try again."
         }
     }
 }

@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Kingfisher
 
 struct PokemonRowView: View {
     let pokemon: Pokemon
@@ -17,14 +16,7 @@ struct PokemonRowView: View {
                 Circle()
                     .fill(Color(.systemGray6))
                     .frame(width: 72, height: 72)
-                KFImage(pokemon.imageURL)
-                    .placeholder {
-                        ProgressView()
-                            .frame(width: 72, height: 72)
-                    }
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 60, height: 60)
+                PokemonSpriteView(url: pokemon.imageURL, size: 60)
             }
             VStack(alignment: .leading, spacing: 2) {
                 Text("#\(pokemon.id)")

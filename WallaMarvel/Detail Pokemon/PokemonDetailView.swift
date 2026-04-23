@@ -32,6 +32,12 @@ struct PokemonDetailView: View {
                         .padding(.bottom)
                     }
                 }
+            } else {
+                ContentUnavailableView(
+                    "Unavailable",
+                    systemImage: "exclamationmark.circle",
+                    description: Text("This Pokémon's data could not be loaded.")
+                )
             }
         }
         .navigationTitle(viewModel.detail?.name ?? "")
@@ -39,5 +45,6 @@ struct PokemonDetailView: View {
         .task {
             await viewModel.getDetail()
         }
+        .errorAlert(message: viewModel.errorMessage, onDismiss: viewModel.dismissError)
     }
 }

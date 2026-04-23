@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Kingfisher
 
 struct PokemonDetailHeaderView: View {
     let detail: PokemonDetail
@@ -38,10 +37,7 @@ struct PokemonDetailHeaderView: View {
                         )
                     )
                     .frame(width: 200, height: 200)
-                KFImage(detail.imageURL)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 160, height: 160)
+                PokemonSpriteView(url: detail.imageURL, size: 160)
                     .offset(y: isFloating ? -10 : 0)
                     .shadow(color: .black.opacity(0.15), radius: 8, x: 0, y: 4)
                     .onAppear {

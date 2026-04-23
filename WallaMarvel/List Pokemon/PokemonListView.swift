@@ -13,8 +13,7 @@ struct PokemonListView: View {
     var body: some View {
         NavigationStack {
             Group {
-                let isTypeFilterLoading = viewModel.isLoading && viewModel.selectedType != nil && viewModel.filteredPokemon.isEmpty
-                if (viewModel.isLoading && viewModel.pokemon.isEmpty || isTypeFilterLoading) && !viewModel.isSearching {
+                if viewModel.isLoading && viewModel.pokemon.isEmpty && !viewModel.isSearching {
                     ProgressView()
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if viewModel.isSearching {
@@ -22,7 +21,11 @@ struct PokemonListView: View {
                 } else {
                     VStack(spacing: 0) {
                         typeFilterBar
-                        if !viewModel.isLoading && viewModel.selectedType != nil && viewModel.filteredPokemon.isEmpty {
+                        let isTypeFilterLoading = viewModel.isLoading && viewModel.selectedType != nil && viewModel.filteredPokemon.isEmpty
+                        if isTypeFilterLoading {
+                            ProgressView()
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        } else if !viewModel.isLoading && viewModel.selectedType != nil && viewModel.filteredPokemon.isEmpty {
                             ContentUnavailableView(
                                 "No Pokémon found",
                                 systemImage: "questionmark.circle",
@@ -48,6 +51,7 @@ struct PokemonListView: View {
                 async let pokemon: () = viewModel.getPokemon()
                 _ = await (types, pokemon)
             }
+            .errorAlert(message: viewModel.errorMessage, onDismiss: viewModel.dismissError)
         }
     }
 
@@ -109,7 +113,7 @@ struct PokemonListView: View {
         .listStyle(.plain)
         .refreshable {
             if let type = viewModel.selectedType {
-                await viewModel.selectType(type)
+                await viewModel.refreshFilteredPokemon(typeName: type)
             } else {
                 await viewModel.getPokemon()
             }
