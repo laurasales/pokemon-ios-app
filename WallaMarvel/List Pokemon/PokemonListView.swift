@@ -19,30 +19,7 @@ struct PokemonListView: View {
                 } else if viewModel.isSearching {
                     searchContent
                 } else {
-                    VStack(spacing: 0) {
-                        typeFilterBar
-                        let isTypeFilterLoading = viewModel.isLoading && viewModel.selectedType != nil && viewModel.filteredPokemon.isEmpty
-                        if viewModel.showingFavoritesOnly && viewModel.favorites.isEmpty {
-                            ContentUnavailableView(
-                                "No favourites yet",
-                                systemImage: "heart.slash",
-                                description: Text("Tap the heart on any Pokémon to save it here.")
-                            )
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        } else if isTypeFilterLoading {
-                            ProgressView()
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        } else if !viewModel.isLoading && viewModel.selectedType != nil && viewModel.filteredPokemon.isEmpty {
-                            ContentUnavailableView(
-                                "No Pokémon found",
-                                systemImage: "questionmark.circle",
-                                description: Text("No Pokémon of this type are available.")
-                            )
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        } else {
-                            pokemonList
-                        }
-                    }
+                    mainContent
                 }
             }
             .navigationTitle(viewModel.title)
@@ -61,6 +38,37 @@ struct PokemonListView: View {
             }
             .errorAlert(message: viewModel.errorMessage, onDismiss: viewModel.dismissError)
         }
+    }
+
+    @ViewBuilder
+    private var mainContent: some View {
+        VStack(spacing: 0) {
+            typeFilterBar
+            if viewModel.showingFavoritesOnly && viewModel.favorites.isEmpty {
+                emptyFavoritesView
+            } else if viewModel.isTypeFilterLoading {
+                ProgressView()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if !viewModel.isLoading && viewModel.selectedType != nil && viewModel.filteredPokemon.isEmpty {
+                ContentUnavailableView(
+                    "No Pokémon found",
+                    systemImage: "questionmark.circle",
+                    description: Text("No Pokémon of this type are available.")
+                )
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else {
+                pokemonList
+            }
+        }
+    }
+
+    private var emptyFavoritesView: some View {
+        ContentUnavailableView(
+            "No favourites yet",
+            systemImage: "heart.slash",
+            description: Text("Tap the heart on any Pokémon to save it here.")
+        )
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     private var typeFilterBar: some View {
@@ -104,13 +112,8 @@ struct PokemonListView: View {
     }
 
     private var pokemonList: some View {
-        let displayed: [Pokemon] = {
-            if viewModel.showingFavoritesOnly { return viewModel.favorites }
-            if viewModel.selectedType != nil { return viewModel.filteredPokemon }
-            return viewModel.pokemon
-        }()
-        return List {
-            ForEach(displayed, id: \.id) { pokemon in
+        List {
+            ForEach(viewModel.displayedPokemon, id: \.id) { pokemon in
                 NavigationLink(destination: PokemonDetailView(pokemonID: pokemon.id)) {
                     PokemonRowView(
                         pokemon: pokemon,
@@ -145,4 +148,3 @@ struct PokemonListView: View {
         }
     }
 }
-

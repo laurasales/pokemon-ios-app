@@ -34,6 +34,16 @@ final class ListPokemonViewModel: ObservableObject {
 
     var isSearching: Bool { !searchText.isEmpty }
 
+    var displayedPokemon: [Pokemon] {
+        if showingFavoritesOnly { return favorites }
+        if selectedType != nil { return filteredPokemon }
+        return pokemon
+    }
+
+    var isTypeFilterLoading: Bool {
+        isLoading && selectedType != nil && filteredPokemon.isEmpty
+    }
+
     init(
         getPokemonListUseCase: GetPokemonListUseCaseProtocol = GetPokemonList(),
         searchPokemonUseCase: SearchPokemonUseCaseProtocol = SearchPokemon(),

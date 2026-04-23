@@ -20,18 +20,7 @@ struct PokemonDetailView: View {
                 ProgressView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if let detail = viewModel.detail {
-                ScrollView {
-                    VStack(spacing: 0) {
-                        PokemonDetailHeaderView(detail: detail)
-                        VStack(spacing: 24) {
-                            PokemonInfoSectionView(detail: detail)
-                            PokemonStatsSectionView(stats: detail.stats)
-                            PokemonAbilitiesSectionView(abilities: detail.abilities)
-                        }
-                        .padding()
-                        .padding(.bottom)
-                    }
-                }
+                detailContent(detail)
             } else {
                 ContentUnavailableView(
                     "Unavailable",
@@ -42,20 +31,36 @@ struct PokemonDetailView: View {
         }
         .navigationTitle(viewModel.detail?.name ?? "")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    viewModel.toggleFavorite()
-                } label: {
-                    Image(systemName: viewModel.isFavorite ? "heart.fill" : "heart")
-                        .foregroundStyle(viewModel.isFavorite ? .red : .primary)
+        .toolbar { favoriteButton }
+        .task { await viewModel.getDetail() }
+        .errorAlert(message: viewModel.errorMessage, onDismiss: viewModel.dismissError)
+    }
+
+    private func detailContent(_ detail: PokemonDetail) -> some View {
+        ScrollView {
+            VStack(spacing: 0) {
+                PokemonDetailHeaderView(detail: detail)
+                VStack(spacing: 24) {
+                    PokemonInfoSectionView(detail: detail)
+                    PokemonStatsSectionView(stats: detail.stats)
+                    PokemonAbilitiesSectionView(abilities: detail.abilities)
                 }
-                .disabled(viewModel.detail == nil)
+                .padding()
+                .padding(.bottom)
             }
         }
-        .task {
-            await viewModel.getDetail()
+    }
+
+    @ToolbarContentBuilder
+    private var favoriteButton: some ToolbarContent {
+        ToolbarItem(placement: .topBarTrailing) {
+            Button {
+                viewModel.toggleFavorite()
+            } label: {
+                Image(systemName: viewModel.isFavorite ? "heart.fill" : "heart")
+                    .foregroundStyle(viewModel.isFavorite ? .red : .primary)
+            }
+            .disabled(viewModel.detail == nil)
         }
-        .errorAlert(message: viewModel.errorMessage, onDismiss: viewModel.dismissError)
     }
 }
