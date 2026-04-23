@@ -69,7 +69,7 @@ final class ListPokemonViewModel: ObservableObject {
             Logger.network.debug("Loaded \(result.count) Pokémon")
         } catch {
             Logger.network.error("Failed to load Pokémon list: \(error)")
-            errorMessage = "Failed to load Pokémon. Please try again."
+            errorMessage = "Failed to load Pokémons. Please try again."
         }
     }
 
@@ -128,11 +128,11 @@ final class ListPokemonViewModel: ObservableObject {
         defer { isLoading = false }
         do {
             filteredPokemon = try await getPokemonByTypeUseCase.execute(typeName: type)
-            Logger.network.debug("Loaded \(self.filteredPokemon.count) Pokémon for type: \(type)")
+            Logger.network.debug("Loaded \(self.filteredPokemon.count) Pokémons for type: \(type)")
         } catch {
-            Logger.network.error("Failed to load Pokémon for type \(type): \(error)")
+            Logger.network.error("Failed to load Pokémons for type \(type): \(error)")
             selectedType = nil
-            errorMessage = "Failed to load \(type.capitalized) type Pokémon. Please try again."
+            errorMessage = "Failed to load \(type.capitalized) type Pokémons. Please try again."
         }
     }
 }
