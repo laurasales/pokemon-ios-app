@@ -113,7 +113,7 @@ struct PokemonListView: View {
         .listStyle(.plain)
         .refreshable {
             if let type = viewModel.selectedType {
-                await viewModel.selectType(type)
+                await viewModel.refreshFilteredPokemon(typeName: type)
             } else {
                 await viewModel.getPokemon()
             }

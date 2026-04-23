@@ -114,6 +114,20 @@ final class ListPokemonViewModel: ObservableObject {
         searchNotFound = false
     }
 
+    func refreshFilteredPokemon(typeName: String) async {
+        filteredPokemon = []
+        isLoading = true
+        defer { isLoading = false }
+        do {
+            filteredPokemon = try await getPokemonByTypeUseCase.execute(typeName: typeName)
+            Logger.network.debug("Refreshed \(self.filteredPokemon.count) Pokémons for type: \(typeName)")
+        } catch {
+            Logger.network.error("Failed to refresh Pokémons for type \(typeName): \(error)")
+            selectedType = nil
+            errorMessage = "Failed to load \(typeName.capitalized) type Pokémons. Please try again."
+        }
+    }
+
     func selectType(_ type: String) async {
         if selectedType == type {
             Logger.ui.debug("Deselected Pokémon type: \(type)")
