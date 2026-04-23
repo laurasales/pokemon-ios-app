@@ -21,7 +21,7 @@ final class PokemonAPINetworkService: PokemonNetworkServiceProtocol {
         let paged = try await api.pokemonService.fetchPokemonList(
             paginationState: .initial(pageLimit: limit, offset: offset)
         )
-        return (paged.results ?? []).compactMap { try? mapper.toPokemon(from: $0) }
+        return try (paged.results ?? []).map { try mapper.toPokemon(from: $0) }
     }
 
     func getPokemonDetail(id: Int) async throws -> PokemonDetail {

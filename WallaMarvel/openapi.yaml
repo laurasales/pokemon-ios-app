@@ -1,0 +1,180 @@
+openapi: "3.1.0"
+info:
+  title: PokéAPI
+  version: 2.7.0
+servers:
+  - url: https://pokeapi.co
+paths:
+  /api/v2/pokemon/:
+    get:
+      operationId: listPokemon
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: A paginated list of Pokémon
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PokemonList"
+  /api/v2/pokemon/{id}/:
+    get:
+      operationId: getPokemon
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: A Pokémon
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pokemon"
+  /api/v2/type/{id}/:
+    get:
+      operationId: getPokemonType
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: A Pokémon type
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PokemonType"
+components:
+  schemas:
+    PokemonList:
+      type: object
+      required:
+        - count
+        - results
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+        previous:
+          type: string
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/NamedResource"
+    NamedResource:
+      type: object
+      required:
+        - name
+        - url
+      properties:
+        name:
+          type: string
+        url:
+          type: string
+    Pokemon:
+      type: object
+      required:
+        - id
+        - name
+        - height
+        - weight
+        - types
+        - stats
+        - abilities
+        - sprites
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        height:
+          type: integer
+        weight:
+          type: integer
+        sprites:
+          $ref: "#/components/schemas/PokemonSprites"
+        types:
+          type: array
+          items:
+            $ref: "#/components/schemas/PokemonTypeSlot"
+        stats:
+          type: array
+          items:
+            $ref: "#/components/schemas/PokemonStat"
+        abilities:
+          type: array
+          items:
+            $ref: "#/components/schemas/PokemonAbilitySlot"
+    PokemonSprites:
+      type: object
+      properties:
+        front_default:
+          type: string
+    PokemonTypeSlot:
+      type: object
+      required:
+        - slot
+        - type
+      properties:
+        slot:
+          type: integer
+        type:
+          $ref: "#/components/schemas/NamedResource"
+    PokemonStat:
+      type: object
+      required:
+        - base_stat
+        - stat
+      properties:
+        base_stat:
+          type: integer
+        stat:
+          $ref: "#/components/schemas/NamedResource"
+    PokemonAbilitySlot:
+      type: object
+      required:
+        - ability
+        - slot
+        - is_hidden
+      properties:
+        ability:
+          $ref: "#/components/schemas/NamedResource"
+        slot:
+          type: integer
+        is_hidden:
+          type: boolean
+    PokemonType:
+      type: object
+      required:
+        - id
+        - name
+        - pokemon
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        pokemon:
+          type: array
+          items:
+            $ref: "#/components/schemas/TypePokemonSlot"
+    TypePokemonSlot:
+      type: object
+      properties:
+        slot:
+          type: integer
+        pokemon:
+          $ref: "#/components/schemas/NamedResource"
