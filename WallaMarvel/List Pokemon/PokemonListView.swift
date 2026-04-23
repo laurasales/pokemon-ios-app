@@ -26,7 +26,7 @@ struct PokemonListView: View {
                 }
             }
             .navigationTitle(viewModel.title)
-            .searchable(text: $viewModel.searchText, prompt: "Name or number")
+            .searchable(text: $viewModel.searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Name or number")
             .onSubmit(of: .search) {
                 Task { await viewModel.searchPokemon() }
             }
