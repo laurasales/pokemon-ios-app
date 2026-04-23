@@ -40,6 +40,21 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Pokemon"
+  /api/v2/type/:
+    get:
+      operationId: listPokemonTypes
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: A list of Pokémon types
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TypeList"
   /api/v2/type/{id}/:
     get:
       operationId: getPokemonType
@@ -178,3 +193,12 @@ components:
           type: integer
         pokemon:
           $ref: "#/components/schemas/NamedResource"
+    TypeList:
+      type: object
+      required:
+        - results
+      properties:
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/NamedResource"

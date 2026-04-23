@@ -17,6 +17,8 @@ final class ListPokemonViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.title, "Pokédex")
     }
 
+    // MARK: - getPokemon
+
     func test_getPokemon_updatesPokemonOnSuccess() async {
         let expectedPokemon = [
             Pokemon(id: 1, name: "Bulbasaur", imageURL: URL(string: "https://example.com/1.png")!),
@@ -88,55 +90,102 @@ final class ListPokemonViewModelTests: XCTestCase {
         XCTAssertFalse(viewModel.searchNotFound)
     }
 
+    // MARK: - loadTypes
+
+    func test_loadTypes_updatesPokemonTypes_onSuccess() async {
+        let viewModel = makeViewModel(pokemonTypes: ["fire", "water", "grass"])
+
+        await viewModel.loadTypes()
+
+        XCTAssertEqual(viewModel.pokemonTypes, ["fire", "water", "grass"])
+    }
+
+    func test_loadTypes_keepsPokemonTypesEmpty_onError() async {
+        let viewModel = makeViewModel(pokemonTypesError: URLError(.notConnectedToInternet))
+
+        await viewModel.loadTypes()
+
+        XCTAssertTrue(viewModel.pokemonTypes.isEmpty)
+    }
+
+    // MARK: - selectType
+
+    func test_selectType_setsSelectedType() async {
+        let viewModel = makeViewModel()
+
+        await viewModel.selectType("fire")
+
+        XCTAssertEqual(viewModel.selectedType, "fire")
+    }
+
+    func test_selectType_setsFilteredPokemon_onSuccess() async {
+        let expected = [
+            Pokemon(id: 4, name: "Charmander", imageURL: URL(string: "https://example.com/4.png")!)
+        ]
+        let viewModel = makeViewModel(typesByType: expected)
+
+        await viewModel.selectType("fire")
+
+        XCTAssertEqual(viewModel.filteredPokemon.count, 1)
+        XCTAssertEqual(viewModel.filteredPokemon.first?.name, "Charmander")
+    }
+
+    func test_selectType_deselects_whenSameTypeSelected() async {
+        let viewModel = makeViewModel(typesByType: [
+            Pokemon(id: 4, name: "Charmander", imageURL: URL(string: "https://example.com/4.png")!)
+        ])
+        await viewModel.selectType("fire")
+
+        await viewModel.selectType("fire")
+
+        XCTAssertNil(viewModel.selectedType)
+        XCTAssertTrue(viewModel.filteredPokemon.isEmpty)
+    }
+
+    func test_selectType_clearsFilteredPokemon_onError() async {
+        let viewModel = makeViewModel(typesByTypeError: URLError(.notConnectedToInternet))
+
+        await viewModel.selectType("fire")
+
+        XCTAssertTrue(viewModel.filteredPokemon.isEmpty)
+    }
+
+    func test_selectType_replacesFilteredPokemon_whenDifferentTypeSelected() async {
+        let viewModel = makeViewModel(typesByType: [
+            Pokemon(id: 7, name: "Squirtle", imageURL: URL(string: "https://example.com/7.png")!)
+        ])
+        await viewModel.selectType("fire")
+        await viewModel.selectType("water")
+
+        XCTAssertEqual(viewModel.selectedType, "water")
+        XCTAssertEqual(viewModel.filteredPokemon.first?.name, "Squirtle")
+    }
+
     // MARK: - Helpers
 
     private func makeViewModel(
         listPokemon: [Pokemon] = [],
         listError: Error? = nil,
         searchResult: Pokemon? = nil,
-        searchError: Error? = nil
+        searchError: Error? = nil,
+        typesByType: [Pokemon] = [],
+        typesByTypeError: Error? = nil,
+        pokemonTypes: [String] = [],
+        pokemonTypesError: Error? = nil
     ) -> ListPokemonViewModel {
         let listUseCase = listError.map { MockGetPokemonListUseCase(error: $0) }
             ?? MockGetPokemonListUseCase(pokemon: listPokemon)
         let searchUseCase = searchError.map { MockSearchPokemonUseCase(error: $0) }
             ?? MockSearchPokemonUseCase(pokemon: searchResult ?? Pokemon(id: 0, name: "", imageURL: URL(string: "https://example.com")!))
+        let byTypeUseCase = typesByTypeError.map { MockGetPokemonByTypeUseCase(error: $0) }
+            ?? MockGetPokemonByTypeUseCase(pokemon: typesByType)
+        let typesUseCase = pokemonTypesError.map { MockGetPokemonTypesUseCase(error: $0) }
+            ?? MockGetPokemonTypesUseCase(types: pokemonTypes)
         return ListPokemonViewModel(
             getPokemonListUseCase: listUseCase,
-            searchPokemonUseCase: searchUseCase
+            searchPokemonUseCase: searchUseCase,
+            getPokemonByTypeUseCase: byTypeUseCase,
+            getPokemonTypesUseCase: typesUseCase
         )
-    }
-}
-
-// MARK: - Mocks
-
-private final class MockGetPokemonListUseCase: GetPokemonListUseCaseProtocol {
-    private let result: Result<[Pokemon], Error>
-
-    init(pokemon: [Pokemon]) {
-        self.result = .success(pokemon)
-    }
-
-    init(error: Error) {
-        self.result = .failure(error)
-    }
-
-    func execute(limit: Int, offset: Int) async throws -> [Pokemon] {
-        try result.get()
-    }
-}
-
-private final class MockSearchPokemonUseCase: SearchPokemonUseCaseProtocol {
-    private let result: Result<Pokemon, Error>
-
-    init(pokemon: Pokemon) {
-        self.result = .success(pokemon)
-    }
-
-    init(error: Error) {
-        self.result = .failure(error)
-    }
-
-    func execute(query: String) async throws -> Pokemon {
-        try result.get()
     }
 }

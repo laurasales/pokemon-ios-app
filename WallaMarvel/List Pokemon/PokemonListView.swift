@@ -13,17 +13,30 @@ struct PokemonListView: View {
     var body: some View {
         NavigationStack {
             Group {
-                if viewModel.isLoading && viewModel.pokemon.isEmpty && !viewModel.isSearching {
+                let isTypeFilterLoading = viewModel.isLoading && viewModel.selectedType != nil && viewModel.filteredPokemon.isEmpty
+                if (viewModel.isLoading && viewModel.pokemon.isEmpty || isTypeFilterLoading) && !viewModel.isSearching {
                     ProgressView()
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if viewModel.isSearching {
                     searchContent
                 } else {
-                    pokemonList
+                    VStack(spacing: 0) {
+                        typeFilterBar
+                        if !viewModel.isLoading && viewModel.selectedType != nil && viewModel.filteredPokemon.isEmpty {
+                            ContentUnavailableView(
+                                "No Pokémon found",
+                                systemImage: "questionmark.circle",
+                                description: Text("No Pokémon of this type are available.")
+                            )
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        } else {
+                            pokemonList
+                        }
+                    }
                 }
             }
             .navigationTitle(viewModel.title)
-            .searchable(text: $viewModel.searchText, prompt: "Name or number")
+            .searchable(text: $viewModel.searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Name or number")
             .onSubmit(of: .search) {
                 Task { await viewModel.searchPokemon() }
             }
@@ -31,9 +44,27 @@ struct PokemonListView: View {
                 if newValue.isEmpty { viewModel.clearSearch() }
             }
             .task {
-                await viewModel.getPokemon()
+                async let types: () = viewModel.loadTypes()
+                async let pokemon: () = viewModel.getPokemon()
+                _ = await (types, pokemon)
             }
         }
+    }
+
+    private var typeFilterBar: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(viewModel.pokemonTypes, id: \.self) { type in
+                    PokemonTypeBadgeView(
+                        type: type,
+                        isSelected: viewModel.selectedType == type,
+                        onTap: { Task { await viewModel.selectType(type) } }
+                    )
+                }
+            }
+            .padding(.horizontal, 16)
+        }
+        .padding(.vertical, 8)
     }
 
     @ViewBuilder
@@ -56,8 +87,9 @@ struct PokemonListView: View {
     }
 
     private var pokemonList: some View {
-        List {
-            ForEach(viewModel.pokemon, id: \.id) { pokemon in
+        let displayed = viewModel.selectedType != nil ? viewModel.filteredPokemon : viewModel.pokemon
+        return List {
+            ForEach(displayed, id: \.id) { pokemon in
                 NavigationLink(destination: PokemonDetailView(pokemonID: pokemon.id)) {
                     PokemonRowView(pokemon: pokemon)
                 }
@@ -76,7 +108,12 @@ struct PokemonListView: View {
         }
         .listStyle(.plain)
         .refreshable {
-            await viewModel.getPokemon()
+            if let type = viewModel.selectedType {
+                await viewModel.selectType(type)
+            } else {
+                await viewModel.getPokemon()
+            }
         }
     }
 }
+

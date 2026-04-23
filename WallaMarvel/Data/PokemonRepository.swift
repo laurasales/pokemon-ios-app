@@ -10,7 +10,9 @@ import Foundation
 final class PokemonRepository: PokemonRepositoryProtocol {
     private let networkService: PokemonNetworkServiceProtocol
 
-    init(networkService: PokemonNetworkServiceProtocol = PokemonAPINetworkService()) {
+    init(
+        networkService: PokemonNetworkServiceProtocol = PokemonAPINetworkService()
+    ) {
         self.networkService = networkService
     }
 
@@ -24,5 +26,13 @@ final class PokemonRepository: PokemonRepositoryProtocol {
 
     func searchPokemon(query: String) async throws -> Pokemon {
         try await networkService.searchPokemon(query: query)
+    }
+
+    func getPokemonByType(typeName: String) async throws -> [Pokemon] {
+        try await networkService.getPokemonByType(typeName: typeName)
+    }
+
+    func getPokemonTypes() async throws -> [String] {
+        try await networkService.getPokemonTypes()
     }
 }

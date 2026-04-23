@@ -33,4 +33,21 @@ final class PokemonAPINetworkService: PokemonNetworkServiceProtocol {
         let pokemon = try await api.pokemonService.fetchPokemon(query)
         return try mapper.toPokemon(from: pokemon)
     }
+
+    func getPokemonByType(typeName: String) async throws -> [Pokemon] {
+        let type = try await api.pokemonService.fetchType(typeName)
+        return try (type.pokemon ?? []).compactMap { slot -> Pokemon? in
+            guard let resource = slot.pokemon else { return nil }
+            return try mapper.toPokemon(from: resource)
+        }
+    }
+
+    func getPokemonTypes() async throws -> [String] {
+        let paged = try await api.pokemonService.fetchTypeList(
+            paginationState: .initial(pageLimit: 100)
+        )
+        return (paged.results ?? [])
+            .compactMap { $0.name }
+            .filter { !["unknown", "shadow", "stellar"].contains($0) }
+    }
 }
