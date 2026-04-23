@@ -42,6 +42,17 @@ struct PokemonDetailView: View {
         }
         .navigationTitle(viewModel.detail?.name ?? "")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    viewModel.toggleFavorite()
+                } label: {
+                    Image(systemName: viewModel.isFavorite ? "heart.fill" : "heart")
+                        .foregroundStyle(viewModel.isFavorite ? .red : .primary)
+                }
+                .disabled(viewModel.detail == nil)
+            }
+        }
         .task {
             await viewModel.getDetail()
         }

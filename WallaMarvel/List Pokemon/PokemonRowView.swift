@@ -9,6 +9,8 @@ import SwiftUI
 
 struct PokemonRowView: View {
     let pokemon: Pokemon
+    var isFavorite: Bool = false
+    var onToggleFavorite: (() -> Void)? = nil
 
     var body: some View {
         HStack(spacing: 16) {
@@ -26,6 +28,16 @@ struct PokemonRowView: View {
                     .font(.headline)
             }
             Spacer()
+            if let onToggleFavorite {
+                Button {
+                    onToggleFavorite()
+                } label: {
+                    Image(systemName: isFavorite ? "heart.fill" : "heart")
+                        .foregroundStyle(isFavorite ? .red : Color(.systemGray3))
+                        .font(.title3)
+                }
+                .buttonStyle(.plain)
+            }
         }
         .padding(.vertical, 6)
     }

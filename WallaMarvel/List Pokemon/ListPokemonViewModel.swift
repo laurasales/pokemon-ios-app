@@ -19,11 +19,15 @@ final class ListPokemonViewModel: ObservableObject {
     @Published private(set) var filteredPokemon: [Pokemon] = []
     @Published private(set) var pokemonTypes: [String] = []
     @Published private(set) var errorMessage: String? = nil
+    @Published private(set) var favorites: [Pokemon] = []
+    @Published private(set) var showingFavoritesOnly: Bool = false
 
     private let getPokemonListUseCase: GetPokemonListUseCaseProtocol
     private let searchPokemonUseCase: SearchPokemonUseCaseProtocol
     private let getPokemonByTypeUseCase: GetPokemonByTypeUseCaseProtocol
     private let getPokemonTypesUseCase: GetPokemonTypesUseCaseProtocol
+    private let toggleFavoriteUseCase: ToggleFavoriteUseCaseProtocol
+    private let getFavoritesUseCase: GetFavoritesUseCaseProtocol
     private let pageSize: Int = 20
     private var currentOffset: Int = 0
     private var hasMore: Bool = true
@@ -34,18 +38,44 @@ final class ListPokemonViewModel: ObservableObject {
         getPokemonListUseCase: GetPokemonListUseCaseProtocol = GetPokemonList(),
         searchPokemonUseCase: SearchPokemonUseCaseProtocol = SearchPokemon(),
         getPokemonByTypeUseCase: GetPokemonByTypeUseCaseProtocol = GetPokemonByType(),
-        getPokemonTypesUseCase: GetPokemonTypesUseCaseProtocol = GetPokemonTypes()
+        getPokemonTypesUseCase: GetPokemonTypesUseCaseProtocol = GetPokemonTypes(),
+        toggleFavoriteUseCase: ToggleFavoriteUseCaseProtocol = ToggleFavorite(),
+        getFavoritesUseCase: GetFavoritesUseCaseProtocol = GetFavorites()
     ) {
         self.getPokemonListUseCase = getPokemonListUseCase
         self.searchPokemonUseCase = searchPokemonUseCase
         self.getPokemonByTypeUseCase = getPokemonByTypeUseCase
         self.getPokemonTypesUseCase = getPokemonTypesUseCase
+        self.toggleFavoriteUseCase = toggleFavoriteUseCase
+        self.getFavoritesUseCase = getFavoritesUseCase
     }
 
     var title: String { "Pokédex" }
 
     func dismissError() {
         errorMessage = nil
+    }
+
+    func loadFavorites() {
+        favorites = getFavoritesUseCase.execute()
+    }
+
+    func toggleShowFavoritesOnly() {
+        showingFavoritesOnly.toggle()
+        if showingFavoritesOnly {
+            selectedType = nil
+            filteredPokemon = []
+            loadFavorites()
+        }
+    }
+
+    func isFavorite(_ pokemon: Pokemon) -> Bool {
+        toggleFavoriteUseCase.isFavorite(id: pokemon.id)
+    }
+
+    func toggleFavorite(_ pokemon: Pokemon) {
+        toggleFavoriteUseCase.execute(pokemon: pokemon)
+        loadFavorites()
     }
 
     func loadTypes() async {
@@ -135,6 +165,7 @@ final class ListPokemonViewModel: ObservableObject {
             filteredPokemon = []
             return
         }
+        showingFavoritesOnly = false
         Logger.ui.debug("Selected Pokémon type: \(type)")
         selectedType = type
         filteredPokemon = []

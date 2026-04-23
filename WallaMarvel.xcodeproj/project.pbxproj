@@ -55,6 +55,11 @@
 		D3A5E0F72F9AB435007F83A5 /* ErrorAlertModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E0F62F9AB435007F83A5 /* ErrorAlertModifier.swift */; };
 		D3A5E10A2F9AB9DA007F83A5 /* PokemonSpriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E1092F9AB9DA007F83A5 /* PokemonSpriteView.swift */; };
 		D3A5E1162F9AD6DB007F83A5 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D3A5E1152F9AD6DB007F83A5 /* RealmSwift */; };
+		D3A5E11B2F9AD91F007F83A5 /* FavoritesRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E11A2F9AD91F007F83A5 /* FavoritesRepositoryProtocol.swift */; };
+		D3A5E11F2F9AD92A007F83A5 /* GetFavorites.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E11E2F9AD92A007F83A5 /* GetFavorites.swift */; };
+		D3A5E1232F9AD932007F83A5 /* ToggleFavorite.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E1222F9AD932007F83A5 /* ToggleFavorite.swift */; };
+		D3A5E1272F9AD944007F83A5 /* FavoritesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E1262F9AD944007F83A5 /* FavoritesRepository.swift */; };
+		D3A5E12C2F9AD94F007F83A5 /* FavoritePokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E12A2F9AD94F007F83A5 /* FavoritePokemon.swift */; };
 		D3DC46F42F983A6700C72D3B /* PokemonAPI in Frameworks */ = {isa = PBXBuildFile; productRef = D3DC46F32F983A6700C72D3B /* PokemonAPI */; };
 		D3DC47012F997D6400C72D3B /* OpenAPIRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = D3DC47002F997D6400C72D3B /* OpenAPIRuntime */; };
 		D3DC47042F997D7D00C72D3B /* OpenAPIURLSession in Frameworks */ = {isa = PBXBuildFile; productRef = D3DC47032F997D7D00C72D3B /* OpenAPIURLSession */; };
@@ -130,6 +135,11 @@
 		D3A5E0F22F9AB42E007F83A5 /* AppLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLogger.swift; sourceTree = "<group>"; };
 		D3A5E0F62F9AB435007F83A5 /* ErrorAlertModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorAlertModifier.swift; sourceTree = "<group>"; };
 		D3A5E1092F9AB9DA007F83A5 /* PokemonSpriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonSpriteView.swift; sourceTree = "<group>"; };
+		D3A5E11A2F9AD91F007F83A5 /* FavoritesRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesRepositoryProtocol.swift; sourceTree = "<group>"; };
+		D3A5E11E2F9AD92A007F83A5 /* GetFavorites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetFavorites.swift; sourceTree = "<group>"; };
+		D3A5E1222F9AD932007F83A5 /* ToggleFavorite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleFavorite.swift; sourceTree = "<group>"; };
+		D3A5E1262F9AD944007F83A5 /* FavoritesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesRepository.swift; sourceTree = "<group>"; };
+		D3A5E12A2F9AD94F007F83A5 /* FavoritePokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritePokemon.swift; sourceTree = "<group>"; };
 		D3DC470F2F9980A500C72D3B /* openapi-generator-config.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = "openapi-generator-config.yaml"; sourceTree = "<group>"; };
 		D3DC47262F99896300C72D3B /* openapi.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = openapi.yaml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -252,6 +262,7 @@
 		1A821EC62862FD650024D397 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
+				D3A5E11A2F9AD91F007F83A5 /* FavoritesRepositoryProtocol.swift */,
 				D3DC46F92F984BBC00C72D3B /* Models */,
 				D34DFA482F96E25E00386709 /* PokemonRepositoryProtocol.swift */,
 				1AC0347D286320F000E93178 /* UseCases */,
@@ -262,6 +273,8 @@
 		1A821EC72862FD6E0024D397 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				D3A5E12B2F9AD94F007F83A5 /* Persistence */,
+				D3A5E1262F9AD944007F83A5 /* FavoritesRepository.swift */,
 				D3DC46F72F984B0300C72D3B /* Mapper */,
 				D34DFA462F96E24A00386709 /* PokemonRepository.swift */,
 			);
@@ -271,6 +284,8 @@
 		1AC0347D286320F000E93178 /* UseCases */ = {
 			isa = PBXGroup;
 			children = (
+				D3A5E1222F9AD932007F83A5 /* ToggleFavorite.swift */,
+				D3A5E11E2F9AD92A007F83A5 /* GetFavorites.swift */,
 				D3A5E0B22F9AA21D007F83A5 /* GetPokemonTypes.swift */,
 				D3A5E0862F9A980B007F83A5 /* GetPokemonByType.swift */,
 				D34DFA4A2F96E28300386709 /* GetPokemonList.swift */,
@@ -311,6 +326,14 @@
 				D3A5E0E82F9AAF95007F83A5 /* PokemonDetail+Mock.swift */,
 			);
 			path = TestData;
+			sourceTree = "<group>";
+		};
+		D3A5E12B2F9AD94F007F83A5 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				D3A5E12A2F9AD94F007F83A5 /* FavoritePokemon.swift */,
+			);
+			path = Persistence;
 			sourceTree = "<group>";
 		};
 		D3DC46F62F984AC400C72D3B /* Network */ = {
@@ -488,10 +511,14 @@
 				D34DFA532F96E5EA00386709 /* PokemonRowView.swift in Sources */,
 				D34DFA3F2F96E1D000386709 /* Pokemon.swift in Sources */,
 				D3A5E0F72F9AB435007F83A5 /* ErrorAlertModifier.swift in Sources */,
+				D3A5E1232F9AD932007F83A5 /* ToggleFavorite.swift in Sources */,
+				D3A5E11B2F9AD91F007F83A5 /* FavoritesRepositoryProtocol.swift in Sources */,
+				D3A5E12C2F9AD94F007F83A5 /* FavoritePokemon.swift in Sources */,
 				1A0E3A992862F7E200132FCB /* AppDelegate.swift in Sources */,
 				D34DFA4B2F96E28400386709 /* GetPokemonList.swift in Sources */,
 				D34DFA492F96E25F00386709 /* PokemonRepositoryProtocol.swift in Sources */,
 				1A0E3A9B2862F7E200132FCB /* SceneDelegate.swift in Sources */,
+				D3A5E1272F9AD944007F83A5 /* FavoritesRepository.swift in Sources */,
 				D34DFA472F96E24B00386709 /* PokemonRepository.swift in Sources */,
 				D3A5E10A2F9AB9DA007F83A5 /* PokemonSpriteView.swift in Sources */,
 				D3A5E0BB2F9AA2E1007F83A5 /* String+PokemonType.swift in Sources */,
@@ -506,6 +533,7 @@
 				D34DFA5A2F96E60600386709 /* PokemonDetailViewModel.swift in Sources */,
 				D34DFA5C2F96E60800386709 /* PokemonDetailView.swift in Sources */,
 				D3A5E0872F9A980B007F83A5 /* GetPokemonByType.swift in Sources */,
+				D3A5E11F2F9AD92A007F83A5 /* GetFavorites.swift in Sources */,
 				D34DFA5E2F96E70000386709 /* PokemonDetailHeaderView.swift in Sources */,
 				D3A5E0F32F9AB42E007F83A5 /* AppLogger.swift in Sources */,
 				D34DFA602F96E70200386709 /* PokemonStatsSectionView.swift in Sources */,

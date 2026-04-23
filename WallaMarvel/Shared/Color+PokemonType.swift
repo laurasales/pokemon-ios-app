@@ -27,8 +27,9 @@ extension Color {
         case "dragon":   return Color(red: 0.44, green: 0.22, blue: 0.97)
         case "dark":     return Color(red: 0.44, green: 0.36, blue: 0.30)
         case "steel":    return Color(red: 0.72, green: 0.72, blue: 0.82)
-        case "fairy":    return Color(red: 0.93, green: 0.60, blue: 0.68)
-        default:         return .gray
+        case "fairy":      return Color(red: 0.93, green: 0.60, blue: 0.68)
+        case "favorites":  return Color(red: 0.88, green: 0.19, blue: 0.22)
+        default:           return .gray
         }
     }
 }

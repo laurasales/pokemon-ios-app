@@ -13,17 +13,32 @@ final class PokemonDetailViewModel: ObservableObject {
     @Published private(set) var detail: PokemonDetail?
     @Published private(set) var isLoading: Bool = true
     @Published private(set) var errorMessage: String? = nil
+    @Published private(set) var isFavorite: Bool = false
 
     private let pokemonID: Int
     private let getPokemonDetailUseCase: GetPokemonDetailUseCaseProtocol
+    private let toggleFavoriteUseCase: ToggleFavoriteUseCaseProtocol
 
-    init(pokemonID: Int, getPokemonDetailUseCase: GetPokemonDetailUseCaseProtocol = GetPokemonDetail()) {
+    init(
+        pokemonID: Int,
+        getPokemonDetailUseCase: GetPokemonDetailUseCaseProtocol = GetPokemonDetail(),
+        toggleFavoriteUseCase: ToggleFavoriteUseCaseProtocol = ToggleFavorite()
+    ) {
         self.pokemonID = pokemonID
         self.getPokemonDetailUseCase = getPokemonDetailUseCase
+        self.toggleFavoriteUseCase = toggleFavoriteUseCase
+        self.isFavorite = toggleFavoriteUseCase.isFavorite(id: pokemonID)
     }
 
     func dismissError() {
         errorMessage = nil
+    }
+
+    func toggleFavorite() {
+        guard let detail = detail else { return }
+        let pokemon = Pokemon(id: detail.id, name: detail.name, imageURL: detail.imageURL)
+        toggleFavoriteUseCase.execute(pokemon: pokemon)
+        isFavorite = toggleFavoriteUseCase.isFavorite(id: pokemonID)
     }
 
     func getDetail() async {
