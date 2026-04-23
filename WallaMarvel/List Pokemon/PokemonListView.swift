@@ -22,7 +22,16 @@ struct PokemonListView: View {
                 } else {
                     VStack(spacing: 0) {
                         typeFilterBar
-                        pokemonList
+                        if !viewModel.isLoading && viewModel.selectedType != nil && viewModel.filteredPokemon.isEmpty {
+                            ContentUnavailableView(
+                                "No Pokémon found",
+                                systemImage: "questionmark.circle",
+                                description: Text("No Pokémon of this type are available.")
+                            )
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        } else {
+                            pokemonList
+                        }
                     }
                 }
             }
