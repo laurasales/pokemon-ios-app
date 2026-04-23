@@ -9,16 +9,12 @@ import Foundation
 import PokemonAPI
 
 struct PokemonDataMapper {
-    private enum Constant {
-        static let spriteBaseURL = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon"
-    }
-
     func toPokemon(from resource: PKMAPIResource<PKMPokemon>) throws -> Pokemon {
         guard let name = resource.name,
               let url = resource.url,
-              let id = extractID(from: url),
-              let imageURL = URL(string: "\(Constant.spriteBaseURL)/\(id).png") else {
-            throw URLError(.badURL)
+              let id = SpriteURL.extractID(from: url),
+              let imageURL = SpriteURL.fromID(id) else {
+            throw PokemonMappingError.missingData
         }
         return Pokemon(id: id, name: name.capitalized, imageURL: imageURL)
     }
@@ -28,7 +24,7 @@ struct PokemonDataMapper {
               let name = pokemon.name,
               let spriteString = pokemon.sprites?.frontDefault,
               let imageURL = URL(string: spriteString) else {
-            throw URLError(.badServerResponse)
+            throw PokemonMappingError.missingData
         }
         return Pokemon(id: id, name: name.capitalized, imageURL: imageURL)
     }
@@ -38,7 +34,7 @@ struct PokemonDataMapper {
               let name = pokemon.name,
               let spriteString = pokemon.sprites?.frontDefault,
               let imageURL = URL(string: spriteString) else {
-            throw URLError(.badServerResponse)
+            throw PokemonMappingError.missingData
         }
         return PokemonDetail(
             id: id,
@@ -54,9 +50,5 @@ struct PokemonDataMapper {
             },
             abilities: (pokemon.abilities ?? []).compactMap { $0.ability?.name?.capitalized }
         )
-    }
-
-    private func extractID(from url: String) -> Int? {
-        url.split(separator: "/").last.flatMap { Int($0) }
     }
 }

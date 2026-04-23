@@ -13,9 +13,9 @@ final class OpenAPIPokemonNetworkService: PokemonNetworkServiceProtocol {
     private let client: Client
     private let mapper: OpenAPIPokemonDataMapper
 
-    init(mapper: OpenAPIPokemonDataMapper = OpenAPIPokemonDataMapper()) throws {
+    init(mapper: OpenAPIPokemonDataMapper = OpenAPIPokemonDataMapper()) {
         client = Client(
-            serverURL: try Servers.Server1.url(),
+            serverURL: try! Servers.Server1.url(),
             transport: URLSessionTransport()
         )
         self.mapper = mapper
@@ -24,7 +24,7 @@ final class OpenAPIPokemonNetworkService: PokemonNetworkServiceProtocol {
     func getPokemonList(limit: Int, offset: Int) async throws -> [Pokemon] {
         let response = try await client.listPokemon(query: .init(limit: limit, offset: offset))
         let body = try response.ok.body.json
-        return body.results.compactMap { try? mapper.toPokemon(from: $0) }
+        return try body.results.map { try mapper.toPokemon(from: $0) }
     }
 
     func getPokemonDetail(id: Int) async throws -> PokemonDetail {

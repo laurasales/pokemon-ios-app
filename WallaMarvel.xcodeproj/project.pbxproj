@@ -40,6 +40,7 @@
 		D34DFA742F96E72A00386709 /* PokemonDataMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DFA752F96E72B00386709 /* PokemonDataMapper.swift */; };
 		D34DFA762F96E72C00386709 /* OpenAPIPokemonNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DFA772F96E72D00386709 /* OpenAPIPokemonNetworkService.swift */; };
 		D34DFA782F96E72E00386709 /* OpenAPIPokemonDataMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DFA792F96E72F00386709 /* OpenAPIPokemonDataMapper.swift */; };
+		D3A5E07E2F9A86E6007F83A5 /* PokemonMapperHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E07D2F9A86E6007F83A5 /* PokemonMapperHelpers.swift */; };
 		D3DC46F42F983A6700C72D3B /* PokemonAPI in Frameworks */ = {isa = PBXBuildFile; productRef = D3DC46F32F983A6700C72D3B /* PokemonAPI */; };
 		D3DC47012F997D6400C72D3B /* OpenAPIRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = D3DC47002F997D6400C72D3B /* OpenAPIRuntime */; };
 		D3DC47042F997D7D00C72D3B /* OpenAPIURLSession in Frameworks */ = {isa = PBXBuildFile; productRef = D3DC47032F997D7D00C72D3B /* OpenAPIURLSession */; };
@@ -101,6 +102,7 @@
 		D34DFA752F96E72B00386709 /* PokemonDataMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDataMapper.swift; sourceTree = "<group>"; };
 		D34DFA772F96E72D00386709 /* OpenAPIPokemonNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAPIPokemonNetworkService.swift; sourceTree = "<group>"; };
 		D34DFA792F96E72F00386709 /* OpenAPIPokemonDataMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAPIPokemonDataMapper.swift; sourceTree = "<group>"; };
+		D3A5E07D2F9A86E6007F83A5 /* PokemonMapperHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonMapperHelpers.swift; sourceTree = "<group>"; };
 		D3DC470F2F9980A500C72D3B /* openapi-generator-config.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = "openapi-generator-config.yaml"; sourceTree = "<group>"; };
 		D3DC47262F99896300C72D3B /* openapi.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = openapi.yaml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -259,6 +261,7 @@
 		D3DC46F72F984B0300C72D3B /* Mapper */ = {
 			isa = PBXGroup;
 			children = (
+				D3A5E07D2F9A86E6007F83A5 /* PokemonMapperHelpers.swift */,
 				D34DFA752F96E72B00386709 /* PokemonDataMapper.swift */,
 				D34DFA792F96E72F00386709 /* OpenAPIPokemonDataMapper.swift */,
 			);
@@ -436,6 +439,7 @@
 				D34DFA642F96E70600386709 /* PokemonAbilitiesSectionView.swift in Sources */,
 				D34DFA662F96E70800386709 /* Color+PokemonType.swift in Sources */,
 				D34DFA682F96E71000386709 /* PokemonSoundPlayer.swift in Sources */,
+				D3A5E07E2F9A86E6007F83A5 /* PokemonMapperHelpers.swift in Sources */,
 				D34DFA6C2F96E72200386709 /* SearchPokemon.swift in Sources */,
 				D34DFA762F96E72C00386709 /* OpenAPIPokemonNetworkService.swift in Sources */,
 				D34DFA782F96E72E00386709 /* OpenAPIPokemonDataMapper.swift in Sources */,
