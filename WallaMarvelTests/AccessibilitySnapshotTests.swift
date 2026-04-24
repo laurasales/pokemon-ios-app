@@ -69,6 +69,15 @@ final class AccessibilitySnapshotTests: XCTestCase {
         )
     }
 
+    // MARK: - PokemonDetailHeaderView
+
+    func test_pokemonDetailHeaderView() {
+        assertAccessibilitySnapshot(
+            PokemonDetailHeaderView(detail: .mock),
+            size: CGSize(width: 375, height: 360)
+        )
+    }
+
     // MARK: - PokemonAbilitiesSectionView
 
     func test_pokemonAbilitiesSectionView() {
