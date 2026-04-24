@@ -25,6 +25,9 @@
 		D3196E0A2F9C12570018E4A3 /* SearchPokemonUseCaseProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3196E092F9C12570018E4A3 /* SearchPokemonUseCaseProtocol.swift */; };
 		D3196E0D2F9C125E0018E4A3 /* GetFavoritesUseCaseProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3196E0C2F9C125E0018E4A3 /* GetFavoritesUseCaseProtocol.swift */; };
 		D3196E112F9C12690018E4A3 /* ToggleFavoriteUseCaseProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3196E102F9C12680018E4A3 /* ToggleFavoriteUseCaseProtocol.swift */; };
+		D3196E212F9C37D00018E4A3 /* AccessibilitySnapshot in Frameworks */ = {isa = PBXBuildFile; productRef = D3196E202F9C37D00018E4A3 /* AccessibilitySnapshot */; };
+		D3196E232F9C37D00018E4A3 /* AccessibilitySnapshotCore in Frameworks */ = {isa = PBXBuildFile; productRef = D3196E222F9C37D00018E4A3 /* AccessibilitySnapshotCore */; };
+		D3196E252F9C37D00018E4A3 /* FBSnapshotTestCase+Accessibility in Frameworks */ = {isa = PBXBuildFile; productRef = D3196E242F9C37D00018E4A3 /* FBSnapshotTestCase+Accessibility */; };
 		D34DFA3D2F96DDA800386709 /* PokemonListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DFA3C2F96DDA600386709 /* PokemonListViewModelTests.swift */; };
 		D34DFA3F2F96E1D000386709 /* Pokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DFA3E2F96E1CD00386709 /* Pokemon.swift */; };
 		D34DFA472F96E24B00386709 /* PokemonRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DFA462F96E24A00386709 /* PokemonRepository.swift */; };
@@ -185,6 +188,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3196E232F9C37D00018E4A3 /* AccessibilitySnapshotCore in Frameworks */,
+				D3196E212F9C37D00018E4A3 /* AccessibilitySnapshot in Frameworks */,
+				D3196E252F9C37D00018E4A3 /* FBSnapshotTestCase+Accessibility in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -609,6 +615,7 @@
 				D3DC46FF2F997D6400C72D3B /* XCRemoteSwiftPackageReference "swift-openapi-runtime" */,
 				D3DC47022F997D7D00C72D3B /* XCRemoteSwiftPackageReference "swift-openapi-urlsession" */,
 				D3A5E1142F9AD6DB007F83A5 /* XCRemoteSwiftPackageReference "realm-swift" */,
+				D3196E1F2F9C37D00018E4A3 /* XCRemoteSwiftPackageReference "AccessibilitySnapshot" */,
 			);
 			productRefGroup = 1A0E3A962862F7E200132FCB /* Products */;
 			projectDirPath = "";
@@ -1067,6 +1074,14 @@
 				minimumVersion = 7.2.4;
 			};
 		};
+		D3196E1F2F9C37D00018E4A3 /* XCRemoteSwiftPackageReference "AccessibilitySnapshot" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/cashapp/AccessibilitySnapshot";
+			requirement = {
+				kind = exactVersion;
+				version = 0.10.0;
+			};
+		};
 		D3A5E1142F9AD6DB007F83A5 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/realm-swift.git";
@@ -1114,6 +1129,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A66389F12DCE202500466318 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		D3196E202F9C37D00018E4A3 /* AccessibilitySnapshot */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D3196E1F2F9C37D00018E4A3 /* XCRemoteSwiftPackageReference "AccessibilitySnapshot" */;
+			productName = AccessibilitySnapshot;
+		};
+		D3196E222F9C37D00018E4A3 /* AccessibilitySnapshotCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D3196E1F2F9C37D00018E4A3 /* XCRemoteSwiftPackageReference "AccessibilitySnapshot" */;
+			productName = AccessibilitySnapshotCore;
+		};
+		D3196E242F9C37D00018E4A3 /* FBSnapshotTestCase+Accessibility */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D3196E1F2F9C37D00018E4A3 /* XCRemoteSwiftPackageReference "AccessibilitySnapshot" */;
+			productName = "FBSnapshotTestCase+Accessibility";
 		};
 		D3A5E1152F9AD6DB007F83A5 /* RealmSwift */ = {
 			isa = XCSwiftPackageProductDependency;
