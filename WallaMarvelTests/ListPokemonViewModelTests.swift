@@ -299,6 +299,55 @@ final class ListPokemonViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.displayedPokemon.count, 2)
     }
 
+    // MARK: - hasSearched
+
+    func test_hasSearched_isFalse_initially() {
+        let viewModel = makeViewModel()
+
+        XCTAssertFalse(viewModel.hasSearched)
+    }
+
+    func test_hasSearched_isTrue_afterSearchPokemon() async {
+        let viewModel = makeViewModel()
+        viewModel.searchText = "bulbasaur"
+
+        await viewModel.searchPokemon()
+
+        XCTAssertTrue(viewModel.hasSearched)
+    }
+
+    func test_hasSearched_isTrue_afterFailedSearch() async {
+        let viewModel = makeViewModel(searchError: URLError(.notConnectedToInternet))
+        viewModel.searchText = "unknownmon"
+
+        await viewModel.searchPokemon()
+
+        XCTAssertTrue(viewModel.hasSearched)
+    }
+
+    func test_clearSearch_resetsHasSearched() async {
+        let viewModel = makeViewModel()
+        viewModel.searchText = "bulbasaur"
+        await viewModel.searchPokemon()
+
+        viewModel.clearSearch()
+
+        XCTAssertFalse(viewModel.hasSearched)
+    }
+
+    func test_resetSearchResults_resetsHasSearched_withoutClearingText() async {
+        let viewModel = makeViewModel(searchError: URLError(.notConnectedToInternet))
+        viewModel.searchText = "bulb"
+        await viewModel.searchPokemon()
+
+        viewModel.resetSearchResults()
+
+        XCTAssertFalse(viewModel.hasSearched)
+        XCTAssertFalse(viewModel.searchNotFound)
+        XCTAssertNil(viewModel.searchResult)
+        XCTAssertEqual(viewModel.searchText, "bulb")
+    }
+
     // MARK: - Helpers
 
     private func makeViewModel(

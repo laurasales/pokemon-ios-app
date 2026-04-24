@@ -14,7 +14,7 @@ protocol SearchPokemonUseCaseProtocol {
 struct SearchPokemon: SearchPokemonUseCaseProtocol {
     private let repository: PokemonRepositoryProtocol
 
-    init(repository: PokemonRepositoryProtocol = PokemonRepository()) {
+    init(repository: PokemonRepositoryProtocol) {
         self.repository = repository
     }
 

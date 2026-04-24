@@ -13,6 +13,7 @@ final class ListPokemonViewModel: ObservableObject {
     @Published private(set) var pokemon: [Pokemon] = []
     @Published private(set) var isLoading: Bool = false
     @Published var searchText: String = ""
+    @Published private(set) var hasSearched: Bool = false
     @Published private(set) var searchResult: Pokemon? = nil
     @Published private(set) var searchNotFound: Bool = false
     @Published private(set) var selectedType: String? = nil
@@ -45,12 +46,12 @@ final class ListPokemonViewModel: ObservableObject {
     }
 
     init(
-        getPokemonListUseCase: GetPokemonListUseCaseProtocol = GetPokemonList(),
-        searchPokemonUseCase: SearchPokemonUseCaseProtocol = SearchPokemon(),
-        getPokemonByTypeUseCase: GetPokemonByTypeUseCaseProtocol = GetPokemonByType(),
-        getPokemonTypesUseCase: GetPokemonTypesUseCaseProtocol = GetPokemonTypes(),
-        toggleFavoriteUseCase: ToggleFavoriteUseCaseProtocol = ToggleFavorite(),
-        getFavoritesUseCase: GetFavoritesUseCaseProtocol = GetFavorites()
+        getPokemonListUseCase: GetPokemonListUseCaseProtocol,
+        searchPokemonUseCase: SearchPokemonUseCaseProtocol,
+        getPokemonByTypeUseCase: GetPokemonByTypeUseCaseProtocol,
+        getPokemonTypesUseCase: GetPokemonTypesUseCaseProtocol,
+        toggleFavoriteUseCase: ToggleFavoriteUseCaseProtocol,
+        getFavoritesUseCase: GetFavoritesUseCaseProtocol
     ) {
         self.getPokemonListUseCase = getPokemonListUseCase
         self.searchPokemonUseCase = searchPokemonUseCase
@@ -136,6 +137,7 @@ final class ListPokemonViewModel: ObservableObject {
         guard !query.isEmpty else { return }
         searchResult = nil
         searchNotFound = false
+        hasSearched = true
         isLoading = true
         defer { isLoading = false }
         Logger.ui.debug("Searching for Pokémon with query: \(query, privacy: .private)")
@@ -148,10 +150,15 @@ final class ListPokemonViewModel: ObservableObject {
         }
     }
 
-    func clearSearch() {
-        searchText = ""
+    func resetSearchResults() {
         searchResult = nil
         searchNotFound = false
+        hasSearched = false
+    }
+
+    func clearSearch() {
+        searchText = ""
+        resetSearchResults()
     }
 
     func refreshFilteredPokemon(typeName: String) async {

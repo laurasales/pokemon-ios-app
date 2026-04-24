@@ -14,7 +14,7 @@ protocol GetPokemonListUseCaseProtocol {
 struct GetPokemonList: GetPokemonListUseCaseProtocol {
     private let repository: PokemonRepositoryProtocol
     
-    init(repository: PokemonRepositoryProtocol = PokemonRepository()) {
+    init(repository: PokemonRepositoryProtocol) {
         self.repository = repository
     }
     

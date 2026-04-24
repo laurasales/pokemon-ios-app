@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct PokemonListView: View {
-    @StateObject private var viewModel = ListPokemonViewModel()
+    @StateObject private var viewModel: ListPokemonViewModel
+
+    init(viewModel: ListPokemonViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
 
     var body: some View {
         NavigationStack {
@@ -23,12 +27,19 @@ struct PokemonListView: View {
                 }
             }
             .navigationTitle(viewModel.title)
+            .navigationDestination(for: Int.self) { pokemonID in
+                PokemonDetailContainerView(pokemonID: pokemonID)
+            }
             .searchable(text: $viewModel.searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Name or number")
             .onSubmit(of: .search) {
                 Task { await viewModel.searchPokemon() }
             }
             .onChange(of: viewModel.searchText) { _, newValue in
-                if newValue.isEmpty { viewModel.clearSearch() }
+                if newValue.isEmpty {
+                    viewModel.clearSearch()
+                } else {
+                    viewModel.resetSearchResults()
+                }
             }
             .task {
                 async let types: () = viewModel.loadTypes()
@@ -97,11 +108,17 @@ struct PokemonListView: View {
         if viewModel.isLoading {
             ProgressView()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+        } else if !viewModel.hasSearched {
+            ContentUnavailableView(
+                "Search Pokémon",
+                systemImage: "magnifyingglass",
+                description: Text("Enter a name or number and press Search.")
+            )
         } else if viewModel.searchNotFound {
             ContentUnavailableView.search(text: viewModel.searchText)
         } else if let result = viewModel.searchResult {
             List {
-                NavigationLink(destination: PokemonDetailView(pokemonID: result.id)) {
+                NavigationLink(value: result.id) {
                     PokemonRowView(pokemon: result)
                 }
             }
@@ -114,7 +131,7 @@ struct PokemonListView: View {
     private var pokemonList: some View {
         List {
             ForEach(viewModel.displayedPokemon, id: \.id) { pokemon in
-                NavigationLink(destination: PokemonDetailView(pokemonID: pokemon.id)) {
+                NavigationLink(value: pokemon.id) {
                     PokemonRowView(
                         pokemon: pokemon,
                         isFavorite: viewModel.isFavorite(pokemon),

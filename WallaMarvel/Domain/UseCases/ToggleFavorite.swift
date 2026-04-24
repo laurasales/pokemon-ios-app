@@ -15,7 +15,7 @@ protocol ToggleFavoriteUseCaseProtocol {
 struct ToggleFavorite: ToggleFavoriteUseCaseProtocol {
     private let repository: FavoritesRepositoryProtocol
 
-    init(repository: FavoritesRepositoryProtocol = FavoritesRepository()) {
+    init(repository: FavoritesRepositoryProtocol) {
         self.repository = repository
     }
 

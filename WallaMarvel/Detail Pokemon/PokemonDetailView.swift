@@ -7,11 +7,20 @@
 
 import SwiftUI
 
+struct PokemonDetailContainerView: View {
+    let pokemonID: Int
+    @EnvironmentObject private var container: DependencyContainer
+
+    var body: some View {
+        PokemonDetailView(viewModel: container.makePokemonDetailViewModel(pokemonID: pokemonID))
+    }
+}
+
 struct PokemonDetailView: View {
     @StateObject private var viewModel: PokemonDetailViewModel
 
-    init(pokemonID: Int) {
-        _viewModel = StateObject(wrappedValue: PokemonDetailViewModel(pokemonID: pokemonID))
+    init(viewModel: PokemonDetailViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
     }
 
     var body: some View {
