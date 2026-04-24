@@ -61,6 +61,7 @@ struct PokemonDetailView: View {
                     .foregroundStyle(viewModel.isFavorite ? .red : .primary)
             }
             .disabled(viewModel.detail == nil)
+            .accessibilityLabel(viewModel.isFavorite ? "Remove from favourites" : "Add to favourites")
         }
     }
 }

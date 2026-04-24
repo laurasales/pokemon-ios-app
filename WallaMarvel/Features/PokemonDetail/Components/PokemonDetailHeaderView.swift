@@ -11,6 +11,7 @@ struct PokemonDetailHeaderView: View {
     let detail: PokemonDetail
     @State private var isFloating = false
     @StateObject private var soundPlayer = PokemonSoundPlayer()
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private var primaryColor: Color {
         detail.types.first.map { Color.pokemonType($0) } ?? .gray
@@ -26,6 +27,7 @@ struct PokemonDetailHeaderView: View {
                 .font(.subheadline)
                 .fontWeight(.semibold)
                 .foregroundStyle(.secondary)
+                .accessibilityLabel("Number \(detail.id)")
 
             ZStack {
                 Circle()
@@ -41,11 +43,13 @@ struct PokemonDetailHeaderView: View {
                     .offset(y: isFloating ? -10 : 0)
                     .shadow(color: .black.opacity(0.15), radius: 8, x: 0, y: 4)
                     .onAppear {
+                        guard !reduceMotion else { return }
                         withAnimation(.easeInOut(duration: 2).repeatForever(autoreverses: true)) {
                             isFloating = true
                         }
                     }
             }
+            .accessibilityHidden(true)
 
             HStack(spacing: 8) {
                 ForEach(detail.types, id: \.self) { type in
@@ -66,6 +70,7 @@ struct PokemonDetailHeaderView: View {
                     .symbolEffect(.bounce, value: soundPlayer.isPlaying)
             }
             .padding(.bottom, 12)
+            .accessibilityLabel(soundPlayer.isPlaying ? "Stop \(detail.name)'s cry" : "Play \(detail.name)'s cry")
         }
         .padding(.top, 16)
         .frame(maxWidth: .infinity)

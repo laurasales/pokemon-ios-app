@@ -23,6 +23,7 @@ struct PokemonAbilitiesSectionView: View {
                         .padding(.vertical, 10)
                         .background(Color(.systemGray6))
                         .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .accessibilityLabel(ability.replacingOccurrences(of: "-", with: " ").capitalized)
                 }
             }
         }

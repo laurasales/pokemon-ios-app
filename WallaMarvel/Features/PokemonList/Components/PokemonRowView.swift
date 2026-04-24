@@ -29,6 +29,7 @@ struct PokemonRowView: View {
                 .frame(width: 72, height: 72)
             PokemonSpriteView(url: pokemon.imageURL, size: 60)
         }
+        .accessibilityHidden(true)
     }
 
     private var info: some View {
@@ -39,6 +40,8 @@ struct PokemonRowView: View {
             Text(pokemon.name)
                 .font(.headline)
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(pokemon.name.capitalized), number \(pokemon.id)")
     }
 
     @ViewBuilder
@@ -50,6 +53,7 @@ struct PokemonRowView: View {
                     .font(.title3)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel(isFavorite ? "Remove \(pokemon.name) from favourites" : "Add \(pokemon.name) to favourites")
         }
     }
 }

@@ -46,6 +46,7 @@ private struct StatRowView: View {
     let barColor: Color
     let animate: Bool
     let animationDelay: Double
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         HStack(spacing: 12) {
@@ -65,11 +66,13 @@ private struct StatRowView: View {
                     RoundedRectangle(cornerRadius: 4)
                         .fill(barColor)
                         .frame(width: animate ? geometry.size.width * min(CGFloat(value) / CGFloat(maxValue), 1) : 0)
-                        .animation(.easeOut(duration: 0.8).delay(animationDelay), value: animate)
+                        .animation(reduceMotion ? nil : .easeOut(duration: 0.8).delay(animationDelay), value: animate)
                 }
             }
             .frame(height: 8)
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(label): \(value) out of \(maxValue)")
     }
 }
 
