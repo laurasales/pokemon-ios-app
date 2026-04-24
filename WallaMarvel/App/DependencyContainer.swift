@@ -27,20 +27,20 @@ final class DependencyContainer: ObservableObject {
 
     func makePokemonListViewModel() -> PokemonListViewModel {
         PokemonListViewModel(
-            getPokemonListUseCase: GetPokemonList(repository: pokemonRepository),
-            searchPokemonUseCase: SearchPokemon(repository: pokemonRepository),
-            getPokemonByTypeUseCase: GetPokemonByType(repository: pokemonRepository),
-            getPokemonTypesUseCase: GetPokemonTypes(repository: pokemonRepository),
-            toggleFavoriteUseCase: ToggleFavorite(repository: favoritesRepository),
-            getFavoritesUseCase: GetFavorites(repository: favoritesRepository)
+            getPokemonListUseCase: GetPokemonListUseCase(repository: pokemonRepository),
+            searchPokemonUseCase: SearchPokemonUseCase(repository: pokemonRepository),
+            getPokemonByTypeUseCase: GetPokemonByTypeUseCase(repository: pokemonRepository),
+            getPokemonTypesUseCase: GetPokemonTypesUseCase(repository: pokemonRepository),
+            toggleFavoriteUseCase: ToggleFavoriteUseCase(repository: favoritesRepository),
+            getFavoritesUseCase: GetFavoritesUseCase(repository: favoritesRepository)
         )
     }
 
     func makePokemonDetailViewModel(pokemonID: Int) -> PokemonDetailViewModel {
         PokemonDetailViewModel(
             pokemonID: pokemonID,
-            getPokemonDetailUseCase: GetPokemonDetail(repository: pokemonRepository),
-            toggleFavoriteUseCase: ToggleFavorite(repository: favoritesRepository)
+            getPokemonDetailUseCase: GetPokemonDetailUseCase(repository: pokemonRepository),
+            toggleFavoriteUseCase: ToggleFavoriteUseCase(repository: favoritesRepository)
         )
     }
 }

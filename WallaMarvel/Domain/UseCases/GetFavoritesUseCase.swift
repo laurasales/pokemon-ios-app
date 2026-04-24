@@ -7,11 +7,7 @@
 
 import Foundation
 
-protocol GetFavoritesUseCaseProtocol {
-    func execute() -> [Pokemon]
-}
-
-struct GetFavorites: GetFavoritesUseCaseProtocol {
+struct GetFavoritesUseCase: GetFavoritesUseCaseProtocol {
     private let repository: FavoritesRepositoryProtocol
 
     init(repository: FavoritesRepositoryProtocol) {

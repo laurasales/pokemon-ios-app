@@ -7,11 +7,7 @@
 
 import Foundation
 
-protocol SearchPokemonUseCaseProtocol {
-    func execute(query: String) async throws -> Pokemon
-}
-
-struct SearchPokemon: SearchPokemonUseCaseProtocol {
+struct SearchPokemonUseCase: SearchPokemonUseCaseProtocol {
     private let repository: PokemonRepositoryProtocol
 
     init(repository: PokemonRepositoryProtocol) {
