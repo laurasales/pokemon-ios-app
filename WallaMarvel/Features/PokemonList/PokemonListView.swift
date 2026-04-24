@@ -8,12 +8,16 @@
 import SwiftUI
 
 struct PokemonListView: View {
-    @StateObject private var viewModel = ListPokemonViewModel()
+    @StateObject private var viewModel: PokemonListViewModel
+
+    init(viewModel: PokemonListViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
 
     var body: some View {
         NavigationStack {
             Group {
-                if viewModel.isLoading && viewModel.pokemon.isEmpty && !viewModel.isSearching {
+                if viewModel.isListLoading && viewModel.pokemon.isEmpty && !viewModel.isSearching {
                     ProgressView()
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if viewModel.isSearching {
@@ -23,12 +27,19 @@ struct PokemonListView: View {
                 }
             }
             .navigationTitle(viewModel.title)
+            .navigationDestination(for: Int.self) { pokemonID in
+                PokemonDetailContainerView(pokemonID: pokemonID)
+            }
             .searchable(text: $viewModel.searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Name or number")
             .onSubmit(of: .search) {
                 Task { await viewModel.searchPokemon() }
             }
             .onChange(of: viewModel.searchText) { _, newValue in
-                if newValue.isEmpty { viewModel.clearSearch() }
+                if newValue.isEmpty {
+                    viewModel.clearSearch()
+                } else {
+                    viewModel.resetSearchResults()
+                }
             }
             .task {
                 async let types: () = viewModel.loadTypes()
@@ -49,7 +60,7 @@ struct PokemonListView: View {
             } else if viewModel.isTypeFilterLoading {
                 ProgressView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else if !viewModel.isLoading && viewModel.selectedType != nil && viewModel.filteredPokemon.isEmpty {
+            } else if !viewModel.isTypeFilterLoading && viewModel.selectedType != nil && viewModel.filteredPokemon.isEmpty {
                 ContentUnavailableView(
                     "No Pokémon found",
                     systemImage: "questionmark.circle",
@@ -94,14 +105,20 @@ struct PokemonListView: View {
 
     @ViewBuilder
     private var searchContent: some View {
-        if viewModel.isLoading {
+        if viewModel.isSearchLoading {
             ProgressView()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+        } else if !viewModel.hasSearched {
+            ContentUnavailableView(
+                "Search Pokémon",
+                systemImage: "magnifyingglass",
+                description: Text("Enter a name or number and press Search.")
+            )
         } else if viewModel.searchNotFound {
             ContentUnavailableView.search(text: viewModel.searchText)
         } else if let result = viewModel.searchResult {
             List {
-                NavigationLink(destination: PokemonDetailView(pokemonID: result.id)) {
+                NavigationLink(value: result.id) {
                     PokemonRowView(pokemon: result)
                 }
             }
@@ -114,7 +131,7 @@ struct PokemonListView: View {
     private var pokemonList: some View {
         List {
             ForEach(viewModel.displayedPokemon, id: \.id) { pokemon in
-                NavigationLink(destination: PokemonDetailView(pokemonID: pokemon.id)) {
+                NavigationLink(value: pokemon.id) {
                     PokemonRowView(
                         pokemon: pokemon,
                         isFavorite: viewModel.isFavorite(pokemon),
@@ -127,7 +144,7 @@ struct PokemonListView: View {
                     }
                 }
             }
-            if viewModel.isLoading {
+            if viewModel.isPaginationLoading {
                 HStack {
                     Spacer()
                     ProgressView()
@@ -140,8 +157,8 @@ struct PokemonListView: View {
         .refreshable {
             if viewModel.showingFavoritesOnly {
                 viewModel.loadFavorites()
-            } else if let type = viewModel.selectedType {
-                await viewModel.refreshFilteredPokemon(typeName: type)
+            } else if viewModel.selectedType != nil {
+                await viewModel.refreshCurrentTypeFilter()
             } else {
                 await viewModel.getPokemon()
             }

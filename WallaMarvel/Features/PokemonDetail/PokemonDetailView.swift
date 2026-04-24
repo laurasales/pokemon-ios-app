@@ -10,8 +10,8 @@ import SwiftUI
 struct PokemonDetailView: View {
     @StateObject private var viewModel: PokemonDetailViewModel
 
-    init(pokemonID: Int) {
-        _viewModel = StateObject(wrappedValue: PokemonDetailViewModel(pokemonID: pokemonID))
+    init(viewModel: PokemonDetailViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
     }
 
     var body: some View {

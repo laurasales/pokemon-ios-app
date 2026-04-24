@@ -21,30 +21,30 @@ final class OpenAPIPokemonNetworkService: PokemonNetworkServiceProtocol {
         self.mapper = mapper
     }
 
-    func getPokemonList(limit: Int, offset: Int) async throws -> [Pokemon] {
+    func getPokemonList(limit: Int, offset: Int) async throws -> [PokemonDTO] {
         let response = try await client.listPokemon(query: .init(limit: limit, offset: offset))
         let body = try response.ok.body.json
-        return try body.results.map { try mapper.toPokemon(from: $0) }
+        return try body.results.map { try mapper.toPokemonDTO(from: $0) }
     }
 
-    func getPokemonDetail(id: Int) async throws -> PokemonDetail {
+    func getPokemonDetail(id: Int) async throws -> PokemonDetailDTO {
         let response = try await client.getPokemon(path: .init(id: String(id)))
         let body = try response.ok.body.json
-        return try mapper.toPokemonDetail(from: body)
+        return try mapper.toPokemonDetailDTO(from: body)
     }
 
-    func searchPokemon(query: String) async throws -> Pokemon {
+    func searchPokemon(query: String) async throws -> PokemonDTO {
         let response = try await client.getPokemon(path: .init(id: query))
         let body = try response.ok.body.json
-        return try mapper.toPokemon(from: body)
+        return try mapper.toPokemonDTO(from: body)
     }
 
-    func getPokemonByType(typeName: String) async throws -> [Pokemon] {
+    func getPokemonByType(typeName: String) async throws -> [PokemonDTO] {
         let response = try await client.getPokemonType(path: .init(id: typeName))
         let body = try response.ok.body.json
-        return try body.pokemon.compactMap { slot -> Pokemon? in
+        return try body.pokemon.compactMap { slot -> PokemonDTO? in
             guard let resource = slot.pokemon else { return nil }
-            return try mapper.toPokemon(from: resource)
+            return try mapper.toPokemonDTO(from: resource)
         }
     }
 

@@ -7,11 +7,12 @@
 
 import Foundation
 import RealmSwift
+import os
 
 final class FavoritesRepository: FavoritesRepositoryProtocol {
     private let realm: Realm
 
-    init(realm: Realm = try! Realm()) {
+    init(realm: Realm) {
         self.realm = realm
     }
 
@@ -26,11 +27,19 @@ final class FavoritesRepository: FavoritesRepositoryProtocol {
     func addFavorite(_ pokemon: Pokemon) {
         guard !isFavorite(id: pokemon.id) else { return }
         let object = FavoritePokemon(from: pokemon)
-        try? realm.write { realm.add(object) }
+        do {
+            try realm.write { realm.add(object) }
+        } catch {
+            Logger.persistence.error("Failed to add favourite (id: \(pokemon.id)): \(error)")
+        }
     }
 
     func removeFavorite(id: Int) {
         guard let object = realm.object(ofType: FavoritePokemon.self, forPrimaryKey: id) else { return }
-        try? realm.write { realm.delete(object) }
+        do {
+            try realm.write { realm.delete(object) }
+        } catch {
+            Logger.persistence.error("Failed to remove favourite (id: \(id)): \(error)")
+        }
     }
 }

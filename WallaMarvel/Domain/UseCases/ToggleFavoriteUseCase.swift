@@ -7,15 +7,10 @@
 
 import Foundation
 
-protocol ToggleFavoriteUseCaseProtocol {
-    func execute(pokemon: Pokemon)
-    func isFavorite(id: Int) -> Bool
-}
-
-struct ToggleFavorite: ToggleFavoriteUseCaseProtocol {
+struct ToggleFavoriteUseCase: ToggleFavoriteUseCaseProtocol {
     private let repository: FavoritesRepositoryProtocol
 
-    init(repository: FavoritesRepositoryProtocol = FavoritesRepository()) {
+    init(repository: FavoritesRepositoryProtocol) {
         self.repository = repository
     }
 

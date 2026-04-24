@@ -1,5 +1,5 @@
 //
-//  ListPokemonViewModelTests.swift
+//  PokemonListViewModelTests.swift
 //  WallaMarvelTests
 //
 //  Created by Laura Sales Martínez on 21/4/26.
@@ -9,7 +9,7 @@ import XCTest
 @testable import WallaMarvel
 
 @MainActor
-final class ListPokemonViewModelTests: XCTestCase {
+final class PokemonListViewModelTests: XCTestCase {
 
     func test_title_returnsPokedex() {
         let viewModel = makeViewModel()
@@ -299,6 +299,55 @@ final class ListPokemonViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.displayedPokemon.count, 2)
     }
 
+    // MARK: - hasSearched
+
+    func test_hasSearched_isFalse_initially() {
+        let viewModel = makeViewModel()
+
+        XCTAssertFalse(viewModel.hasSearched)
+    }
+
+    func test_hasSearched_isTrue_afterSearchPokemon() async {
+        let viewModel = makeViewModel()
+        viewModel.searchText = "bulbasaur"
+
+        await viewModel.searchPokemon()
+
+        XCTAssertTrue(viewModel.hasSearched)
+    }
+
+    func test_hasSearched_isTrue_afterFailedSearch() async {
+        let viewModel = makeViewModel(searchError: URLError(.notConnectedToInternet))
+        viewModel.searchText = "unknownmon"
+
+        await viewModel.searchPokemon()
+
+        XCTAssertTrue(viewModel.hasSearched)
+    }
+
+    func test_clearSearch_resetsHasSearched() async {
+        let viewModel = makeViewModel()
+        viewModel.searchText = "bulbasaur"
+        await viewModel.searchPokemon()
+
+        viewModel.clearSearch()
+
+        XCTAssertFalse(viewModel.hasSearched)
+    }
+
+    func test_resetSearchResults_resetsHasSearched_withoutClearingText() async {
+        let viewModel = makeViewModel(searchError: URLError(.notConnectedToInternet))
+        viewModel.searchText = "bulb"
+        await viewModel.searchPokemon()
+
+        viewModel.resetSearchResults()
+
+        XCTAssertFalse(viewModel.hasSearched)
+        XCTAssertFalse(viewModel.searchNotFound)
+        XCTAssertNil(viewModel.searchResult)
+        XCTAssertEqual(viewModel.searchText, "bulb")
+    }
+
     // MARK: - Helpers
 
     private func makeViewModel(
@@ -312,7 +361,7 @@ final class ListPokemonViewModelTests: XCTestCase {
         pokemonTypesError: Error? = nil,
         favorites: [Pokemon] = [],
         favoriteIDs: Set<Int> = []
-    ) -> ListPokemonViewModel {
+    ) -> PokemonListViewModel {
         let listUseCase = listError.map { MockGetPokemonListUseCase(error: $0) }
             ?? MockGetPokemonListUseCase(pokemon: listPokemon)
         let searchUseCase = searchError.map { MockSearchPokemonUseCase(error: $0) }
@@ -323,7 +372,7 @@ final class ListPokemonViewModelTests: XCTestCase {
             ?? MockGetPokemonTypesUseCase(types: pokemonTypes)
         let toggleUseCase = MockToggleFavoriteUseCase(favoriteIDs: favoriteIDs)
         let getFavoritesUseCase = MockGetFavoritesUseCase(favorites: favorites)
-        return ListPokemonViewModel(
+        return PokemonListViewModel(
             getPokemonListUseCase: listUseCase,
             searchPokemonUseCase: searchUseCase,
             getPokemonByTypeUseCase: byTypeUseCase,

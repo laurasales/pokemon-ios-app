@@ -7,14 +7,10 @@
 
 import Foundation
 
-protocol GetPokemonListUseCaseProtocol {
-    func execute(limit: Int, offset: Int) async throws -> [Pokemon]
-}
-
-struct GetPokemonList: GetPokemonListUseCaseProtocol {
+struct GetPokemonListUseCase: GetPokemonListUseCaseProtocol {
     private let repository: PokemonRepositoryProtocol
     
-    init(repository: PokemonRepositoryProtocol = PokemonRepository()) {
+    init(repository: PokemonRepositoryProtocol) {
         self.repository = repository
     }
     

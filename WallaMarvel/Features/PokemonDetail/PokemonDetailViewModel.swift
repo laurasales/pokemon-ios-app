@@ -21,8 +21,8 @@ final class PokemonDetailViewModel: ObservableObject {
 
     init(
         pokemonID: Int,
-        getPokemonDetailUseCase: GetPokemonDetailUseCaseProtocol = GetPokemonDetail(),
-        toggleFavoriteUseCase: ToggleFavoriteUseCaseProtocol = ToggleFavorite()
+        getPokemonDetailUseCase: GetPokemonDetailUseCaseProtocol,
+        toggleFavoriteUseCase: ToggleFavoriteUseCaseProtocol
     ) {
         self.pokemonID = pokemonID
         self.getPokemonDetailUseCase = getPokemonDetailUseCase

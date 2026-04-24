@@ -17,28 +17,28 @@ final class PokemonAPINetworkService: PokemonNetworkServiceProtocol {
         self.mapper = mapper
     }
 
-    func getPokemonList(limit: Int, offset: Int) async throws -> [Pokemon] {
+    func getPokemonList(limit: Int, offset: Int) async throws -> [PokemonDTO] {
         let paged = try await api.pokemonService.fetchPokemonList(
             paginationState: .initial(pageLimit: limit, offset: offset)
         )
-        return try (paged.results ?? []).map { try mapper.toPokemon(from: $0) }
+        return try (paged.results ?? []).map { try mapper.toPokemonDTO(from: $0) }
     }
 
-    func getPokemonDetail(id: Int) async throws -> PokemonDetail {
+    func getPokemonDetail(id: Int) async throws -> PokemonDetailDTO {
         let pokemon = try await api.pokemonService.fetchPokemon(id)
-        return try mapper.toPokemonDetail(from: pokemon)
+        return try mapper.toPokemonDetailDTO(from: pokemon)
     }
 
-    func searchPokemon(query: String) async throws -> Pokemon {
+    func searchPokemon(query: String) async throws -> PokemonDTO {
         let pokemon = try await api.pokemonService.fetchPokemon(query)
-        return try mapper.toPokemon(from: pokemon)
+        return try mapper.toPokemonDTO(from: pokemon)
     }
 
-    func getPokemonByType(typeName: String) async throws -> [Pokemon] {
+    func getPokemonByType(typeName: String) async throws -> [PokemonDTO] {
         let type = try await api.pokemonService.fetchType(typeName)
-        return try (type.pokemon ?? []).compactMap { slot -> Pokemon? in
+        return try (type.pokemon ?? []).compactMap { slot -> PokemonDTO? in
             guard let resource = slot.pokemon else { return nil }
-            return try mapper.toPokemon(from: resource)
+            return try mapper.toPokemonDTO(from: resource)
         }
     }
 
