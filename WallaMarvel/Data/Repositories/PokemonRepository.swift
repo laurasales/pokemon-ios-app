@@ -9,25 +9,31 @@ import Foundation
 
 final class PokemonRepository: PokemonRepositoryProtocol {
     private let networkService: PokemonNetworkServiceProtocol
+    private let mapper: PokemonMapper
 
-    init(networkService: PokemonNetworkServiceProtocol) {
+    init(networkService: PokemonNetworkServiceProtocol, mapper: PokemonMapper = PokemonMapper()) {
         self.networkService = networkService
+        self.mapper = mapper
     }
 
     func getPokemonList(limit: Int, offset: Int) async throws -> [Pokemon] {
-        try await networkService.getPokemonList(limit: limit, offset: offset)
+        let dtos = try await networkService.getPokemonList(limit: limit, offset: offset)
+        return dtos.map { mapper.toDomain($0) }
     }
 
     func getPokemonDetail(id: Int) async throws -> PokemonDetail {
-        try await networkService.getPokemonDetail(id: id)
+        let dto = try await networkService.getPokemonDetail(id: id)
+        return mapper.toDomain(dto)
     }
 
     func searchPokemon(query: String) async throws -> Pokemon {
-        try await networkService.searchPokemon(query: query)
+        let dto = try await networkService.searchPokemon(query: query)
+        return mapper.toDomain(dto)
     }
 
     func getPokemonByType(typeName: String) async throws -> [Pokemon] {
-        try await networkService.getPokemonByType(typeName: typeName)
+        let dtos = try await networkService.getPokemonByType(typeName: typeName)
+        return dtos.map { mapper.toDomain($0) }
     }
 
     func getPokemonTypes() async throws -> [String] {

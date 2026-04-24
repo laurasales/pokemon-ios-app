@@ -1,5 +1,5 @@
 //
-//  ListPokemonViewModel.swift
+//  PokemonListViewModel.swift
 //  WallaMarvel
 //
 //  Created by Laura Sales Martínez on 21/4/26.
@@ -9,9 +9,12 @@ import Foundation
 import os
 
 @MainActor
-final class ListPokemonViewModel: ObservableObject {
+final class PokemonListViewModel: ObservableObject {
     @Published private(set) var pokemon: [Pokemon] = []
-    @Published private(set) var isLoading: Bool = false
+    @Published private(set) var isListLoading: Bool = false
+    @Published private(set) var isPaginationLoading: Bool = false
+    @Published private(set) var isSearchLoading: Bool = false
+    @Published private(set) var isTypeFilterLoading: Bool = false
     @Published var searchText: String = ""
     @Published private(set) var hasSearched: Bool = false
     @Published private(set) var searchResult: Pokemon? = nil
@@ -40,11 +43,7 @@ final class ListPokemonViewModel: ObservableObject {
         if selectedType != nil { return filteredPokemon }
         return pokemon
     }
-
-    var isTypeFilterLoading: Bool {
-        isLoading && selectedType != nil && filteredPokemon.isEmpty
-    }
-
+    
     init(
         getPokemonListUseCase: GetPokemonListUseCaseProtocol,
         searchPokemonUseCase: SearchPokemonUseCaseProtocol,
@@ -60,17 +59,17 @@ final class ListPokemonViewModel: ObservableObject {
         self.toggleFavoriteUseCase = toggleFavoriteUseCase
         self.getFavoritesUseCase = getFavoritesUseCase
     }
-
+    
     var title: String { "Pokédex" }
-
+    
     func dismissError() {
         errorMessage = nil
     }
-
+    
     func loadFavorites() {
         favorites = getFavoritesUseCase.execute()
     }
-
+    
     func toggleShowFavoritesOnly() {
         showingFavoritesOnly.toggle()
         if showingFavoritesOnly {
@@ -79,16 +78,16 @@ final class ListPokemonViewModel: ObservableObject {
             loadFavorites()
         }
     }
-
+    
     func isFavorite(_ pokemon: Pokemon) -> Bool {
         toggleFavoriteUseCase.isFavorite(id: pokemon.id)
     }
-
+    
     func toggleFavorite(_ pokemon: Pokemon) {
         toggleFavoriteUseCase.execute(pokemon: pokemon)
         loadFavorites()
     }
-
+    
     func loadTypes() async {
         do {
             pokemonTypes = try await getPokemonTypesUseCase.execute()
@@ -97,11 +96,11 @@ final class ListPokemonViewModel: ObservableObject {
             Logger.network.error("Failed to load Pokémon types: \(error)")
         }
     }
-
+    
     func getPokemon() async {
-        guard !isLoading else { return }
-        isLoading = true
-        defer { isLoading = false }
+        guard !isListLoading else { return }
+        isListLoading = true
+        defer { isListLoading = false }
         do {
             let result = try await getPokemonListUseCase.execute(limit: pageSize, offset: 0)
             pokemon = result
@@ -110,16 +109,16 @@ final class ListPokemonViewModel: ObservableObject {
             Logger.network.debug("Loaded \(result.count) Pokémon")
         } catch {
             Logger.network.error("Failed to load Pokémon list: \(error)")
-            errorMessage = "Failed to load Pokémons. Please try again."
+            errorMessage = "Failed to load Pokémon. Please try again."
         }
     }
 
     func loadMoreIfNeeded(currentPokemon: Pokemon) async {
-        guard selectedType == nil, hasMore, !isLoading else { return }
+        guard selectedType == nil, hasMore, !isListLoading, !isPaginationLoading else { return }
         guard let index = pokemon.firstIndex(where: { $0.id == currentPokemon.id }),
               index >= pokemon.count - 5 else { return }
-        isLoading = true
-        defer { isLoading = false }
+        isPaginationLoading = true
+        defer { isPaginationLoading = false }
         do {
             let result = try await getPokemonListUseCase.execute(limit: pageSize, offset: currentOffset)
             pokemon.append(contentsOf: result)
@@ -138,8 +137,8 @@ final class ListPokemonViewModel: ObservableObject {
         searchResult = nil
         searchNotFound = false
         hasSearched = true
-        isLoading = true
-        defer { isLoading = false }
+        isSearchLoading = true
+        defer { isSearchLoading = false }
         Logger.ui.debug("Searching for Pokémon with query: \(query, privacy: .private)")
         do {
             searchResult = try await searchPokemonUseCase.execute(query: query)
@@ -149,32 +148,18 @@ final class ListPokemonViewModel: ObservableObject {
             searchNotFound = true
         }
     }
-
+    
     func resetSearchResults() {
         searchResult = nil
         searchNotFound = false
         hasSearched = false
     }
-
+    
     func clearSearch() {
         searchText = ""
         resetSearchResults()
     }
-
-    func refreshFilteredPokemon(typeName: String) async {
-        filteredPokemon = []
-        isLoading = true
-        defer { isLoading = false }
-        do {
-            filteredPokemon = try await getPokemonByTypeUseCase.execute(typeName: typeName)
-            Logger.network.debug("Refreshed \(self.filteredPokemon.count) Pokémons for type: \(typeName)")
-        } catch {
-            Logger.network.error("Failed to refresh Pokémons for type \(typeName): \(error)")
-            selectedType = nil
-            errorMessage = "Failed to load \(typeName.capitalized) type Pokémons. Please try again."
-        }
-    }
-
+    
     func selectType(_ type: String) async {
         if selectedType == type {
             Logger.ui.debug("Deselected Pokémon type: \(type)")
@@ -185,16 +170,25 @@ final class ListPokemonViewModel: ObservableObject {
         showingFavoritesOnly = false
         Logger.ui.debug("Selected Pokémon type: \(type)")
         selectedType = type
+        await loadFilteredPokemon(forType: type)
+    }
+
+    func refreshCurrentTypeFilter() async {
+        guard let type = selectedType else { return }
+        await loadFilteredPokemon(forType: type)
+    }
+
+    private func loadFilteredPokemon(forType typeName: String) async {
         filteredPokemon = []
-        isLoading = true
-        defer { isLoading = false }
+        isTypeFilterLoading = true
+        defer { isTypeFilterLoading = false }
         do {
-            filteredPokemon = try await getPokemonByTypeUseCase.execute(typeName: type)
-            Logger.network.debug("Loaded \(self.filteredPokemon.count) Pokémons for type: \(type)")
+            filteredPokemon = try await getPokemonByTypeUseCase.execute(typeName: typeName)
+            Logger.network.debug("Loaded \(self.filteredPokemon.count) Pokémon for type: \(typeName)")
         } catch {
-            Logger.network.error("Failed to load Pokémons for type \(type): \(error)")
+            Logger.network.error("Failed to load Pokémon for type \(typeName): \(error)")
             selectedType = nil
-            errorMessage = "Failed to load \(type.capitalized) type Pokémons. Please try again."
+            errorMessage = "Failed to load \(typeName.capitalized) type Pokémon. Please try again."
         }
     }
 }

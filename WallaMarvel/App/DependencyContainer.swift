@@ -25,8 +25,8 @@ final class DependencyContainer: ObservableObject {
         }
     }
 
-    func makePokemonListViewModel() -> ListPokemonViewModel {
-        ListPokemonViewModel(
+    func makePokemonListViewModel() -> PokemonListViewModel {
+        PokemonListViewModel(
             getPokemonListUseCase: GetPokemonList(repository: pokemonRepository),
             searchPokemonUseCase: SearchPokemon(repository: pokemonRepository),
             getPokemonByTypeUseCase: GetPokemonByType(repository: pokemonRepository),

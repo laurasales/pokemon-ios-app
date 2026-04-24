@@ -8,9 +8,9 @@
 import Foundation
 
 protocol PokemonNetworkServiceProtocol {
-    func getPokemonList(limit: Int, offset: Int) async throws -> [Pokemon]
-    func getPokemonDetail(id: Int) async throws -> PokemonDetail
-    func searchPokemon(query: String) async throws -> Pokemon
-    func getPokemonByType(typeName: String) async throws -> [Pokemon]
+    func getPokemonList(limit: Int, offset: Int) async throws -> [PokemonDTO]
+    func getPokemonDetail(id: Int) async throws -> PokemonDetailDTO
+    func searchPokemon(query: String) async throws -> PokemonDTO
+    func getPokemonByType(typeName: String) async throws -> [PokemonDTO]
     func getPokemonTypes() async throws -> [String]
 }
