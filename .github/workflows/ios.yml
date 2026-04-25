@@ -22,6 +22,7 @@ jobs:
             -scheme WallaMarvel \
             -destination "platform=iOS Simulator,name=iPhone 16" \
             -resultBundlePath TestResults.xcresult \
+            -skipPackagePluginValidation \
             CODE_SIGNING_ALLOWED=NO
 
       - name: Upload test results
