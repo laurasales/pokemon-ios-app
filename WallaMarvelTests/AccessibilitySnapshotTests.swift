@@ -99,7 +99,13 @@ final class AccessibilitySnapshotTests: XCTestCase {
     ) {
         let controller = UIHostingController(rootView: view)
         controller.view.frame = CGRect(origin: .zero, size: size)
-        assertSnapshot(matching: controller, as: .accessibilityImage, file: file, testName: testName, line: line)
+        assertSnapshot(
+            of: controller,
+            as: .accessibilityImage,
+            file: file,
+            testName: testName,
+            line: line
+        )
     }
 }
 
