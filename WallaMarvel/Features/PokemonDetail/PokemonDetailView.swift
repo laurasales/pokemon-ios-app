@@ -62,6 +62,7 @@ struct PokemonDetailView: View {
             }
             .disabled(viewModel.detail == nil)
             .accessibilityLabel(viewModel.isFavorite ? "Remove from favourites" : "Add to favourites")
+            .accessibilityIdentifier("favouriteButton")
         }
     }
 }

@@ -1,144 +1,141 @@
-//
-//  PokemonDetailViewModelTests.swift
-//  WallaMarvelTests
-//
-//  Created by Laura Sales Martínez on 21/4/26.
-//
-
-import XCTest
+import Foundation
+import Nimble
+import Quick
 @testable import WallaMarvel
 
-@MainActor
-final class PokemonDetailViewModelTests: XCTestCase {
-    func test_isLoading_isTrue_initially() {
-        let viewModel = makeViewModel()
+final class PokemonDetailViewModelSpec: AsyncSpec {
+    override class func spec() {
+        @MainActor
+        func makeViewModel(
+            detail: PokemonDetail = .mock,
+            error: Error? = nil,
+            favoriteIDs: Set<Int> = []
+        ) -> PokemonDetailViewModel {
+            PokemonDetailViewModel(
+                pokemonID: detail.id,
+                getPokemonDetailUseCase: error.map { MockGetPokemonDetailUseCase(error: $0) }
+                    ?? MockGetPokemonDetailUseCase(detail: detail),
+                toggleFavoriteUseCase: MockToggleFavoriteUseCase(favoriteIDs: favoriteIDs)
+            )
+        }
 
-        XCTAssertTrue(viewModel.isLoading)
-    }
+        describe("PokemonDetailViewModel") {
+            describe("initial state") {
+                it("isLoading is true") {
+                    let sut = await makeViewModel()
+                    let isLoading = await sut.isLoading
+                    expect(isLoading) == true
+                }
 
-    func test_detail_isNil_initially() {
-        let viewModel = makeViewModel()
+                it("detail is nil") {
+                    let sut = await makeViewModel()
+                    let detail = await sut.detail
+                    expect(detail).to(beNil())
+                }
 
-        XCTAssertNil(viewModel.detail)
-    }
+                it("isFavorite is false when pokemon is not in favorites") {
+                    let sut = await makeViewModel()
+                    let isFavorite = await sut.isFavorite
+                    expect(isFavorite) == false
+                }
 
-    func test_getDetail_updatesDetailOnSuccess() async {
-        let viewModel = makeViewModel(detail: .mock)
+                it("isFavorite is true when pokemon is already a favorite") {
+                    let sut = await makeViewModel(favoriteIDs: [PokemonDetail.mock.id])
+                    let isFavorite = await sut.isFavorite
+                    expect(isFavorite) == true
+                }
+            }
 
-        await viewModel.getDetail()
+            describe("getDetail") {
+                context("when the API succeeds") {
+                    it("populates detail") {
+                        let sut = await makeViewModel(detail: .mock)
+                        await sut.getDetail()
+                        let detail = await sut.detail
+                        expect(detail?.id) == PokemonDetail.mock.id
+                        expect(detail?.name) == PokemonDetail.mock.name
+                        expect(detail?.slug) == PokemonDetail.mock.slug
+                        expect(detail?.types) == PokemonDetail.mock.types
+                    }
 
-        XCTAssertEqual(viewModel.detail?.id, PokemonDetail.mock.id)
-        XCTAssertEqual(viewModel.detail?.name, PokemonDetail.mock.name)
-        XCTAssertEqual(viewModel.detail?.slug, PokemonDetail.mock.slug)
-        XCTAssertEqual(viewModel.detail?.types, PokemonDetail.mock.types)
-    }
+                    it("sets isLoading to false") {
+                        let sut = await makeViewModel(detail: .mock)
+                        await sut.getDetail()
+                        let isLoading = await sut.isLoading
+                        expect(isLoading) == false
+                    }
 
-    func test_getDetail_setsIsLoadingFalse_afterSuccess() async {
-        let viewModel = makeViewModel(detail: .mock)
+                    it("does not set an error message") {
+                        let sut = await makeViewModel(detail: .mock)
+                        await sut.getDetail()
+                        let errorMessage = await sut.errorMessage
+                        expect(errorMessage).to(beNil())
+                    }
+                }
 
-        await viewModel.getDetail()
+                context("when the API fails") {
+                    it("leaves detail nil") {
+                        let sut = await makeViewModel(error: URLError(.notConnectedToInternet))
+                        await sut.getDetail()
+                        let detail = await sut.detail
+                        expect(detail).to(beNil())
+                    }
 
-        XCTAssertFalse(viewModel.isLoading)
-    }
+                    it("sets isLoading to false") {
+                        let sut = await makeViewModel(error: URLError(.notConnectedToInternet))
+                        await sut.getDetail()
+                        let isLoading = await sut.isLoading
+                        expect(isLoading) == false
+                    }
 
-    func test_getDetail_doesNotUpdateDetail_onError() async {
-        let viewModel = makeViewModel(error: URLError(.notConnectedToInternet))
+                    it("sets an error message") {
+                        let sut = await makeViewModel(error: URLError(.notConnectedToInternet))
+                        await sut.getDetail()
+                        let errorMessage = await sut.errorMessage
+                        expect(errorMessage).toNot(beNil())
+                    }
+                }
+            }
 
-        await viewModel.getDetail()
+            describe("dismissError") {
+                it("clears the error message") {
+                    let sut = await makeViewModel(error: URLError(.notConnectedToInternet))
+                    await sut.getDetail()
+                    await MainActor.run { sut.dismissError() }
+                    let errorMessage = await sut.errorMessage
+                    expect(errorMessage).to(beNil())
+                }
+            }
 
-        XCTAssertNil(viewModel.detail)
-    }
+            describe("toggleFavorite") {
+                context("when detail has loaded") {
+                    it("sets isFavorite to true") {
+                        let sut = await makeViewModel()
+                        await sut.getDetail()
+                        await MainActor.run { sut.toggleFavorite() }
+                        let isFavorite = await sut.isFavorite
+                        expect(isFavorite) == true
+                    }
 
-    func test_getDetail_setsIsLoadingFalse_afterError() async {
-        let viewModel = makeViewModel(error: URLError(.notConnectedToInternet))
+                    it("sets isFavorite to false when already a favorite") {
+                        let sut = await makeViewModel(favoriteIDs: [PokemonDetail.mock.id])
+                        await sut.getDetail()
+                        await MainActor.run { sut.toggleFavorite() }
+                        let isFavorite = await sut.isFavorite
+                        expect(isFavorite) == false
+                    }
+                }
 
-        await viewModel.getDetail()
-
-        XCTAssertFalse(viewModel.isLoading)
-    }
-
-    // MARK: - errorMessage
-
-    func test_getDetail_setsErrorMessage_onError() async {
-        let viewModel = makeViewModel(error: URLError(.notConnectedToInternet))
-
-        await viewModel.getDetail()
-
-        XCTAssertNotNil(viewModel.errorMessage)
-    }
-
-    func test_getDetail_doesNotSetErrorMessage_onSuccess() async {
-        let viewModel = makeViewModel(detail: .mock)
-
-        await viewModel.getDetail()
-
-        XCTAssertNil(viewModel.errorMessage)
-    }
-
-    func test_dismissError_clearsErrorMessage() async {
-        let viewModel = makeViewModel(error: URLError(.notConnectedToInternet))
-        await viewModel.getDetail()
-
-        viewModel.dismissError()
-
-        XCTAssertNil(viewModel.errorMessage)
-    }
-
-    // MARK: - favourites
-
-    func test_isFavorite_isFalse_initially() {
-        let viewModel = makeViewModel()
-
-        XCTAssertFalse(viewModel.isFavorite)
-    }
-
-    func test_isFavorite_isTrue_whenPokemonIsAlreadyFavorite() {
-        let viewModel = makeViewModel(favoriteIDs: [PokemonDetail.mock.id])
-
-        XCTAssertTrue(viewModel.isFavorite)
-    }
-
-    func test_toggleFavorite_setsIsFavoriteTrue_afterLoading() async {
-        let viewModel = makeViewModel()
-        await viewModel.getDetail()
-
-        viewModel.toggleFavorite()
-
-        XCTAssertTrue(viewModel.isFavorite)
-    }
-
-    func test_toggleFavorite_setsIsFavoriteFalse_whenAlreadyFavorite() async {
-        let viewModel = makeViewModel(favoriteIDs: [PokemonDetail.mock.id])
-        await viewModel.getDetail()
-
-        viewModel.toggleFavorite()
-
-        XCTAssertFalse(viewModel.isFavorite)
-    }
-
-    func test_toggleFavorite_doesNothing_whenDetailIsNil() async {
-        let viewModel = makeViewModel(error: URLError(.notConnectedToInternet))
-        await viewModel.getDetail()
-
-        viewModel.toggleFavorite()
-
-        XCTAssertFalse(viewModel.isFavorite)
-    }
-
-    // MARK: - Helpers
-
-    private func makeViewModel(
-        detail: PokemonDetail = .mock,
-        error: Error? = nil,
-        favoriteIDs: Set<Int> = []
-    ) -> PokemonDetailViewModel {
-        let detailUseCase = error.map { MockGetPokemonDetailUseCase(error: $0) }
-            ?? MockGetPokemonDetailUseCase(detail: detail)
-        let toggleUseCase = MockToggleFavoriteUseCase(favoriteIDs: favoriteIDs)
-        return PokemonDetailViewModel(
-            pokemonID: detail.id,
-            getPokemonDetailUseCase: detailUseCase,
-            toggleFavoriteUseCase: toggleUseCase
-        )
+                context("when detail has not loaded") {
+                    it("does nothing") {
+                        let sut = await makeViewModel(error: URLError(.notConnectedToInternet))
+                        await sut.getDetail()
+                        await MainActor.run { sut.toggleFavorite() }
+                        let isFavorite = await sut.isFavorite
+                        expect(isFavorite) == false
+                    }
+                }
+            }
+        }
     }
 }

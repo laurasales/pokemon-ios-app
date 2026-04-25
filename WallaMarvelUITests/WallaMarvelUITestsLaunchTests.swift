@@ -1,27 +1,18 @@
-//
-//  WallaMarvelUITestsLaunchTests.swift
-//  WallaMarvelUITests
-//
-//  Created by Laura Sales Martínez on 20/4/26.
-//
-
 import XCTest
 
-class WallaMarvelUITestsLaunchTests: XCTestCase {
+final class WallaMarvelLaunchTests: XCTestCase {
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
     }
 
-    override func setUpWithError() throws {
+    override func setUp() {
+        super.setUp()
         continueAfterFailure = false
     }
 
-    func testLaunch() {
+    func test_launch() {
         let app = XCUIApplication()
         app.launch()
-
-        // Insert steps here to perform after app launch but before taking a screenshot,
-        // such as logging into a test account or navigating somewhere in the app
 
         let attachment = XCTAttachment(screenshot: app.screenshot())
         attachment.name = "Launch Screen"
