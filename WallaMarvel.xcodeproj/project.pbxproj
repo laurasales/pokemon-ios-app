@@ -52,6 +52,8 @@
 		D34DFA742F96E72A00386709 /* PokemonDataMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DFA752F96E72B00386709 /* PokemonDataMapper.swift */; };
 		D34DFA762F96E72C00386709 /* OpenAPIPokemonNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DFA772F96E72D00386709 /* OpenAPIPokemonNetworkService.swift */; };
 		D34DFA782F96E72E00386709 /* OpenAPIPokemonDataMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DFA792F96E72F00386709 /* OpenAPIPokemonDataMapper.swift */; };
+		D38A49FD2F9D403E00FD87C3 /* Quick in Frameworks */ = {isa = PBXBuildFile; productRef = D38A49FC2F9D403E00FD87C3 /* Quick */; };
+		D38A4A012F9D409600FD87C3 /* Nimble in Frameworks */ = {isa = PBXBuildFile; productRef = D38A4A002F9D409600FD87C3 /* Nimble */; };
 		D3A5E07E2F9A86E6007F83A5 /* PokemonMapperHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E07D2F9A86E6007F83A5 /* PokemonMapperHelpers.swift */; };
 		D3A5E0872F9A980B007F83A5 /* GetPokemonByTypeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E0862F9A980B007F83A5 /* GetPokemonByTypeUseCase.swift */; };
 		D3A5E0A32F9AA1F4007F83A5 /* Color+PokemonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E0A12F9AA1F4007F83A5 /* Color+PokemonType.swift */; };
@@ -190,8 +192,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D38A4A012F9D409600FD87C3 /* Nimble in Frameworks */,
 				D3196E232F9C37D00018E4A3 /* AccessibilitySnapshotCore in Frameworks */,
 				D3196E212F9C37D00018E4A3 /* AccessibilitySnapshot in Frameworks */,
+				D38A49FD2F9D403E00FD87C3 /* Quick in Frameworks */,
 				D3196E252F9C37D00018E4A3 /* FBSnapshotTestCase+Accessibility in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -621,6 +625,8 @@
 				D3DC47022F997D7D00C72D3B /* XCRemoteSwiftPackageReference "swift-openapi-urlsession" */,
 				D3A5E1142F9AD6DB007F83A5 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				D3196E1F2F9C37D00018E4A3 /* XCRemoteSwiftPackageReference "AccessibilitySnapshot" */,
+				D38A49FB2F9D403E00FD87C3 /* XCRemoteSwiftPackageReference "Quick" */,
+				D38A49FF2F9D409600FD87C3 /* XCRemoteSwiftPackageReference "Nimble" */,
 			);
 			productRefGroup = 1A0E3A962862F7E200132FCB /* Products */;
 			projectDirPath = "";
@@ -1127,6 +1133,22 @@
 				version = 0.10.0;
 			};
 		};
+		D38A49FB2F9D403E00FD87C3 /* XCRemoteSwiftPackageReference "Quick" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Quick/Quick";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		D38A49FF2F9D409600FD87C3 /* XCRemoteSwiftPackageReference "Nimble" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Quick/Nimble";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		D3A5E1142F9AD6DB007F83A5 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/realm-swift.git";
@@ -1189,6 +1211,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D3196E1F2F9C37D00018E4A3 /* XCRemoteSwiftPackageReference "AccessibilitySnapshot" */;
 			productName = "FBSnapshotTestCase+Accessibility";
+		};
+		D38A49FC2F9D403E00FD87C3 /* Quick */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D38A49FB2F9D403E00FD87C3 /* XCRemoteSwiftPackageReference "Quick" */;
+			productName = Quick;
+		};
+		D38A4A002F9D409600FD87C3 /* Nimble */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D38A49FF2F9D409600FD87C3 /* XCRemoteSwiftPackageReference "Nimble" */;
+			productName = Nimble;
 		};
 		D3A5E1152F9AD6DB007F83A5 /* RealmSwift */ = {
 			isa = XCSwiftPackageProductDependency;
