@@ -30,6 +30,16 @@ struct PokemonTypeBadgeView: View {
                 .stroke(Color.pokemonType(type), lineWidth: isSelected ? 2 : 0)
         )
         .onTapGesture { onTap?() }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(type.capitalized)
+        .accessibilityAddTraits(accessibilityTraits)
+    }
+
+    private var accessibilityTraits: AccessibilityTraits {
+        var traits: AccessibilityTraits = []
+        if onTap != nil { traits = traits.union(.isButton) }
+        if isSelected { traits = traits.union(.isSelected) }
+        return traits
     }
 
     private var backgroundOpacity: Double {
