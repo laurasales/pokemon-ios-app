@@ -20,9 +20,9 @@ struct PokemonMapper {
             imageURL: dto.imageURL,
             height: dto.height,
             weight: dto.weight,
-            types: dto.types.map { $0.capitalized },
+            types: dto.types.map(\.capitalized),
             stats: dto.stats.map { PokemonDetail.Stat(name: $0.name, value: $0.value) },
-            abilities: dto.abilities.map { $0.capitalized }
+            abilities: dto.abilities.map(\.capitalized)
         )
     }
 }

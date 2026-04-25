@@ -10,7 +10,6 @@ import XCTest
 
 @MainActor
 final class PokemonDetailViewModelTests: XCTestCase {
-
     func test_isLoading_isTrue_initially() {
         let viewModel = makeViewModel()
 

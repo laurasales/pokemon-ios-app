@@ -10,7 +10,8 @@ import Foundation
 struct OpenAPIPokemonDataMapper {
     func toPokemonDTO(from resource: Components.Schemas.NamedResource) throws -> PokemonDTO {
         guard let id = SpriteURL.extractID(from: resource.url),
-              let imageURL = SpriteURL.fromID(id) else {
+              let imageURL = SpriteURL.fromID(id)
+        else {
             throw PokemonMappingError.missingData
         }
         return PokemonDTO(id: id, name: resource.name, imageURL: imageURL)
@@ -18,7 +19,8 @@ struct OpenAPIPokemonDataMapper {
 
     func toPokemonDTO(from pokemon: Components.Schemas.Pokemon) throws -> PokemonDTO {
         guard let spriteURL = pokemon.sprites.front_default,
-              let imageURL = URL(string: spriteURL) else {
+              let imageURL = URL(string: spriteURL)
+        else {
             throw PokemonMappingError.invalidSpriteURL
         }
         return PokemonDTO(id: pokemon.id, name: pokemon.name, imageURL: imageURL)
@@ -26,7 +28,8 @@ struct OpenAPIPokemonDataMapper {
 
     func toPokemonDetailDTO(from pokemon: Components.Schemas.Pokemon) throws -> PokemonDetailDTO {
         guard let spriteURL = pokemon.sprites.front_default,
-              let imageURL = URL(string: spriteURL) else {
+              let imageURL = URL(string: spriteURL)
+        else {
             throw PokemonMappingError.invalidSpriteURL
         }
         return PokemonDetailDTO(
@@ -35,9 +38,9 @@ struct OpenAPIPokemonDataMapper {
             imageURL: imageURL,
             height: pokemon.height,
             weight: pokemon.weight,
-            types: pokemon.types.map { $0._type.name },
+            types: pokemon.types.map(\._type.name),
             stats: pokemon.stats.map { PokemonDetailDTO.StatDTO(name: $0.stat.name, value: $0.base_stat) },
-            abilities: pokemon.abilities.map { $0.ability.name }
+            abilities: pokemon.abilities.map(\.ability.name)
         )
     }
 }

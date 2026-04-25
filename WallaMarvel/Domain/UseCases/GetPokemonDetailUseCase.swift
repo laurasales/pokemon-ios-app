@@ -1,5 +1,5 @@
 //
-//  GetPokemonDetail.swift
+//  GetPokemonDetailUseCase.swift
 //  WallaMarvel
 //
 //  Created by Laura Sales Martínez on 21/4/26.

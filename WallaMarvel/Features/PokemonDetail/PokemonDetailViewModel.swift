@@ -12,7 +12,7 @@ import os
 final class PokemonDetailViewModel: ObservableObject {
     @Published private(set) var detail: PokemonDetail?
     @Published private(set) var isLoading: Bool = true
-    @Published private(set) var errorMessage: String? = nil
+    @Published private(set) var errorMessage: String?
     @Published private(set) var isFavorite: Bool = false
 
     private let pokemonID: Int
@@ -27,7 +27,7 @@ final class PokemonDetailViewModel: ObservableObject {
         self.pokemonID = pokemonID
         self.getPokemonDetailUseCase = getPokemonDetailUseCase
         self.toggleFavoriteUseCase = toggleFavoriteUseCase
-        self.isFavorite = toggleFavoriteUseCase.isFavorite(id: pokemonID)
+        isFavorite = toggleFavoriteUseCase.isFavorite(id: pokemonID)
     }
 
     func dismissError() {
@@ -35,7 +35,7 @@ final class PokemonDetailViewModel: ObservableObject {
     }
 
     func toggleFavorite() {
-        guard let detail = detail else { return }
+        guard let detail else { return }
         let pokemon = Pokemon(id: detail.id, name: detail.name, imageURL: detail.imageURL)
         toggleFavoriteUseCase.execute(pokemon: pokemon)
         isFavorite = toggleFavoriteUseCase.isFavorite(id: pokemonID)
@@ -46,9 +46,13 @@ final class PokemonDetailViewModel: ObservableObject {
         defer { isLoading = false }
         do {
             detail = try await getPokemonDetailUseCase.execute(id: pokemonID)
-            Logger.network.debug("Loaded detail for Pokémon ID: \(self.pokemonID)")
+            Logger.network
+                .debug("Loaded detail for Pokémon ID: \(self.pokemonID)")
         } catch {
-            Logger.network.error("Failed to load detail for Pokémon ID \(self.pokemonID): \(error)")
+            Logger.network
+                .error(
+                    "Failed to load detail for Pokémon ID \(self.pokemonID): \(error)"
+                )
             errorMessage = "Failed to load Pokémon details. Please try again."
         }
     }

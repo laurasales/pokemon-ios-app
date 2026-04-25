@@ -7,27 +7,27 @@
 
 extension String {
     var pokemonTypeSymbol: String {
-        switch self.lowercased() {
-        case "normal":   return "circle.fill"
-        case "fire":     return "flame.fill"
-        case "water":    return "drop.fill"
-        case "electric": return "bolt.fill"
-        case "grass":    return "leaf.fill"
-        case "ice":      return "snowflake"
-        case "fighting": return "hand.raised.fill"
-        case "poison":   return "staroflife.fill"
-        case "ground":   return "mountain.2.fill"
-        case "flying":   return "wind"
-        case "psychic":  return "eye.fill"
-        case "bug":      return "ant.fill"
-        case "rock":     return "diamond.fill"
-        case "ghost":    return "moon.stars.fill"
-        case "dragon":   return "lizard.fill"
-        case "dark":     return "moon.fill"
-        case "steel":    return "shield.fill"
-        case "fairy":      return "sparkles"
-        case "favorites":  return "heart.fill"
-        default:           return "questionmark.circle.fill"
+        switch lowercased() {
+        case "normal": "circle.fill"
+        case "fire": "flame.fill"
+        case "water": "drop.fill"
+        case "electric": "bolt.fill"
+        case "grass": "leaf.fill"
+        case "ice": "snowflake"
+        case "fighting": "hand.raised.fill"
+        case "poison": "staroflife.fill"
+        case "ground": "mountain.2.fill"
+        case "flying": "wind"
+        case "psychic": "eye.fill"
+        case "bug": "ant.fill"
+        case "rock": "diamond.fill"
+        case "ghost": "moon.stars.fill"
+        case "dragon": "lizard.fill"
+        case "dark": "moon.fill"
+        case "steel": "shield.fill"
+        case "fairy": "sparkles"
+        case "favorites": "heart.fill"
+        default: "questionmark.circle.fill"
         }
     }
 }

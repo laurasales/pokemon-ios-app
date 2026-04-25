@@ -78,14 +78,14 @@ private struct StatRowView: View {
 
 private extension String {
     var statAbbreviation: String {
-        switch self.lowercased() {
-        case "hp":              return "HP"
-        case "attack":          return "ATK"
-        case "defense":         return "DEF"
-        case "special-attack":  return "SpA"
-        case "special-defense": return "SpD"
-        case "speed":           return "SPD"
-        default:                return String(self.prefix(3)).uppercased()
+        switch lowercased() {
+        case "hp": "HP"
+        case "attack": "ATK"
+        case "defense": "DEF"
+        case "special-attack": "SpA"
+        case "special-defense": "SpD"
+        case "speed": "SPD"
+        default: String(prefix(3)).uppercased()
         }
     }
 }
@@ -93,10 +93,10 @@ private extension String {
 private extension Int {
     var statColor: Color {
         switch self {
-        case ..<50:    return Color(.systemRed)
-        case 50..<80:  return Color(.systemOrange)
-        case 80..<100: return Color(.systemYellow)
-        default:       return Color(.systemGreen)
+        case ..<50: Color(.systemRed)
+        case 50 ..< 80: Color(.systemOrange)
+        case 80 ..< 100: Color(.systemYellow)
+        default: Color(.systemGreen)
         }
     }
 }

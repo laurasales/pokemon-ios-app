@@ -5,8 +5,9 @@
 //  Created by Laura Sales Martínez on 24/4/26.
 //
 
-import SwiftUI
+import os
 import RealmSwift
+import SwiftUI
 
 @MainActor
 final class DependencyContainer: ObservableObject {
@@ -16,13 +17,20 @@ final class DependencyContainer: ObservableObject {
     init() {
         let networkService = OpenAPIPokemonNetworkService()
         pokemonRepository = PokemonRepository(networkService: networkService)
+        favoritesRepository = FavoritesRepository(realm: Self.makeRealm())
+    }
 
+    private static func makeRealm() -> Realm {
         if let realm = try? Realm() {
-            favoritesRepository = FavoritesRepository(realm: realm)
-        } else {
-            let config = Realm.Configuration(inMemoryIdentifier: "favorites-fallback")
-            favoritesRepository = FavoritesRepository(realm: try! Realm(configuration: config))
+            Logger.persistence.debug("Realm initialized at: \(realm.configuration.fileURL?.path ?? "unknown")")
+            return realm
         }
+        Logger.persistence.warning("Default Realm initialization failed, falling back to in-memory store")
+        let config = Realm.Configuration(inMemoryIdentifier: "favorites-fallback")
+        guard let realm = try? Realm(configuration: config) else {
+            preconditionFailure("Failed to initialize Realm with in-memory fallback")
+        }
+        return realm
     }
 
     func makePokemonListViewModel() -> PokemonListViewModel {

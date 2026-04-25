@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import RealmSwift
 import os
+import RealmSwift
 
 final class FavoritesRepository: FavoritesRepositoryProtocol {
     private let realm: Realm

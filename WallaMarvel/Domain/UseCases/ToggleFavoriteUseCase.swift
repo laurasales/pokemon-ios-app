@@ -1,5 +1,5 @@
 //
-//  ToggleFavorite.swift
+//  ToggleFavoriteUseCase.swift
 //  WallaMarvel
 //
 //  Created by Laura Sales Martínez on 23/4/26.

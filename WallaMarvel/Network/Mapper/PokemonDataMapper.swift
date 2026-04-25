@@ -13,7 +13,8 @@ struct PokemonDataMapper {
         guard let name = resource.name,
               let url = resource.url,
               let id = SpriteURL.extractID(from: url),
-              let imageURL = SpriteURL.fromID(id) else {
+              let imageURL = SpriteURL.fromID(id)
+        else {
             throw PokemonMappingError.missingData
         }
         return PokemonDTO(id: id, name: name, imageURL: imageURL)
@@ -23,7 +24,8 @@ struct PokemonDataMapper {
         guard let id = pokemon.id,
               let name = pokemon.name,
               let spriteString = pokemon.sprites?.frontDefault,
-              let imageURL = URL(string: spriteString) else {
+              let imageURL = URL(string: spriteString)
+        else {
             throw PokemonMappingError.missingData
         }
         return PokemonDTO(id: id, name: name, imageURL: imageURL)
@@ -33,7 +35,8 @@ struct PokemonDataMapper {
         guard let id = pokemon.id,
               let name = pokemon.name,
               let spriteString = pokemon.sprites?.frontDefault,
-              let imageURL = URL(string: spriteString) else {
+              let imageURL = URL(string: spriteString)
+        else {
             throw PokemonMappingError.missingData
         }
         return PokemonDetailDTO(
@@ -42,7 +45,7 @@ struct PokemonDataMapper {
             imageURL: imageURL,
             height: pokemon.height ?? 0,
             weight: pokemon.weight ?? 0,
-            types: (pokemon.types ?? []).compactMap { $0.`type`?.name },
+            types: (pokemon.types ?? []).compactMap { $0.type?.name },
             stats: (pokemon.stats ?? []).compactMap { stat in
                 guard let name = stat.stat?.name, let value = stat.baseStat else { return nil }
                 return PokemonDetailDTO.StatDTO(name: name, value: value)

@@ -10,7 +10,7 @@ import SwiftUI
 struct PokemonTypeBadgeView: View {
     let type: String
     var isSelected: Bool = false
-    var onTap: (() -> Void)? = nil
+    var onTap: (() -> Void)?
 
     var body: some View {
         HStack(spacing: 4) {

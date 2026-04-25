@@ -10,7 +10,6 @@ import XCTest
 
 @MainActor
 final class PokemonListViewModelTests: XCTestCase {
-
     func test_title_returnsPokedex() {
         let viewModel = makeViewModel()
 
@@ -19,10 +18,10 @@ final class PokemonListViewModelTests: XCTestCase {
 
     // MARK: - getPokemon
 
-    func test_getPokemon_updatesPokemonOnSuccess() async {
-        let expectedPokemon = [
-            Pokemon(id: 1, name: "Bulbasaur", imageURL: URL(string: "https://example.com/1.png")!),
-            Pokemon(id: 2, name: "Ivysaur", imageURL: URL(string: "https://example.com/2.png")!)
+    func test_getPokemon_updatesPokemonOnSuccess() async throws {
+        let expectedPokemon = try [
+            Pokemon(id: 1, name: "Bulbasaur", imageURL: XCTUnwrap(URL(string: "https://example.com/1.png"))),
+            Pokemon(id: 2, name: "Ivysaur", imageURL: XCTUnwrap(URL(string: "https://example.com/2.png"))),
         ]
         let viewModel = makeViewModel(listPokemon: expectedPokemon)
 
@@ -55,8 +54,8 @@ final class PokemonListViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.isSearching)
     }
 
-    func test_searchPokemon_setsResultOnSuccess() async {
-        let expected = Pokemon(id: 1, name: "Bulbasaur", imageURL: URL(string: "https://example.com/1.png")!)
+    func test_searchPokemon_setsResultOnSuccess() async throws {
+        let expected = try Pokemon(id: 1, name: "Bulbasaur", imageURL: XCTUnwrap(URL(string: "https://example.com/1.png")))
         let viewModel = makeViewModel(searchResult: expected)
         viewModel.searchText = "bulbasaur"
 
@@ -77,8 +76,8 @@ final class PokemonListViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.searchNotFound)
     }
 
-    func test_clearSearch_resetsSearchState() async {
-        let expected = Pokemon(id: 1, name: "Bulbasaur", imageURL: URL(string: "https://example.com/1.png")!)
+    func test_clearSearch_resetsSearchState() async throws {
+        let expected = try Pokemon(id: 1, name: "Bulbasaur", imageURL: XCTUnwrap(URL(string: "https://example.com/1.png")))
         let viewModel = makeViewModel(searchResult: expected)
         viewModel.searchText = "bulbasaur"
         await viewModel.searchPokemon()
@@ -100,9 +99,9 @@ final class PokemonListViewModelTests: XCTestCase {
         XCTAssertNotNil(viewModel.errorMessage)
     }
 
-    func test_getPokemon_doesNotSetErrorMessage_onSuccess() async {
-        let viewModel = makeViewModel(listPokemon: [
-            Pokemon(id: 1, name: "Bulbasaur", imageURL: URL(string: "https://example.com/1.png")!)
+    func test_getPokemon_doesNotSetErrorMessage_onSuccess() async throws {
+        let viewModel = try makeViewModel(listPokemon: [
+            Pokemon(id: 1, name: "Bulbasaur", imageURL: XCTUnwrap(URL(string: "https://example.com/1.png"))),
         ])
 
         await viewModel.getPokemon()
@@ -163,9 +162,9 @@ final class PokemonListViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.selectedType, "fire")
     }
 
-    func test_selectType_setsFilteredPokemon_onSuccess() async {
-        let expected = [
-            Pokemon(id: 4, name: "Charmander", imageURL: URL(string: "https://example.com/4.png")!)
+    func test_selectType_setsFilteredPokemon_onSuccess() async throws {
+        let expected = try [
+            Pokemon(id: 4, name: "Charmander", imageURL: XCTUnwrap(URL(string: "https://example.com/4.png"))),
         ]
         let viewModel = makeViewModel(typesByType: expected)
 
@@ -175,9 +174,9 @@ final class PokemonListViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.filteredPokemon.first?.name, "Charmander")
     }
 
-    func test_selectType_deselects_whenSameTypeSelected() async {
-        let viewModel = makeViewModel(typesByType: [
-            Pokemon(id: 4, name: "Charmander", imageURL: URL(string: "https://example.com/4.png")!)
+    func test_selectType_deselects_whenSameTypeSelected() async throws {
+        let viewModel = try makeViewModel(typesByType: [
+            Pokemon(id: 4, name: "Charmander", imageURL: XCTUnwrap(URL(string: "https://example.com/4.png"))),
         ])
         await viewModel.selectType("fire")
 
@@ -195,9 +194,9 @@ final class PokemonListViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.filteredPokemon.isEmpty)
     }
 
-    func test_selectType_replacesFilteredPokemon_whenDifferentTypeSelected() async {
-        let viewModel = makeViewModel(typesByType: [
-            Pokemon(id: 7, name: "Squirtle", imageURL: URL(string: "https://example.com/7.png")!)
+    func test_selectType_replacesFilteredPokemon_whenDifferentTypeSelected() async throws {
+        let viewModel = try makeViewModel(typesByType: [
+            Pokemon(id: 7, name: "Squirtle", imageURL: XCTUnwrap(URL(string: "https://example.com/7.png"))),
         ])
         await viewModel.selectType("fire")
         await viewModel.selectType("water")
@@ -208,8 +207,8 @@ final class PokemonListViewModelTests: XCTestCase {
 
     // MARK: - favourites
 
-    func test_loadFavorites_updatesFavorites() {
-        let expected = [Pokemon(id: 1, name: "Bulbasaur", imageURL: URL(string: "https://example.com/1.png")!)]
+    func test_loadFavorites_updatesFavorites() throws {
+        let expected = try [Pokemon(id: 1, name: "Bulbasaur", imageURL: XCTUnwrap(URL(string: "https://example.com/1.png")))]
         let viewModel = makeViewModel(favorites: expected)
 
         viewModel.loadFavorites()
@@ -226,9 +225,9 @@ final class PokemonListViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.showingFavoritesOnly)
     }
 
-    func test_toggleShowFavoritesOnly_clearsSelectedType() async {
-        let viewModel = makeViewModel(typesByType: [
-            Pokemon(id: 4, name: "Charmander", imageURL: URL(string: "https://example.com/4.png")!)
+    func test_toggleShowFavoritesOnly_clearsSelectedType() async throws {
+        let viewModel = try makeViewModel(typesByType: [
+            Pokemon(id: 4, name: "Charmander", imageURL: XCTUnwrap(URL(string: "https://example.com/4.png"))),
         ])
         await viewModel.selectType("fire")
 
@@ -256,22 +255,22 @@ final class PokemonListViewModelTests: XCTestCase {
         XCTAssertFalse(viewModel.showingFavoritesOnly)
     }
 
-    func test_isFavorite_returnsTrue_whenPokemonIsFavorite() {
-        let pokemon = Pokemon(id: 1, name: "Bulbasaur", imageURL: URL(string: "https://example.com/1.png")!)
+    func test_isFavorite_returnsTrue_whenPokemonIsFavorite() throws {
+        let pokemon = try Pokemon(id: 1, name: "Bulbasaur", imageURL: XCTUnwrap(URL(string: "https://example.com/1.png")))
         let viewModel = makeViewModel(favoriteIDs: [1])
 
         XCTAssertTrue(viewModel.isFavorite(pokemon))
     }
 
-    func test_isFavorite_returnsFalse_whenPokemonIsNotFavorite() {
-        let pokemon = Pokemon(id: 1, name: "Bulbasaur", imageURL: URL(string: "https://example.com/1.png")!)
+    func test_isFavorite_returnsFalse_whenPokemonIsNotFavorite() throws {
+        let pokemon = try Pokemon(id: 1, name: "Bulbasaur", imageURL: XCTUnwrap(URL(string: "https://example.com/1.png")))
         let viewModel = makeViewModel()
 
         XCTAssertFalse(viewModel.isFavorite(pokemon))
     }
 
-    func test_displayedPokemon_returnsFavorites_whenShowingFavoritesOnly() {
-        let favorites = [Pokemon(id: 1, name: "Bulbasaur", imageURL: URL(string: "https://example.com/1.png")!)]
+    func test_displayedPokemon_returnsFavorites_whenShowingFavoritesOnly() throws {
+        let favorites = try [Pokemon(id: 1, name: "Bulbasaur", imageURL: XCTUnwrap(URL(string: "https://example.com/1.png")))]
         let viewModel = makeViewModel(favorites: favorites)
         viewModel.toggleShowFavoritesOnly()
 
@@ -279,8 +278,8 @@ final class PokemonListViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.displayedPokemon.first?.name, "Bulbasaur")
     }
 
-    func test_displayedPokemon_returnsFilteredPokemon_whenTypeSelected() async {
-        let firePokemon = [Pokemon(id: 4, name: "Charmander", imageURL: URL(string: "https://example.com/4.png")!)]
+    func test_displayedPokemon_returnsFilteredPokemon_whenTypeSelected() async throws {
+        let firePokemon = try [Pokemon(id: 4, name: "Charmander", imageURL: XCTUnwrap(URL(string: "https://example.com/4.png")))]
         let viewModel = makeViewModel(typesByType: firePokemon)
         await viewModel.selectType("fire")
 
@@ -288,10 +287,10 @@ final class PokemonListViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.displayedPokemon.first?.name, "Charmander")
     }
 
-    func test_displayedPokemon_returnsAllPokemon_whenNoFilterActive() async {
-        let allPokemon = [
-            Pokemon(id: 1, name: "Bulbasaur", imageURL: URL(string: "https://example.com/1.png")!),
-            Pokemon(id: 2, name: "Ivysaur", imageURL: URL(string: "https://example.com/2.png")!)
+    func test_displayedPokemon_returnsAllPokemon_whenNoFilterActive() async throws {
+        let allPokemon = try [
+            Pokemon(id: 1, name: "Bulbasaur", imageURL: XCTUnwrap(URL(string: "https://example.com/1.png"))),
+            Pokemon(id: 2, name: "Ivysaur", imageURL: XCTUnwrap(URL(string: "https://example.com/2.png"))),
         ]
         let viewModel = makeViewModel(listPokemon: allPokemon)
         await viewModel.getPokemon()

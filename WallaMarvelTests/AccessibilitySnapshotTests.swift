@@ -5,14 +5,13 @@
 //  Created by Laura Sales Martínez on 25/4/26.
 //
 
-import XCTest
-import SwiftUI
 import AccessibilitySnapshot
 import SnapshotTesting
+import SwiftUI
+import XCTest
 @testable import WallaMarvel
 
 final class AccessibilitySnapshotTests: XCTestCase {
-
     // MARK: - PokemonRowView
 
     func test_pokemonRowView_default() {
@@ -90,8 +89,8 @@ final class AccessibilitySnapshotTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func assertAccessibilitySnapshot<V: View>(
-        _ view: V,
+    private func assertAccessibilitySnapshot(
+        _ view: some View,
         size: CGSize,
         file: StaticString = #file,
         testName: String = #function,
