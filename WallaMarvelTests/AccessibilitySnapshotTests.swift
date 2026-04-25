@@ -96,8 +96,13 @@ final class AccessibilitySnapshotTests: XCTestCase {
         testName: String = #function,
         line: UInt = #line
     ) {
+        let window = UIWindow(frame: CGRect(origin: .zero, size: size))
         let controller = UIHostingController(rootView: view)
         controller.view.frame = CGRect(origin: .zero, size: size)
+        window.rootViewController = controller
+        window.makeKeyAndVisible()
+        controller.view.layoutIfNeeded()
+        CATransaction.flush()
         assertSnapshot(
             of: controller,
             as: .accessibilityImage,

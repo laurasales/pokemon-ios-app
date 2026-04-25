@@ -78,6 +78,15 @@
 		D3A5E1392F9ADF74007F83A5 /* MockToggleFavoriteUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E1382F9ADF74007F83A5 /* MockToggleFavoriteUseCase.swift */; };
 		D3A5E13F2F9ADF7E007F83A5 /* MockGetFavoritesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E13E2F9ADF7E007F83A5 /* MockGetFavoritesUseCase.swift */; };
 		D3A5E1572F9B818C007F83A5 /* DependencyContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5E1562F9B818C007F83A5 /* DependencyContainer.swift */; };
+		D3C8EF652F9D826700AA6D2F /* test_typeBadgeView_filterUnselected.1.png in Resources */ = {isa = PBXBuildFile; fileRef = D3C8EF622F9D826700AA6D2F /* test_typeBadgeView_filterUnselected.1.png */; };
+		D3C8EF662F9D826700AA6D2F /* test_pokemonDetailHeaderView.1.png in Resources */ = {isa = PBXBuildFile; fileRef = D3C8EF5B2F9D826700AA6D2F /* test_pokemonDetailHeaderView.1.png */; };
+		D3C8EF672F9D826700AA6D2F /* test_pokemonRowView_favorited.1.png in Resources */ = {isa = PBXBuildFile; fileRef = D3C8EF5E2F9D826700AA6D2F /* test_pokemonRowView_favorited.1.png */; };
+		D3C8EF682F9D826700AA6D2F /* test_typeBadgeView_displayMode.1.png in Resources */ = {isa = PBXBuildFile; fileRef = D3C8EF602F9D826700AA6D2F /* test_typeBadgeView_displayMode.1.png */; };
+		D3C8EF692F9D826700AA6D2F /* test_pokemonInfoSectionView.1.png in Resources */ = {isa = PBXBuildFile; fileRef = D3C8EF5C2F9D826700AA6D2F /* test_pokemonInfoSectionView.1.png */; };
+		D3C8EF6A2F9D826700AA6D2F /* test_pokemonRowView_default.1.png in Resources */ = {isa = PBXBuildFile; fileRef = D3C8EF5D2F9D826700AA6D2F /* test_pokemonRowView_default.1.png */; };
+		D3C8EF6B2F9D826700AA6D2F /* test_pokemonStatsSectionView.1.png in Resources */ = {isa = PBXBuildFile; fileRef = D3C8EF5F2F9D826700AA6D2F /* test_pokemonStatsSectionView.1.png */; };
+		D3C8EF6C2F9D826700AA6D2F /* test_typeBadgeView_filterSelected.1.png in Resources */ = {isa = PBXBuildFile; fileRef = D3C8EF612F9D826700AA6D2F /* test_typeBadgeView_filterSelected.1.png */; };
+		D3C8EF6D2F9D826700AA6D2F /* test_pokemonAbilitiesSectionView.1.png in Resources */ = {isa = PBXBuildFile; fileRef = D3C8EF5A2F9D826700AA6D2F /* test_pokemonAbilitiesSectionView.1.png */; };
 		D3DC46F42F983A6700C72D3B /* PokemonAPI in Frameworks */ = {isa = PBXBuildFile; productRef = D3DC46F32F983A6700C72D3B /* PokemonAPI */; };
 		D3DC47012F997D6400C72D3B /* OpenAPIRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = D3DC47002F997D6400C72D3B /* OpenAPIRuntime */; };
 		D3DC47042F997D7D00C72D3B /* OpenAPIURLSession in Frameworks */ = {isa = PBXBuildFile; productRef = D3DC47032F997D7D00C72D3B /* OpenAPIURLSession */; };
@@ -171,6 +180,15 @@
 		D3A5E1382F9ADF74007F83A5 /* MockToggleFavoriteUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockToggleFavoriteUseCase.swift; sourceTree = "<group>"; };
 		D3A5E13E2F9ADF7E007F83A5 /* MockGetFavoritesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockGetFavoritesUseCase.swift; sourceTree = "<group>"; };
 		D3A5E1562F9B818C007F83A5 /* DependencyContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyContainer.swift; sourceTree = "<group>"; };
+		D3C8EF5A2F9D826700AA6D2F /* test_pokemonAbilitiesSectionView.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_pokemonAbilitiesSectionView.1.png; sourceTree = "<group>"; };
+		D3C8EF5B2F9D826700AA6D2F /* test_pokemonDetailHeaderView.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_pokemonDetailHeaderView.1.png; sourceTree = "<group>"; };
+		D3C8EF5C2F9D826700AA6D2F /* test_pokemonInfoSectionView.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_pokemonInfoSectionView.1.png; sourceTree = "<group>"; };
+		D3C8EF5D2F9D826700AA6D2F /* test_pokemonRowView_default.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_pokemonRowView_default.1.png; sourceTree = "<group>"; };
+		D3C8EF5E2F9D826700AA6D2F /* test_pokemonRowView_favorited.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_pokemonRowView_favorited.1.png; sourceTree = "<group>"; };
+		D3C8EF5F2F9D826700AA6D2F /* test_pokemonStatsSectionView.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_pokemonStatsSectionView.1.png; sourceTree = "<group>"; };
+		D3C8EF602F9D826700AA6D2F /* test_typeBadgeView_displayMode.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_typeBadgeView_displayMode.1.png; sourceTree = "<group>"; };
+		D3C8EF612F9D826700AA6D2F /* test_typeBadgeView_filterSelected.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_typeBadgeView_filterSelected.1.png; sourceTree = "<group>"; };
+		D3C8EF622F9D826700AA6D2F /* test_typeBadgeView_filterUnselected.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_typeBadgeView_filterUnselected.1.png; sourceTree = "<group>"; };
 		D3DC470F2F9980A500C72D3B /* openapi-generator-config.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = "openapi-generator-config.yaml"; sourceTree = "<group>"; };
 		D3DC47262F99896300C72D3B /* openapi.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = openapi.yaml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -252,6 +270,7 @@
 		1A0E3AAE2862F7E300132FCB /* WallaMarvelTests */ = {
 			isa = PBXGroup;
 			children = (
+				D3C8EF642F9D826700AA6D2F /* __Snapshots__ */,
 				D3196E2B2F9C39450018E4A3 /* AccessibilitySnapshotTests.swift */,
 				D3A5E0E92F9AAF95007F83A5 /* TestData */,
 				D3A5E0E12F9AAF8C007F83A5 /* Mocks */,
@@ -496,6 +515,30 @@
 			path = PokemonDetail;
 			sourceTree = "<group>";
 		};
+		D3C8EF632F9D826700AA6D2F /* AccessibilitySnapshotTests */ = {
+			isa = PBXGroup;
+			children = (
+				D3C8EF5A2F9D826700AA6D2F /* test_pokemonAbilitiesSectionView.1.png */,
+				D3C8EF5B2F9D826700AA6D2F /* test_pokemonDetailHeaderView.1.png */,
+				D3C8EF5C2F9D826700AA6D2F /* test_pokemonInfoSectionView.1.png */,
+				D3C8EF5D2F9D826700AA6D2F /* test_pokemonRowView_default.1.png */,
+				D3C8EF5E2F9D826700AA6D2F /* test_pokemonRowView_favorited.1.png */,
+				D3C8EF5F2F9D826700AA6D2F /* test_pokemonStatsSectionView.1.png */,
+				D3C8EF602F9D826700AA6D2F /* test_typeBadgeView_displayMode.1.png */,
+				D3C8EF612F9D826700AA6D2F /* test_typeBadgeView_filterSelected.1.png */,
+				D3C8EF622F9D826700AA6D2F /* test_typeBadgeView_filterUnselected.1.png */,
+			);
+			path = AccessibilitySnapshotTests;
+			sourceTree = "<group>";
+		};
+		D3C8EF642F9D826700AA6D2F /* __Snapshots__ */ = {
+			isa = PBXGroup;
+			children = (
+				D3C8EF632F9D826700AA6D2F /* AccessibilitySnapshotTests */,
+			);
+			path = __Snapshots__;
+			sourceTree = "<group>";
+		};
 		D3DC46F62F984AC400C72D3B /* Network */ = {
 			isa = PBXGroup;
 			children = (
@@ -655,6 +698,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3C8EF652F9D826700AA6D2F /* test_typeBadgeView_filterUnselected.1.png in Resources */,
+				D3C8EF662F9D826700AA6D2F /* test_pokemonDetailHeaderView.1.png in Resources */,
+				D3C8EF672F9D826700AA6D2F /* test_pokemonRowView_favorited.1.png in Resources */,
+				D3C8EF682F9D826700AA6D2F /* test_typeBadgeView_displayMode.1.png in Resources */,
+				D3C8EF692F9D826700AA6D2F /* test_pokemonInfoSectionView.1.png in Resources */,
+				D3C8EF6A2F9D826700AA6D2F /* test_pokemonRowView_default.1.png in Resources */,
+				D3C8EF6B2F9D826700AA6D2F /* test_pokemonStatsSectionView.1.png in Resources */,
+				D3C8EF6C2F9D826700AA6D2F /* test_typeBadgeView_filterSelected.1.png in Resources */,
+				D3C8EF6D2F9D826700AA6D2F /* test_pokemonAbilitiesSectionView.1.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,383 +1,388 @@
-//
-//  PokemonListViewModelTests.swift
-//  WallaMarvelTests
-//
-//  Created by Laura Sales Martínez on 21/4/26.
-//
-
-import XCTest
+import Foundation
+import Nimble
+import Quick
 @testable import WallaMarvel
 
-@MainActor
-final class PokemonListViewModelTests: XCTestCase {
-    func test_title_returnsPokedex() {
-        let viewModel = makeViewModel()
-
-        XCTAssertEqual(viewModel.title, "Pokédex")
-    }
-
-    // MARK: - getPokemon
-
-    func test_getPokemon_updatesPokemonOnSuccess() async throws {
-        let expectedPokemon = try [
-            Pokemon(id: 1, name: "Bulbasaur", imageURL: XCTUnwrap(URL(string: "https://example.com/1.png"))),
-            Pokemon(id: 2, name: "Ivysaur", imageURL: XCTUnwrap(URL(string: "https://example.com/2.png"))),
-        ]
-        let viewModel = makeViewModel(listPokemon: expectedPokemon)
-
-        await viewModel.getPokemon()
-
-        XCTAssertEqual(viewModel.pokemon.count, 2)
-        XCTAssertEqual(viewModel.pokemon.first?.name, "Bulbasaur")
-    }
-
-    func test_getPokemon_doesNotUpdatePokemonOnError() async {
-        let viewModel = makeViewModel(listError: URLError(.notConnectedToInternet))
-
-        await viewModel.getPokemon()
-
-        XCTAssertTrue(viewModel.pokemon.isEmpty)
-    }
-
-    // MARK: - searchPokemon
-
-    func test_isSearching_isFalse_whenSearchTextIsEmpty() {
-        let viewModel = makeViewModel()
-
-        XCTAssertFalse(viewModel.isSearching)
-    }
-
-    func test_isSearching_isTrue_whenSearchTextIsNotEmpty() {
-        let viewModel = makeViewModel()
-        viewModel.searchText = "bulbasaur"
-
-        XCTAssertTrue(viewModel.isSearching)
-    }
-
-    func test_searchPokemon_setsResultOnSuccess() async throws {
-        let expected = try Pokemon(id: 1, name: "Bulbasaur", imageURL: XCTUnwrap(URL(string: "https://example.com/1.png")))
-        let viewModel = makeViewModel(searchResult: expected)
-        viewModel.searchText = "bulbasaur"
-
-        await viewModel.searchPokemon()
-
-        XCTAssertEqual(viewModel.searchResult?.id, expected.id)
-        XCTAssertEqual(viewModel.searchResult?.name, expected.name)
-        XCTAssertFalse(viewModel.searchNotFound)
-    }
-
-    func test_searchPokemon_setsSearchNotFound_onError() async {
-        let viewModel = makeViewModel(searchError: URLError(.notConnectedToInternet))
-        viewModel.searchText = "unknownmon"
-
-        await viewModel.searchPokemon()
-
-        XCTAssertNil(viewModel.searchResult)
-        XCTAssertTrue(viewModel.searchNotFound)
-    }
-
-    func test_clearSearch_resetsSearchState() async throws {
-        let expected = try Pokemon(id: 1, name: "Bulbasaur", imageURL: XCTUnwrap(URL(string: "https://example.com/1.png")))
-        let viewModel = makeViewModel(searchResult: expected)
-        viewModel.searchText = "bulbasaur"
-        await viewModel.searchPokemon()
-
-        viewModel.clearSearch()
-
-        XCTAssertEqual(viewModel.searchText, "")
-        XCTAssertNil(viewModel.searchResult)
-        XCTAssertFalse(viewModel.searchNotFound)
-    }
-
-    // MARK: - errorMessage
-
-    func test_getPokemon_setsErrorMessage_onError() async {
-        let viewModel = makeViewModel(listError: URLError(.notConnectedToInternet))
-
-        await viewModel.getPokemon()
-
-        XCTAssertNotNil(viewModel.errorMessage)
-    }
-
-    func test_getPokemon_doesNotSetErrorMessage_onSuccess() async throws {
-        let viewModel = try makeViewModel(listPokemon: [
-            Pokemon(id: 1, name: "Bulbasaur", imageURL: XCTUnwrap(URL(string: "https://example.com/1.png"))),
-        ])
-
-        await viewModel.getPokemon()
-
-        XCTAssertNil(viewModel.errorMessage)
-    }
-
-    func test_selectType_setsErrorMessage_onError() async {
-        let viewModel = makeViewModel(typesByTypeError: URLError(.notConnectedToInternet))
-
-        await viewModel.selectType("fire")
-
-        XCTAssertNotNil(viewModel.errorMessage)
-    }
-
-    func test_selectType_resetsSelectedType_onError() async {
-        let viewModel = makeViewModel(typesByTypeError: URLError(.notConnectedToInternet))
-
-        await viewModel.selectType("fire")
-
-        XCTAssertNil(viewModel.selectedType)
-    }
-
-    func test_dismissError_clearsErrorMessage() async {
-        let viewModel = makeViewModel(listError: URLError(.notConnectedToInternet))
-        await viewModel.getPokemon()
-
-        viewModel.dismissError()
-
-        XCTAssertNil(viewModel.errorMessage)
-    }
-
-    // MARK: - loadTypes
-
-    func test_loadTypes_updatesPokemonTypes_onSuccess() async {
-        let viewModel = makeViewModel(pokemonTypes: ["fire", "water", "grass"])
-
-        await viewModel.loadTypes()
-
-        XCTAssertEqual(viewModel.pokemonTypes, ["fire", "water", "grass"])
-    }
-
-    func test_loadTypes_keepsPokemonTypesEmpty_onError() async {
-        let viewModel = makeViewModel(pokemonTypesError: URLError(.notConnectedToInternet))
-
-        await viewModel.loadTypes()
-
-        XCTAssertTrue(viewModel.pokemonTypes.isEmpty)
-    }
-
-    // MARK: - selectType
-
-    func test_selectType_setsSelectedType() async {
-        let viewModel = makeViewModel()
-
-        await viewModel.selectType("fire")
-
-        XCTAssertEqual(viewModel.selectedType, "fire")
-    }
-
-    func test_selectType_setsFilteredPokemon_onSuccess() async throws {
-        let expected = try [
-            Pokemon(id: 4, name: "Charmander", imageURL: XCTUnwrap(URL(string: "https://example.com/4.png"))),
-        ]
-        let viewModel = makeViewModel(typesByType: expected)
-
-        await viewModel.selectType("fire")
-
-        XCTAssertEqual(viewModel.filteredPokemon.count, 1)
-        XCTAssertEqual(viewModel.filteredPokemon.first?.name, "Charmander")
-    }
-
-    func test_selectType_deselects_whenSameTypeSelected() async throws {
-        let viewModel = try makeViewModel(typesByType: [
-            Pokemon(id: 4, name: "Charmander", imageURL: XCTUnwrap(URL(string: "https://example.com/4.png"))),
-        ])
-        await viewModel.selectType("fire")
-
-        await viewModel.selectType("fire")
-
-        XCTAssertNil(viewModel.selectedType)
-        XCTAssertTrue(viewModel.filteredPokemon.isEmpty)
-    }
-
-    func test_selectType_clearsFilteredPokemon_onError() async {
-        let viewModel = makeViewModel(typesByTypeError: URLError(.notConnectedToInternet))
-
-        await viewModel.selectType("fire")
-
-        XCTAssertTrue(viewModel.filteredPokemon.isEmpty)
-    }
-
-    func test_selectType_replacesFilteredPokemon_whenDifferentTypeSelected() async throws {
-        let viewModel = try makeViewModel(typesByType: [
-            Pokemon(id: 7, name: "Squirtle", imageURL: XCTUnwrap(URL(string: "https://example.com/7.png"))),
-        ])
-        await viewModel.selectType("fire")
-        await viewModel.selectType("water")
-
-        XCTAssertEqual(viewModel.selectedType, "water")
-        XCTAssertEqual(viewModel.filteredPokemon.first?.name, "Squirtle")
-    }
-
-    // MARK: - favourites
-
-    func test_loadFavorites_updatesFavorites() throws {
-        let expected = try [Pokemon(id: 1, name: "Bulbasaur", imageURL: XCTUnwrap(URL(string: "https://example.com/1.png")))]
-        let viewModel = makeViewModel(favorites: expected)
-
-        viewModel.loadFavorites()
-
-        XCTAssertEqual(viewModel.favorites.count, 1)
-        XCTAssertEqual(viewModel.favorites.first?.name, "Bulbasaur")
-    }
-
-    func test_toggleShowFavoritesOnly_setsShowingFavoritesOnly() {
-        let viewModel = makeViewModel()
-
-        viewModel.toggleShowFavoritesOnly()
-
-        XCTAssertTrue(viewModel.showingFavoritesOnly)
-    }
-
-    func test_toggleShowFavoritesOnly_clearsSelectedType() async throws {
-        let viewModel = try makeViewModel(typesByType: [
-            Pokemon(id: 4, name: "Charmander", imageURL: XCTUnwrap(URL(string: "https://example.com/4.png"))),
-        ])
-        await viewModel.selectType("fire")
-
-        viewModel.toggleShowFavoritesOnly()
-
-        XCTAssertNil(viewModel.selectedType)
-        XCTAssertTrue(viewModel.filteredPokemon.isEmpty)
-    }
-
-    func test_toggleShowFavoritesOnly_turnsOff_whenAlreadyOn() {
-        let viewModel = makeViewModel()
-        viewModel.toggleShowFavoritesOnly()
-
-        viewModel.toggleShowFavoritesOnly()
-
-        XCTAssertFalse(viewModel.showingFavoritesOnly)
-    }
-
-    func test_selectType_clearsShowingFavoritesOnly() async {
-        let viewModel = makeViewModel()
-        viewModel.toggleShowFavoritesOnly()
-
-        await viewModel.selectType("fire")
-
-        XCTAssertFalse(viewModel.showingFavoritesOnly)
-    }
-
-    func test_isFavorite_returnsTrue_whenPokemonIsFavorite() throws {
-        let pokemon = try Pokemon(id: 1, name: "Bulbasaur", imageURL: XCTUnwrap(URL(string: "https://example.com/1.png")))
-        let viewModel = makeViewModel(favoriteIDs: [1])
-
-        XCTAssertTrue(viewModel.isFavorite(pokemon))
-    }
-
-    func test_isFavorite_returnsFalse_whenPokemonIsNotFavorite() throws {
-        let pokemon = try Pokemon(id: 1, name: "Bulbasaur", imageURL: XCTUnwrap(URL(string: "https://example.com/1.png")))
-        let viewModel = makeViewModel()
-
-        XCTAssertFalse(viewModel.isFavorite(pokemon))
-    }
-
-    func test_displayedPokemon_returnsFavorites_whenShowingFavoritesOnly() throws {
-        let favorites = try [Pokemon(id: 1, name: "Bulbasaur", imageURL: XCTUnwrap(URL(string: "https://example.com/1.png")))]
-        let viewModel = makeViewModel(favorites: favorites)
-        viewModel.toggleShowFavoritesOnly()
-
-        XCTAssertEqual(viewModel.displayedPokemon.count, 1)
-        XCTAssertEqual(viewModel.displayedPokemon.first?.name, "Bulbasaur")
-    }
-
-    func test_displayedPokemon_returnsFilteredPokemon_whenTypeSelected() async throws {
-        let firePokemon = try [Pokemon(id: 4, name: "Charmander", imageURL: XCTUnwrap(URL(string: "https://example.com/4.png")))]
-        let viewModel = makeViewModel(typesByType: firePokemon)
-        await viewModel.selectType("fire")
-
-        XCTAssertEqual(viewModel.displayedPokemon.count, 1)
-        XCTAssertEqual(viewModel.displayedPokemon.first?.name, "Charmander")
-    }
-
-    func test_displayedPokemon_returnsAllPokemon_whenNoFilterActive() async throws {
-        let allPokemon = try [
-            Pokemon(id: 1, name: "Bulbasaur", imageURL: XCTUnwrap(URL(string: "https://example.com/1.png"))),
-            Pokemon(id: 2, name: "Ivysaur", imageURL: XCTUnwrap(URL(string: "https://example.com/2.png"))),
-        ]
-        let viewModel = makeViewModel(listPokemon: allPokemon)
-        await viewModel.getPokemon()
-
-        XCTAssertEqual(viewModel.displayedPokemon.count, 2)
-    }
-
-    // MARK: - hasSearched
-
-    func test_hasSearched_isFalse_initially() {
-        let viewModel = makeViewModel()
-
-        XCTAssertFalse(viewModel.hasSearched)
-    }
-
-    func test_hasSearched_isTrue_afterSearchPokemon() async {
-        let viewModel = makeViewModel()
-        viewModel.searchText = "bulbasaur"
-
-        await viewModel.searchPokemon()
-
-        XCTAssertTrue(viewModel.hasSearched)
-    }
-
-    func test_hasSearched_isTrue_afterFailedSearch() async {
-        let viewModel = makeViewModel(searchError: URLError(.notConnectedToInternet))
-        viewModel.searchText = "unknownmon"
-
-        await viewModel.searchPokemon()
-
-        XCTAssertTrue(viewModel.hasSearched)
-    }
-
-    func test_clearSearch_resetsHasSearched() async {
-        let viewModel = makeViewModel()
-        viewModel.searchText = "bulbasaur"
-        await viewModel.searchPokemon()
-
-        viewModel.clearSearch()
-
-        XCTAssertFalse(viewModel.hasSearched)
-    }
-
-    func test_resetSearchResults_resetsHasSearched_withoutClearingText() async {
-        let viewModel = makeViewModel(searchError: URLError(.notConnectedToInternet))
-        viewModel.searchText = "bulb"
-        await viewModel.searchPokemon()
-
-        viewModel.resetSearchResults()
-
-        XCTAssertFalse(viewModel.hasSearched)
-        XCTAssertFalse(viewModel.searchNotFound)
-        XCTAssertNil(viewModel.searchResult)
-        XCTAssertEqual(viewModel.searchText, "bulb")
-    }
-
-    // MARK: - Helpers
-
-    private func makeViewModel(
-        listPokemon: [Pokemon] = [],
-        listError: Error? = nil,
-        searchResult: Pokemon? = nil,
-        searchError: Error? = nil,
-        typesByType: [Pokemon] = [],
-        typesByTypeError: Error? = nil,
-        pokemonTypes: [String] = [],
-        pokemonTypesError: Error? = nil,
-        favorites: [Pokemon] = [],
-        favoriteIDs: Set<Int> = []
-    ) -> PokemonListViewModel {
-        let listUseCase = listError.map { MockGetPokemonListUseCase(error: $0) }
-            ?? MockGetPokemonListUseCase(pokemon: listPokemon)
-        let searchUseCase = searchError.map { MockSearchPokemonUseCase(error: $0) }
-            ?? MockSearchPokemonUseCase(pokemon: searchResult ?? Pokemon(id: 0, name: "", imageURL: URL(string: "https://example.com")!))
-        let byTypeUseCase = typesByTypeError.map { MockGetPokemonByTypeUseCase(error: $0) }
-            ?? MockGetPokemonByTypeUseCase(pokemon: typesByType)
-        let typesUseCase = pokemonTypesError.map { MockGetPokemonTypesUseCase(error: $0) }
-            ?? MockGetPokemonTypesUseCase(types: pokemonTypes)
-        let toggleUseCase = MockToggleFavoriteUseCase(favoriteIDs: favoriteIDs)
-        let getFavoritesUseCase = MockGetFavoritesUseCase(favorites: favorites)
-        return PokemonListViewModel(
-            getPokemonListUseCase: listUseCase,
-            searchPokemonUseCase: searchUseCase,
-            getPokemonByTypeUseCase: byTypeUseCase,
-            getPokemonTypesUseCase: typesUseCase,
-            toggleFavoriteUseCase: toggleUseCase,
-            getFavoritesUseCase: getFavoritesUseCase
-        )
+final class PokemonListViewModelSpec: AsyncSpec {
+    override class func spec() {
+        @MainActor
+        func makeViewModel(
+            listPokemon: [Pokemon] = [],
+            listError: Error? = nil,
+            searchResult: Pokemon? = nil,
+            searchError: Error? = nil,
+            typesByType: [Pokemon] = [],
+            typesByTypeError: Error? = nil,
+            pokemonTypes: [String] = [],
+            pokemonTypesError: Error? = nil,
+            favorites: [Pokemon] = [],
+            favoriteIDs: Set<Int> = []
+        ) -> PokemonListViewModel {
+            PokemonListViewModel(
+                getPokemonListUseCase: listError.map { MockGetPokemonListUseCase(error: $0) }
+                    ?? MockGetPokemonListUseCase(pokemon: listPokemon),
+                searchPokemonUseCase: searchError.map { MockSearchPokemonUseCase(error: $0) }
+                    ?? MockSearchPokemonUseCase(pokemon: searchResult ?? Pokemon(id: 0, name: "", imageURL: URL(string: "https://example.com")!)),
+                getPokemonByTypeUseCase: typesByTypeError.map { MockGetPokemonByTypeUseCase(error: $0) }
+                    ?? MockGetPokemonByTypeUseCase(pokemon: typesByType),
+                getPokemonTypesUseCase: pokemonTypesError.map { MockGetPokemonTypesUseCase(error: $0) }
+                    ?? MockGetPokemonTypesUseCase(types: pokemonTypes),
+                toggleFavoriteUseCase: MockToggleFavoriteUseCase(favoriteIDs: favoriteIDs),
+                getFavoritesUseCase: MockGetFavoritesUseCase(favorites: favorites)
+            )
+        }
+
+        describe("PokemonListViewModel") {
+            describe("title") {
+                it("returns Pokédex") {
+                    let sut = await makeViewModel()
+                    let title = await sut.title
+                    expect(title) == "Pokédex"
+                }
+            }
+
+            describe("getPokemon") {
+                context("when the API succeeds") {
+                    it("populates the pokemon list") {
+                        let sut = await makeViewModel(listPokemon: [
+                            Pokemon(id: 1, name: "Bulbasaur", imageURL: URL(string: "https://example.com/1.png")!),
+                            Pokemon(id: 2, name: "Ivysaur", imageURL: URL(string: "https://example.com/2.png")!),
+                        ])
+                        await sut.getPokemon()
+                        let result = await sut.pokemon
+                        expect(result).to(haveCount(2))
+                        expect(result.first?.name) == "Bulbasaur"
+                    }
+
+                    it("does not set an error message") {
+                        let sut = await makeViewModel(listPokemon: [
+                            Pokemon(id: 1, name: "Bulbasaur", imageURL: URL(string: "https://example.com/1.png")!),
+                        ])
+                        await sut.getPokemon()
+                        let errorMessage = await sut.errorMessage
+                        expect(errorMessage).to(beNil())
+                    }
+                }
+
+                context("when the API fails") {
+                    it("leaves the pokemon list empty") {
+                        let sut = await makeViewModel(listError: URLError(.notConnectedToInternet))
+                        await sut.getPokemon()
+                        let result = await sut.pokemon
+                        expect(result).to(beEmpty())
+                    }
+
+                    it("sets an error message") {
+                        let sut = await makeViewModel(listError: URLError(.notConnectedToInternet))
+                        await sut.getPokemon()
+                        let errorMessage = await sut.errorMessage
+                        expect(errorMessage).toNot(beNil())
+                    }
+                }
+            }
+
+            describe("isSearching") {
+                it("is false when searchText is empty") {
+                    let sut = await makeViewModel()
+                    let isSearching = await sut.isSearching
+                    expect(isSearching) == false
+                }
+
+                it("is true when searchText is not empty") {
+                    let sut = await makeViewModel()
+                    await MainActor.run { sut.searchText = "bulbasaur" }
+                    let isSearching = await sut.isSearching
+                    expect(isSearching) == true
+                }
+            }
+
+            describe("searchPokemon") {
+                context("when the search succeeds") {
+                    it("sets searchResult and clears searchNotFound") {
+                        let expected = Pokemon(id: 1, name: "Bulbasaur", imageURL: URL(string: "https://example.com/1.png")!)
+                        let sut = await makeViewModel(searchResult: expected)
+                        await MainActor.run { sut.searchText = "bulbasaur" }
+                        await sut.searchPokemon()
+                        let searchResult = await sut.searchResult
+                        let searchNotFound = await sut.searchNotFound
+                        expect(searchResult?.id) == expected.id
+                        expect(searchResult?.name) == expected.name
+                        expect(searchNotFound) == false
+                    }
+                }
+
+                context("when the search fails") {
+                    it("clears searchResult and sets searchNotFound") {
+                        let sut = await makeViewModel(searchError: URLError(.notConnectedToInternet))
+                        await MainActor.run { sut.searchText = "unknownmon" }
+                        await sut.searchPokemon()
+                        let searchResult = await sut.searchResult
+                        let searchNotFound = await sut.searchNotFound
+                        expect(searchResult).to(beNil())
+                        expect(searchNotFound) == true
+                    }
+                }
+            }
+
+            describe("clearSearch") {
+                it("resets all search state") {
+                    let sut = await makeViewModel(searchResult: Pokemon(id: 1, name: "Bulbasaur", imageURL: URL(string: "https://example.com/1.png")!))
+                    await MainActor.run { sut.searchText = "bulbasaur" }
+                    await sut.searchPokemon()
+                    await MainActor.run { sut.clearSearch() }
+                    let searchText = await sut.searchText
+                    let searchResult = await sut.searchResult
+                    let searchNotFound = await sut.searchNotFound
+                    expect(searchText) == ""
+                    expect(searchResult).to(beNil())
+                    expect(searchNotFound) == false
+                }
+            }
+
+            describe("dismissError") {
+                it("clears the error message") {
+                    let sut = await makeViewModel(listError: URLError(.notConnectedToInternet))
+                    await sut.getPokemon()
+                    await MainActor.run { sut.dismissError() }
+                    let errorMessage = await sut.errorMessage
+                    expect(errorMessage).to(beNil())
+                }
+            }
+
+            describe("loadTypes") {
+                context("when the API succeeds") {
+                    it("populates pokemonTypes") {
+                        let sut = await makeViewModel(pokemonTypes: ["fire", "water", "grass"])
+                        await sut.loadTypes()
+                        let types = await sut.pokemonTypes
+                        expect(types) == ["fire", "water", "grass"]
+                    }
+                }
+
+                context("when the API fails") {
+                    it("leaves pokemonTypes empty") {
+                        let sut = await makeViewModel(pokemonTypesError: URLError(.notConnectedToInternet))
+                        await sut.loadTypes()
+                        let types = await sut.pokemonTypes
+                        expect(types).to(beEmpty())
+                    }
+                }
+            }
+
+            describe("selectType") {
+                context("when a new type is selected") {
+                    it("sets selectedType") {
+                        let sut = await makeViewModel()
+                        await sut.selectType("fire")
+                        let selectedType = await sut.selectedType
+                        expect(selectedType) == "fire"
+                    }
+
+                    it("populates filteredPokemon on success") {
+                        let sut = await makeViewModel(typesByType: [
+                            Pokemon(id: 4, name: "Charmander", imageURL: URL(string: "https://example.com/4.png")!),
+                        ])
+                        await sut.selectType("fire")
+                        let filtered = await sut.filteredPokemon
+                        expect(filtered).to(haveCount(1))
+                        expect(filtered.first?.name) == "Charmander"
+                    }
+
+                    it("clears showingFavoritesOnly") {
+                        let sut = await makeViewModel()
+                        await MainActor.run { sut.toggleShowFavoritesOnly() }
+                        await sut.selectType("fire")
+                        let showingFavoritesOnly = await sut.showingFavoritesOnly
+                        expect(showingFavoritesOnly) == false
+                    }
+                }
+
+                context("when the same type is selected again") {
+                    it("deselects and clears filteredPokemon") {
+                        let sut = await makeViewModel(typesByType: [
+                            Pokemon(id: 4, name: "Charmander", imageURL: URL(string: "https://example.com/4.png")!),
+                        ])
+                        await sut.selectType("fire")
+                        await sut.selectType("fire")
+                        let selectedType = await sut.selectedType
+                        let filtered = await sut.filteredPokemon
+                        expect(selectedType).to(beNil())
+                        expect(filtered).to(beEmpty())
+                    }
+                }
+
+                context("when a different type is selected") {
+                    it("replaces filteredPokemon with the new type's results") {
+                        let sut = await makeViewModel(typesByType: [
+                            Pokemon(id: 7, name: "Squirtle", imageURL: URL(string: "https://example.com/7.png")!),
+                        ])
+                        await sut.selectType("fire")
+                        await sut.selectType("water")
+                        let selectedType = await sut.selectedType
+                        let filtered = await sut.filteredPokemon
+                        expect(selectedType) == "water"
+                        expect(filtered.first?.name) == "Squirtle"
+                    }
+                }
+
+                context("when the API fails") {
+                    it("resets selectedType, sets an error, and clears filteredPokemon") {
+                        let sut = await makeViewModel(typesByTypeError: URLError(.notConnectedToInternet))
+                        await sut.selectType("fire")
+                        let selectedType = await sut.selectedType
+                        let errorMessage = await sut.errorMessage
+                        let filtered = await sut.filteredPokemon
+                        expect(selectedType).to(beNil())
+                        expect(errorMessage).toNot(beNil())
+                        expect(filtered).to(beEmpty())
+                    }
+                }
+            }
+
+            describe("toggleShowFavoritesOnly") {
+                it("sets showingFavoritesOnly to true") {
+                    let sut = await makeViewModel()
+                    await MainActor.run { sut.toggleShowFavoritesOnly() }
+                    let showingFavoritesOnly = await sut.showingFavoritesOnly
+                    expect(showingFavoritesOnly) == true
+                }
+
+                it("turns off when called twice") {
+                    let sut = await makeViewModel()
+                    await MainActor.run {
+                        sut.toggleShowFavoritesOnly()
+                        sut.toggleShowFavoritesOnly()
+                    }
+                    let showingFavoritesOnly = await sut.showingFavoritesOnly
+                    expect(showingFavoritesOnly) == false
+                }
+
+                it("clears selectedType and filteredPokemon") {
+                    let sut = await makeViewModel(typesByType: [
+                        Pokemon(id: 4, name: "Charmander", imageURL: URL(string: "https://example.com/4.png")!),
+                    ])
+                    await sut.selectType("fire")
+                    await MainActor.run { sut.toggleShowFavoritesOnly() }
+                    let selectedType = await sut.selectedType
+                    let filtered = await sut.filteredPokemon
+                    expect(selectedType).to(beNil())
+                    expect(filtered).to(beEmpty())
+                }
+            }
+
+            describe("loadFavorites") {
+                it("populates favorites") {
+                    let sut = await makeViewModel(favorites: [
+                        Pokemon(id: 1, name: "Bulbasaur", imageURL: URL(string: "https://example.com/1.png")!),
+                    ])
+                    await MainActor.run { sut.loadFavorites() }
+                    let favorites = await sut.favorites
+                    expect(favorites).to(haveCount(1))
+                    expect(favorites.first?.name) == "Bulbasaur"
+                }
+            }
+
+            describe("isFavorite") {
+                it("returns true when the pokemon is in favorites") {
+                    let pokemon = Pokemon(id: 1, name: "Bulbasaur", imageURL: URL(string: "https://example.com/1.png")!)
+                    let sut = await makeViewModel(favoriteIDs: [1])
+                    let isFavorite = await sut.isFavorite(pokemon)
+                    expect(isFavorite) == true
+                }
+
+                it("returns false when the pokemon is not in favorites") {
+                    let pokemon = Pokemon(id: 1, name: "Bulbasaur", imageURL: URL(string: "https://example.com/1.png")!)
+                    let sut = await makeViewModel()
+                    let isFavorite = await sut.isFavorite(pokemon)
+                    expect(isFavorite) == false
+                }
+            }
+
+            describe("displayedPokemon") {
+                context("when showingFavoritesOnly is true") {
+                    it("returns favorites") {
+                        let sut = await makeViewModel(favorites: [
+                            Pokemon(id: 1, name: "Bulbasaur", imageURL: URL(string: "https://example.com/1.png")!),
+                        ])
+                        await MainActor.run { sut.toggleShowFavoritesOnly() }
+                        let displayed = await sut.displayedPokemon
+                        expect(displayed).to(haveCount(1))
+                        expect(displayed.first?.name) == "Bulbasaur"
+                    }
+                }
+
+                context("when a type filter is active") {
+                    it("returns filteredPokemon") {
+                        let sut = await makeViewModel(typesByType: [
+                            Pokemon(id: 4, name: "Charmander", imageURL: URL(string: "https://example.com/4.png")!),
+                        ])
+                        await sut.selectType("fire")
+                        let displayed = await sut.displayedPokemon
+                        expect(displayed).to(haveCount(1))
+                        expect(displayed.first?.name) == "Charmander"
+                    }
+                }
+
+                context("when no filter is active") {
+                    it("returns all pokemon") {
+                        let sut = await makeViewModel(listPokemon: [
+                            Pokemon(id: 1, name: "Bulbasaur", imageURL: URL(string: "https://example.com/1.png")!),
+                            Pokemon(id: 2, name: "Ivysaur", imageURL: URL(string: "https://example.com/2.png")!),
+                        ])
+                        await sut.getPokemon()
+                        let displayed = await sut.displayedPokemon
+                        expect(displayed).to(haveCount(2))
+                    }
+                }
+            }
+
+            describe("hasSearched") {
+                it("is false initially") {
+                    let sut = await makeViewModel()
+                    let hasSearched = await sut.hasSearched
+                    expect(hasSearched) == false
+                }
+
+                it("becomes true after a search") {
+                    let sut = await makeViewModel()
+                    await MainActor.run { sut.searchText = "bulbasaur" }
+                    await sut.searchPokemon()
+                    let hasSearched = await sut.hasSearched
+                    expect(hasSearched) == true
+                }
+
+                it("becomes true after a failed search") {
+                    let sut = await makeViewModel(searchError: URLError(.notConnectedToInternet))
+                    await MainActor.run { sut.searchText = "unknownmon" }
+                    await sut.searchPokemon()
+                    let hasSearched = await sut.hasSearched
+                    expect(hasSearched) == true
+                }
+
+                it("resets after clearSearch") {
+                    let sut = await makeViewModel()
+                    await MainActor.run { sut.searchText = "bulbasaur" }
+                    await sut.searchPokemon()
+                    await MainActor.run { sut.clearSearch() }
+                    let hasSearched = await sut.hasSearched
+                    expect(hasSearched) == false
+                }
+
+                it("resets after resetSearchResults without clearing searchText") {
+                    let sut = await makeViewModel(searchError: URLError(.notConnectedToInternet))
+                    await MainActor.run { sut.searchText = "bulb" }
+                    await sut.searchPokemon()
+                    await MainActor.run { sut.resetSearchResults() }
+                    let hasSearched = await sut.hasSearched
+                    let searchNotFound = await sut.searchNotFound
+                    let searchResult = await sut.searchResult
+                    let searchText = await sut.searchText
+                    expect(hasSearched) == false
+                    expect(searchNotFound) == false
+                    expect(searchResult).to(beNil())
+                    expect(searchText) == "bulb"
+                }
+            }
+        }
     }
 }
