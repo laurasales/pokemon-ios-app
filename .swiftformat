@@ -15,7 +15,7 @@
 --importgrouping testable-bottom
 
 # Self
---self remove
+--disable redundantSelf
 
 # Semicolons
 --semicolons never
