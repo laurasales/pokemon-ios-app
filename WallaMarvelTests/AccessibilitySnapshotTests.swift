@@ -8,6 +8,7 @@
 import XCTest
 import SwiftUI
 import AccessibilitySnapshot
+import SnapshotTesting
 @testable import WallaMarvel
 
 final class AccessibilitySnapshotTests: XCTestCase {
