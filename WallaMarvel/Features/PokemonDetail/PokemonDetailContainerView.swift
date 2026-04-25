@@ -10,7 +10,7 @@ import SwiftUI
 struct PokemonDetailContainerView: View {
     let pokemonID: Int
     @EnvironmentObject private var container: DependencyContainer
-    
+
     var body: some View {
         PokemonDetailView(viewModel: container.makePokemonDetailViewModel(pokemonID: pokemonID))
     }

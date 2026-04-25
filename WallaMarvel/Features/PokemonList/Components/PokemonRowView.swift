@@ -10,7 +10,7 @@ import SwiftUI
 struct PokemonRowView: View {
     let pokemon: Pokemon
     var isFavorite: Bool = false
-    var onToggleFavorite: (() -> Void)? = nil
+    var onToggleFavorite: (() -> Void)?
 
     var body: some View {
         HStack(spacing: 16) {

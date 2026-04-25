@@ -5,8 +5,8 @@
 //  Created by Laura Sales Martínez on 23/4/26.
 //
 
-@testable import WallaMarvel
 import Foundation
+@testable import WallaMarvel
 
 extension PokemonDetail {
     static let mock = PokemonDetail(
@@ -19,7 +19,7 @@ extension PokemonDetail {
         types: ["Grass", "Poison"],
         stats: [
             Stat(name: "hp", value: 45),
-            Stat(name: "attack", value: 49)
+            Stat(name: "attack", value: 49),
         ],
         abilities: ["Overgrow", "Chlorophyll"]
     )

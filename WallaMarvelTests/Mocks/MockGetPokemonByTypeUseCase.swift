@@ -10,8 +10,12 @@
 final class MockGetPokemonByTypeUseCase: GetPokemonByTypeUseCaseProtocol {
     private let result: Result<[Pokemon], Error>
 
-    init(pokemon: [Pokemon]) { self.result = .success(pokemon) }
-    init(error: Error) { self.result = .failure(error) }
+    init(pokemon: [Pokemon]) {
+        result = .success(pokemon)
+    }
+    init(error: Error) {
+        result = .failure(error)
+    }
 
     func execute(typeName: String) async throws -> [Pokemon] {
         try result.get()

@@ -17,7 +17,7 @@ private struct ErrorAlertModifier: ViewModifier {
                 get: { errorMessage != nil },
                 set: { if !$0 { onDismiss() } }
             )) {
-                Button("OK", role: .cancel) { }
+                Button("OK", role: .cancel) {}
             } message: {
                 Text(errorMessage ?? "")
             }

@@ -1,0 +1,50 @@
+included:
+  - WallaMarvel
+
+excluded:
+  - WallaMarvel/openapi.yaml
+  - WallaMarvel/openapi-generator-config.yaml
+  - WallaMarvelTests
+  - WallaMarvelUITests
+
+disabled_rules:
+  - trailing_comma
+  - file_header
+
+opt_in_rules:
+  - force_unwrapping
+  - private_action
+  - private_outlet
+  - redundant_optional_initialization
+  - sorted_imports
+  - unused_import
+  - vertical_whitespace_between_cases
+
+line_length:
+  warning: 160
+  error: 200
+  ignores_function_declarations: true
+  ignores_comments: true
+
+type_body_length:
+  warning: 300
+  error: 400
+
+function_body_length:
+  warning: 60
+  error: 100
+
+file_length:
+  warning: 400
+  error: 600
+
+cyclomatic_complexity:
+  warning: 10
+  error: 15
+
+identifier_name:
+  min_length: 2
+  excluded:
+    - id
+    - x
+    - y

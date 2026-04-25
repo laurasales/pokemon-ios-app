@@ -10,8 +10,12 @@
 final class MockGetPokemonDetailUseCase: GetPokemonDetailUseCaseProtocol {
     private let result: Result<PokemonDetail, Error>
 
-    init(detail: PokemonDetail) { self.result = .success(detail) }
-    init(error: Error) { self.result = .failure(error) }
+    init(detail: PokemonDetail) {
+        result = .success(detail)
+    }
+    init(error: Error) {
+        result = .failure(error)
+    }
 
     func execute(id: Int) async throws -> PokemonDetail {
         try result.get()
