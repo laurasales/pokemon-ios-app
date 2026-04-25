@@ -1,0 +1,36 @@
+# Swift version
+--swiftversion 5.9
+
+# Indentation
+--indent 4
+--tabwidth 4
+--indentcase false
+
+# Spacing
+--trimwhitespace always
+--insertlines disabled
+--removelines enabled
+
+# Imports
+--importgrouping testable-bottom
+
+# Self
+--self remove
+
+# Semicolons
+--semicolons never
+
+# Trailing commas
+--trailingcommas always
+
+# Unused arguments
+--stripunusedargs closure-only
+
+# Void
+--voidtype void
+
+# Header — preserve existing file headers
+--header ignore
+
+# Excluded paths
+--exclude WallaMarvel/Network/GeneratedSources
