@@ -15,7 +15,7 @@ The original skeleton used Marvel's API, MVP, and UIKit with known intentional e
 SwiftUI was chosen for the entire UI. Reasons:
 
 - Listed as a "nice to have" in the tech challenge requirements.
-- Wallapop's production stack already includes SwiftUI alongside UIKit — demonstrating comfort with both is relevant.
+- Production stack already includes SwiftUI alongside UIKit.
 - `NavigationStack`, `.searchable`, `.task`, and `.refreshable` remove significant boilerplate compared to their UIKit equivalents, leaving the code focused on product logic.
 
 ---
@@ -56,7 +56,7 @@ PokéAPI was chosen as the data source because:
 
 Realm was chosen over CoreData for the favourites store because:
 
-- Wallapop's production stack uses both Realm and CoreData; demonstrating Realm is directly relevant.
+- Production stack uses both Realm and CoreData.
 - Realm's object model requires less boilerplate than CoreData's NSManagedObject for a simple persisted list.
 - `FavoritesRepository` wraps Realm behind `FavoritesRepositoryProtocol`, so the persistence technology is swappable without touching the domain or presentation layers.
 
@@ -66,7 +66,7 @@ The `DependencyContainer` falls back to an in-memory Realm store if the on-disk 
 
 ## Quick + Nimble for unit tests
 
-Wallapop's production stack uses Quick and Nimble. The view model tests mirror that style:
+Production stack uses Quick and Nimble. The view model tests mirror that style:
 
 - `AsyncSpec` subclasses with `describe` / `context` / `it` blocks.
 - `@MainActor` factory functions in spec scope isolate each example.
@@ -76,7 +76,7 @@ Wallapop's production stack uses Quick and Nimble. The view model tests mirror t
 
 ## Accessibility snapshot tests
 
-`AccessibilitySnapshot` (CashApp) was added to snapshot-test the accessibility tree of shared components (`PokemonRowView`, `PokemonTypeBadgeView`, detail section views). This catches regressions in `accessibilityLabel`, `accessibilityTraits`, and `accessibilityHidden` without requiring a device or a human audit on every CI run. Wallapop's production stack uses snapshot-based integration tests; this demonstrates the same approach applied to accessibility.
+`AccessibilitySnapshot` (CashApp) was added to snapshot-test the accessibility tree of shared components (`PokemonRowView`, `PokemonTypeBadgeView`, detail section views). This catches regressions in `accessibilityLabel`, `accessibilityTraits`, and `accessibilityHidden` without requiring a device or a human audit on every CI run. Production stack uses snapshot-based integration tests.
 
 ---
 
