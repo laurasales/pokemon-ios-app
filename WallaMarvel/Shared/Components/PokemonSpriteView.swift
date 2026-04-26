@@ -37,24 +37,16 @@ struct PokemonSpriteView: View {
     }
 
     private var loadingPlaceholder: some View {
-        Circle()
-            .fill(Color(.systemGray5))
+        ProgressView()
+            .tint(.secondary)
+            .scaleEffect(size > 80 ? 1.2 : 0.8)
             .frame(width: size, height: size)
-            .overlay(
-                ProgressView()
-                    .tint(.secondary)
-                    .scaleEffect(size > 80 ? 1.2 : 0.8)
-            )
     }
 
     private var failurePlaceholder: some View {
-        Circle()
-            .fill(Color(.systemGray5))
+        Image(systemName: "questionmark")
+            .font(.system(size: size * 0.35, weight: .ultraLight))
+            .foregroundStyle(.secondary)
             .frame(width: size, height: size)
-            .overlay(
-                Image(systemName: "questionmark")
-                    .font(.system(size: size * 0.35, weight: .ultraLight))
-                    .foregroundStyle(.secondary)
-            )
     }
 }
