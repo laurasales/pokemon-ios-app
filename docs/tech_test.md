@@ -1,4 +1,4 @@
-## Tech Test README
+## Tech Test
 
 Hello, welcome to this iOS Tech Test.
 
