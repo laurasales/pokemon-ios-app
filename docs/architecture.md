@@ -5,11 +5,11 @@
 I structured the app around Clean Architecture with MVVM in the presentation layer. The dependency rule flows strictly inward: the domain layer knows nothing about UIKit, SwiftUI, networking, or persistence.
 
 ```
-┌─────────────────────────────────────────────┐
-│  Presentation (SwiftUI + MVVM)              │
-│  PokemonListView / PokemonDetailView        │
+┌────────────────────────────────────────────────┐
+│  Presentation (SwiftUI + MVVM)                 │
+│  PokemonListView / PokemonDetailView           │
 │  PokemonListViewModel / PokemonDetailViewModel │
-└───────────────────┬─────────────────────────┘
+└───────────────────┬────────────────────────────┘
                     │ Use Case protocols
 ┌───────────────────▼─────────────────────────┐
 │  Domain                                     │
@@ -124,7 +124,13 @@ WallaMarvel/
 │   │   └── FavoritesRepositoryProtocol.swift
 │   └── UseCases/
 │       ├── Protocols/             # One protocol file per use case
-│       └── *.swift                # Concrete implementations
+│       └── ToggleFavoriteUseCase.swift
+│       └── GetFavoritesUseCase.swift
+│       └── GetPokemonTypesUseCase.swift
+│       └── GetPokemonByTypeUseCase.swift
+│       └── GetPokemonListUseCase.swift
+│       └── GetPokemonDetailUseCase.swift
+│       └── SearchPokemonUseCase.swift
 ├── Features/
 │   ├── PokemonList/
 │   │   ├── Components/
