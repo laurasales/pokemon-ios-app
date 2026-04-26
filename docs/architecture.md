@@ -2,7 +2,7 @@
 
 ## Overview
 
-The app is structured around Clean Architecture with MVVM in the presentation layer. The dependency rule flows strictly inward: the domain layer knows nothing about UIKit, SwiftUI, networking, or persistence.
+I structured the app around Clean Architecture with MVVM in the presentation layer. The dependency rule flows strictly inward: the domain layer knows nothing about UIKit, SwiftUI, networking, or persistence.
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -56,16 +56,16 @@ Two concrete implementations exist:
 - Uses Apple's Swift OpenAPI Generator with a vendored PokéAPI OpenAPI 3.1 spec (`openapi.yaml`).
 - The generator produces a type-safe `Client` at build time; no hand-written `Codable` structs or URL construction.
 - `OpenAPIPokemonDataMapper` converts generated `Components.Schemas` types to `PokemonDTO` / `PokemonDetailDTO`.
-- For list items, the sprite URL is constructed from the Pokédex ID extracted from the resource URL, because the paginated list endpoint returns only `name` and `url`.
+- For list items, I construct the sprite URL from the Pokédex ID extracted from the resource URL, because the paginated list endpoint returns only `name` and `url`.
 
 **`PokemonAPINetworkService`** (alternative)
 - Wraps the `PokemonAPI` Swift package from kinkofer.
-- Retained as a reference implementation to show the protocol boundary in practice — swapping the active implementation is a one-line change in `DependencyContainer`.
+- I kept this as a reference implementation to make the protocol boundary tangible — swapping the active implementation is a one-line change in `DependencyContainer`.
 
 #### Persistence
 
 - `FavoritesRepository` wraps Realm. `FavoritePokemon` is a `RealmSwift.Object` with `@Persisted` properties.
-- `DependencyContainer.makeRealm()` attempts a default Realm and falls back to an in-memory store on failure, so the app degrades gracefully rather than crashing.
+- `DependencyContainer.makeRealm()` tries a default Realm and falls back to an in-memory store on failure, so the app degrades gracefully rather than crashing.
 
 #### DTOs
 
@@ -89,9 +89,9 @@ Two concrete implementations exist:
 
 ### Dependency Injection
 
-`DependencyContainer` is an `ObservableObject` created once in `SceneDelegate` and injected into the SwiftUI environment via `.environmentObject(container)`. It exposes factory methods (`makePokemonListViewModel()`, `makePokemonDetailViewModel(pokemonID:)`) rather than vending singletons, so each screen gets a fresh view model with the shared repositories underneath.
+`DependencyContainer` is an `ObservableObject` created once in `SceneDelegate` and injected into the SwiftUI environment via `.environmentObject(container)`. I expose factory methods (`makePokemonListViewModel()`, `makePokemonDetailViewModel(pokemonID:)`) rather than singletons, so each screen gets a fresh view model with the shared repositories underneath.
 
-`PokemonDetailContainerView` resolves its view model from the environment using `@EnvironmentObject`. This allows `NavigationStack` to push detail screens using plain `Int` (Pokédex ID) as the navigation value, with no need for the list to know about the detail's dependencies.
+`PokemonDetailContainerView` resolves its view model from the environment via `@EnvironmentObject`. This lets `NavigationStack` push detail screens using a plain `Int` (Pokédex ID) as the navigation value — the list doesn't need to know anything about the detail's dependencies.
 
 ## Module structure
 

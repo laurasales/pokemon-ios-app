@@ -1,16 +1,34 @@
 # WallaMarvel — iOS Tech Challenge
 
-A Pokédex app built as a iOS Engineer technical challenge. The starter project used Marvel's API with an MVP + UIKit skeleton; this submission replaces it entirely with PokéAPI, SwiftUI, and Clean Architecture + MVVM.
+A Pokédex app built as an iOS Engineer technical challenge.
 
-## Features
-- Pokémon list with infinite scroll pagination (20 per page, next page fetched when 5 items from the end)
-- Pokémon detail screen with sprite, types, stats, and abilities
-- Search by name or Pokédex number
-- Type filter bar (tap any type badge to filter the list)
-- Favourites — persist across launches via Realm; toggle from list and detail
-- Pokémon cry playback on the detail screen
-- Accessibility support throughout (labels, traits, reduce-motion, snapshot tests)
-- Full Swift Concurrency (async/await, `@MainActor`, structured concurrency)
+The starter project provided a Marvel API + MVP + UIKit skeleton with intentional errors. Rather than patch it incrementally, I replaced the entire implementation to present a coherent architectural vision from scratch. The Marvel API also has known reliability problems, so I switched to PokéAPI, which is free, requires no key, and has a public OpenAPI spec I could use to demonstrate modern Apple tooling.
+
+For a detailed breakdown of every non-obvious choice, see [`docs/decisions.md`](docs/decisions.md).
+
+---
+
+## What I implemented
+
+All mandatory requirements are covered, and so are all the nice-to-haves.
+
+**Mandatory**
+- **Pokémon detail screen** — sprite, type badges, base stats with progress bars, abilities, and a favourite toggle. Opened by tapping any row; data fetched from `GET /pokemon/{id}`.
+- **Pagination** — infinite scroll, 20 Pokémon per page. The next page is prefetched when the user is within 5 items of the end of the current list.
+
+**Nice to have (all implemented)**
+- **Search** — accepts a full Pokémon name or Pokédex number (exact-match, see [known limitations](#known-limitations)).
+- **Swift Concurrency** — `async/await` throughout, `@MainActor` on all view models, structured concurrency via `.task {}`.
+- **SwiftUI** — entire UI is SwiftUI; no storyboards, no UIKit views.
+- **Accessibility** — accessibility labels and traits on all interactive elements; reduce-motion support; snapshot tests of the accessibility tree using `AccessibilitySnapshot`.
+
+**Extras I added to demonstrate the stack**
+- **Favourites** — persisted across launches via Realm; toggleable from the list and detail screens.
+- **Type filter** — horizontal badge strip that filters the list by Pokémon type (`GET /type/{name}`).
+- **Pokémon cry playback** — plays the cry on the detail screen via `AVPlayer`.
+- **SwiftLint + SwiftFormat** — enforced as Xcode build phases.
+
+---
 
 ## Architecture
 
@@ -20,17 +38,19 @@ Clean Architecture with MVVM, all UI in SwiftUI.
 Network / Data  →  Repository  →  Use Cases  →  ViewModel  →  SwiftUI View
 ```
 
-- **Network layer** — `PokemonNetworkServiceProtocol` with two concrete implementations: `OpenAPIPokemonNetworkService` (active, uses Apple's Swift OpenAPI Generator against a vendored PokéAPI spec) and `PokemonAPINetworkService` (a third-party wrapper kept as an alternative). Swapping is a one-line change in `DependencyContainer`.
-- **Data layer** — `PokemonRepository` and `FavoritesRepository` (Realm). Repositories map DTOs to domain models.
-- **Domain layer** — pure Swift structs (`Pokemon`, `PokemonDetail`) and one use case per action, each behind a protocol.
-- **Presentation layer** — `PokemonListViewModel` and `PokemonDetailViewModel` are `@MainActor ObservableObject`s injected by `DependencyContainer`.
-- **DI** — `DependencyContainer` is an `ObservableObject` created in `SceneDelegate` and passed into the SwiftUI environment. `PokemonDetailContainerView` resolves its view model from the environment, keeping detail navigation decoupled from the list.
+- **Network layer** — `PokemonNetworkServiceProtocol` with two concrete implementations: `OpenAPIPokemonNetworkService` (active, uses Apple's Swift OpenAPI Generator against a vendored PokéAPI spec) and `PokemonAPINetworkService` (a third-party wrapper kept as a reference). Swapping is a one-line change in `DependencyContainer`.
+- **Data layer** — `PokemonRepository` and `FavoritesRepository` (Realm). Repositories map DTOs to domain models so the domain never sees a networking or persistence type.
+- **Domain layer** — pure Swift value types (`Pokemon`, `PokemonDetail`) and one use case per action, each behind its own protocol.
+- **Presentation layer** — `PokemonListViewModel` and `PokemonDetailViewModel` are `@MainActor ObservableObject`s constructed by `DependencyContainer` and injected via the SwiftUI environment.
+- **DI** — `DependencyContainer` is created once in `SceneDelegate` and passed into the environment. `PokemonDetailContainerView` resolves its view model from the environment, so `NavigationStack` only needs to pass a plain `Int` (Pokédex ID) as the navigation value — the list knows nothing about the detail's dependencies.
 
-See [`docs/architecture.md`](docs/architecture.md) for the full layer breakdown and [`docs/decisions.md`](docs/decisions.md) for rationale behind key choices.
+See [`docs/architecture.md`](docs/architecture.md) for the full layer breakdown with diagrams.
 
-## Building and Running
+---
 
-Requires Xcode 16+ and an iPhone 16 simulator.
+## Building and running
+
+Requires Xcode 16+ and an iPhone 16 simulator (OS 18.5).
 
 ```bash
 # Build
@@ -46,40 +66,49 @@ xcodebuild -project WallaMarvel.xcodeproj -scheme WallaMarvel \
   -only-testing:WallaMarvelTests/PokemonListViewModelSpec test
 ```
 
+---
+
 ## Testing
 
-- **Unit tests** — `PokemonListViewModelSpec` and `PokemonDetailViewModelSpec` use Quick + Nimble. Every use case and repository is behind a protocol; mocks cover success, failure, and edge cases.
-- **Accessibility snapshot tests** — `AccessibilitySnapshotTests` uses `AccessibilitySnapshot` + `SnapshotTesting` to assert the accessibility tree of all shared and detail components.
-- Test files are excluded from SwiftLint to avoid false positives on `force_try` and `@testable` patterns.
+- **Unit tests** — `PokemonListViewModelSpec` and `PokemonDetailViewModelSpec` use Quick + Nimble. Every use case and repository is behind a protocol; mocks cover success, failure, and edge cases. No third-party mocking framework — each mock is a simple struct.
+- **Accessibility snapshot tests** — `AccessibilitySnapshotTests` uses `AccessibilitySnapshot` + `SnapshotTesting` to assert the accessibility tree of all shared components and detail sections. This catches regressions in labels, traits, and `accessibilityHidden` on every CI run without requiring a manual audit.
+- Test files are excluded from SwiftLint to avoid false positives on `force_try` and `@testable import`.
+
+---
 
 ## Tooling
 
 | Tool | Purpose |
 |---|---|
-| SwiftLint | Enforces style; `force_unwrapping` opt-in rule guards against `!` regressions |
+| SwiftLint | Style enforcement; `force_unwrapping` opt-in rule guards against `!` regressions |
 | SwiftFormat | Consistent formatting; `--header ignore` preserves file headers |
-| GitHub Actions | CI runs build + test on every push/PR to `main` and `develop` |
 
-Both linters run as Xcode Run Script build phases (not SPM framework dependencies) to avoid minimum deployment target conflicts.
+Both linters run as Xcode Run Script build phases (not SPM plugins) to avoid minimum deployment target conflicts with the iOS target.
+
+---
 
 ## Dependencies
 
 | Package | Source | Use |
 |---|---|---|
 | swift-openapi-generator | Apple (exact version) | Generates type-safe network client from `openapi.yaml` |
-| swift-openapi-runtime | Apple (exact version) | Runtime for generated client |
-| swift-openapi-urlsession | Apple (exact version) | URLSession transport for OpenAPI client |
-| PokemonAPI | kinkofer (exact version) | Alternative PokéAPI Swift wrapper (kept for comparison) |
+| swift-openapi-runtime | Apple (exact version) | Runtime for the generated client |
+| swift-openapi-urlsession | Apple (exact version) | URLSession transport for the OpenAPI client |
+| PokemonAPI | kinkofer (exact version) | Alternative PokéAPI Swift wrapper (kept as a reference implementation) |
 | realm-swift | Realm (exact version) | Favourites persistence |
 | Kingfisher | onevcat (up to next major) | Remote image loading for sprites |
 | Quick | Quick/Quick (branch: main) | BDD test framework |
 | Nimble | Quick/Nimble (branch: main) | Matcher library for Quick |
 | AccessibilitySnapshot | CashApp (exact version) | Accessibility tree snapshot tests |
 
-Quick and Nimble are pinned to `branch: main` because no tagged release supports Swift 6 / Xcode 16 at the time of writing. This is a known trade-off accepted for a tech challenge; a production project should wait for a tagged release or fork.
+Quick and Nimble are pinned to `branch: main` because no tagged release supported Swift 6 / Xcode 16 at the time of writing. This is a known trade-off I accepted for a demo context; a production project should wait for a tagged release.
 
-## Known Limitations
+---
 
-- **Search is exact-match only.** PokéAPI has no partial-name search endpoint; the search bar accepts a full name or Pokédex number and calls `GET /pokemon/{id}`. A production app could pre-fetch the names list and filter client-side, or use a dedicated search backend.
-- **List sprite URLs are constructed from the Pokédex ID.** The paginated list endpoint returns only `name` and `url` (no sprites). The sprite URL is derived by extracting the ID from the resource URL and constructing the official GitHub sprites CDN path. The detail screen uses `sprites.front_default` directly from the full Pokémon object. A production app with a richer backend or local cache would avoid this CDN dependency.
-- **Pokémon cry audio** is streamed from the Pokémon Showdown CDN (`play.pokemonshowdown.com`), not PokéAPI, because PokéAPI's OGG cry files are not natively decodable by AVFoundation on iOS.
+## Known limitations
+
+- **Search is exact-match only.** PokéAPI has no partial-name search endpoint. The search bar calls `GET /pokemon/{name|id}`, which returns one result for an exact match or a 404 for anything else. A production alternative would be to pre-fetch the full names list once and filter client-side as the user types — I kept a note on this trade-off in [`docs/decisions.md`](docs/decisions.md).
+
+- **List sprite URLs are constructed, not fetched.** The paginated list endpoint returns only `name` and `url` (no sprites). I extract the Pokédex ID from the resource URL and derive the sprite URL from the known GitHub sprites CDN path. This avoids firing 20+ concurrent requests per page load, but introduces a CDN dependency. The detail screen uses `sprites.front_default` directly from the full Pokémon object.
+
+- **Pokémon cry audio comes from Pokémon Showdown.** PokéAPI provides cries as `.ogg` files, which AVFoundation cannot decode natively on iOS. Rather than add an untagged OGG decoder dependency, I stream MP3 cries from `play.pokemonshowdown.com`. This is an unofficial CDN — acceptable for a demo, not for production.
