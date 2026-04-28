@@ -14,6 +14,7 @@
 		1A0E3ABA2862F7E300132FCB /* WallaMarvelUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0E3AB92862F7E300132FCB /* WallaMarvelUITests.swift */; };
 		1A0E3ABC2862F7E300132FCB /* WallaMarvelUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0E3ABB2862F7E300132FCB /* WallaMarvelUITestsLaunchTests.swift */; };
 		A66389F32DCE202500466318 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = A66389F22DCE202500466318 /* Kingfisher */; };
+		D30B01262FA14E7B0079112E /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = D3A5E1152F9AD6DB007F83A5 /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		D3196DA92F9BED710018E4A3 /* PokemonListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3196DA82F9BED700018E4A3 /* PokemonListViewModel.swift */; };
 		D3196DC42F9BF7CE0018E4A3 /* PokemonDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3196DC32F9BF7CD0018E4A3 /* PokemonDTO.swift */; };
 		D3196DC92F9BF7DC0018E4A3 /* PokemonMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3196DC72F9BF7D80018E4A3 /* PokemonMapper.swift */; };
@@ -113,6 +114,20 @@
 			remoteInfo = WallaMarvel;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D30B01242FA14E770079112E /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				D30B01262FA14E7B0079112E /* RealmSwift in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1A0E3A952862F7E200132FCB /* WallaMarvel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WallaMarvel.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -240,6 +255,7 @@
 				1A0E3A972862F7E200132FCB /* WallaMarvel */,
 				1A0E3AAE2862F7E300132FCB /* WallaMarvelTests */,
 				1A0E3AB82862F7E300132FCB /* WallaMarvelUITests */,
+				D30B01202FA14E770079112E /* Frameworks */,
 				1A0E3A962862F7E200132FCB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -328,6 +344,13 @@
 				D34DFA6D2F96E72300386709 /* SearchPokemonUseCase.swift */,
 			);
 			path = UseCases;
+			sourceTree = "<group>";
+		};
+		D30B01202FA14E770079112E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		D3196DB22F9BEE170018E4A3 /* Repositories */ = {
@@ -590,6 +613,7 @@
 				1A0E3A932862F7E200132FCB /* Resources */,
 				D38A49A72F9CB98B00FD87C3 /* ShellScript */,
 				D38A49A82F9CB9CA00FD87C3 /* ShellScript */,
+				D30B01242FA14E770079112E /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
